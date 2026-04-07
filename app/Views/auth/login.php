@@ -1,7 +1,7 @@
 <?php
 $bootstrapCssPath = FCPATH . 'assets/vendor/bootstrap/css/bootstrap.min.css';
 $bootstrapIconsCssPath = FCPATH . 'assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css';
-$logoPath = FCPATH . 'assets/img/logo-unisap.png';
+$logoPath = FCPATH . 'assets/img/plpi-geo-logo.svg';
 $faviconPath = FCPATH . 'favicon.ico';
 
 $bootstrapCssVersion = is_file($bootstrapCssPath) ? (string) filemtime($bootstrapCssPath) : '1';
@@ -18,10 +18,12 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
     <link rel="icon" type="image/x-icon" href="<?= esc(base_url('favicon.ico?v=' . $faviconVersion)) ?>">
     <link href="<?= esc(base_url('assets/vendor/bootstrap/css/bootstrap.min.css?v=' . $bootstrapCssVersion)) ?>" rel="stylesheet">
     <link href="<?= esc(base_url('assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css?v=' . $bootstrapIconsCssVersion)) ?>" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --auth-primary: #2b59b5;
             --auth-primary-dark: #244c9b;
+            --auth-navy: #163b73;
             --auth-bg: #edf4fb;
             --auth-border: #dfe5ef;
             --auth-text: #0f172a;
@@ -32,43 +34,15 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
             min-height: 100vh;
             margin: 0;
             background:
-                radial-gradient(circle at 8% 12%, rgba(43, 89, 181, 0.18), transparent 34%),
-                radial-gradient(circle at 90% 82%, rgba(59, 130, 246, 0.14), transparent 32%),
-                radial-gradient(circle at 84% 18%, rgba(14, 165, 233, 0.12), transparent 24%),
-                linear-gradient(135deg, #ecf2fb 0%, #e8eef8 48%, #f4f8ff 100%);
+                radial-gradient(circle at 12% 8%, rgba(95, 145, 224, 0.14), transparent 36%),
+                radial-gradient(circle at 88% 24%, rgba(22, 59, 115, 0.12), transparent 33%),
+                #f2f6fb;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             font-family: "Inter", "Segoe UI", sans-serif;
             color: var(--auth-text);
-            position: relative;
-            overflow: hidden;
-        }
-
-        body::before,
-        body::after {
-            content: "";
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        body::before {
-            width: 460px;
-            height: 460px;
-            top: -220px;
-            left: -150px;
-            background: radial-gradient(circle, rgba(43, 89, 181, 0.24), rgba(43, 89, 181, 0));
-        }
-
-        body::after {
-            width: 500px;
-            height: 500px;
-            right: -220px;
-            bottom: -210px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.2), rgba(14, 165, 233, 0));
         }
 
         .auth-card {
@@ -86,13 +60,16 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
         }
 
         .logo-wrap {
-            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             margin-bottom: 14px;
         }
 
         .logo-wrap img {
-            width: 88px;
-            height: 88px;
+            width: 54px;
+            height: 54px;
             object-fit: contain;
         }
 
@@ -105,12 +82,13 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
         }
 
         .auth-app-title {
-            color: var(--auth-primary);
-            font-weight: 600;
-            display: block;
-            font-size: 2rem;
-            line-height: 1.1;
-            margin-bottom: 10px;
+            color: var(--auth-navy);
+            font-weight: 800;
+            display: inline-block;
+            font-size: 2.2rem;
+            line-height: 1;
+            margin-bottom: 0;
+            letter-spacing: .2px;
         }
 
         .form-label {
@@ -174,8 +152,8 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
             }
 
             .logo-wrap img {
-                width: 68px;
-                height: 68px;
+                width: 46px;
+                height: 46px;
             }
 
             .auth-subtitle {
@@ -192,11 +170,13 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
 <body>
     <div class="auth-card card">
         <div class="card-body">
-            <div class="logo-wrap">
-                <img src="<?= esc(base_url('assets/img/logo-unisap.png?v=' . $logoVersion)) ?>" alt="Logo UNISAP">
+            <div style="text-align:center;">
+                <div class="logo-wrap">
+                    <img src="<?= esc(base_url('assets/img/plpi-geo-logo.svg?v=' . $logoVersion)) ?>" alt="Logo PLPI">
+                    <span class="auth-app-title">PLPI</span>
+                </div>
             </div>
             <p class="auth-subtitle">
-                <span class="auth-app-title">PLPI</span>
                 Pusat Layanan Publikasi Ilmiah<br>
                 Sistem Informasi LoA, Invoice, dan Layanan Jurnal
             </p>
