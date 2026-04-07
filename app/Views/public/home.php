@@ -14,7 +14,10 @@
     }
 
     body {
-        background: #f2f6fb;
+        background:
+            radial-gradient(circle at 12% 8%, rgba(95, 145, 224, 0.14), transparent 36%),
+            radial-gradient(circle at 88% 24%, rgba(22, 59, 115, 0.12), transparent 33%),
+            #f2f6fb;
         color: var(--plpi-text);
         font-family: "Inter", sans-serif;
     }
@@ -136,12 +139,37 @@
         padding: 26px 0 20px;
     }
 
+    .plpi-hero-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .plpi-hero-image-wrap {
+        margin: 8px 0 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .plpi-hero-image {
+        width: min(100%, 300px);
+        height: auto;
+        display: block;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        filter: drop-shadow(0 12px 22px rgba(33, 74, 150, 0.17));
+    }
+
     .plpi-hero h1 {
         margin: 0 0 12px;
         color: var(--plpi-navy);
-        font-size: clamp(1.35rem, 2.2vw, 1.95rem);
+        font-size: clamp(1.2rem, 1.9vw, 1.65rem);
         line-height: 1.2;
         font-weight: 800;
+        letter-spacing: .2px;
     }
 
     .plpi-hero p {
@@ -155,6 +183,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
+        justify-content: center;
     }
 
     .plpi-btn-main,
@@ -168,9 +197,10 @@
     }
 
     .plpi-btn-main {
-        border: 1px solid var(--plpi-navy-soft);
-        background: var(--plpi-navy-soft);
+        border: 1px solid #2a57b0;
+        background: linear-gradient(135deg, #2b59b5 0%, #3768c9 100%);
         color: #fff;
+        box-shadow: 0 10px 20px rgba(43, 89, 181, 0.22);
     }
 
     .plpi-btn-main:hover {
@@ -181,7 +211,7 @@
 
     .plpi-btn-soft {
         border: 1px solid #c8d7ee;
-        background: #fff;
+        background: #f8fbff;
         color: var(--plpi-navy-soft);
     }
 
@@ -191,10 +221,10 @@
     }
 
     .plpi-mockup {
-        background: #fff;
-        border: 1px solid var(--plpi-line);
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #d3e1f2;
         border-radius: 16px;
-        box-shadow: 0 14px 34px rgba(20, 45, 84, 0.08);
+        box-shadow: 0 18px 36px rgba(20, 45, 84, 0.10);
         padding: 14px;
     }
 
@@ -211,6 +241,18 @@
         background: #c8d6eb;
     }
 
+    .plpi-dot:nth-child(1) {
+        background: #a9c2e8;
+    }
+
+    .plpi-dot:nth-child(2) {
+        background: #8db0e3;
+    }
+
+    .plpi-dot:nth-child(3) {
+        background: #6f99d8;
+    }
+
     .plpi-mini-cards {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -223,6 +265,12 @@
         background: var(--plpi-bg-soft);
         border-radius: 10px;
         padding: 8px;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .plpi-mini-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 16px rgba(18, 41, 77, 0.10);
     }
 
     .plpi-mini-card strong {
@@ -303,68 +351,125 @@
         color: var(--plpi-navy);
         font-size: 1.22rem;
         font-weight: 800;
+        text-align: center;
+        position: relative;
+        padding-bottom: 12px;
+    }
+
+    .plpi-section-title::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 76px;
+        height: 3px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #2b59b5 0%, #6f93dd 100%);
+    }
+
+    .plpi-section-subtitle {
+        margin: -4px auto 16px;
+        color: #60779a;
+        font-size: .93rem;
+        line-height: 1.6;
+        text-align: center;
+        max-width: 760px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .plpi-feature-grid {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        max-width: 980px;
+        margin: 0 auto;
     }
 
     .plpi-feature-card {
-        background: #ffffff;
-        border: 1px solid var(--plpi-line);
-        border-radius: 14px;
-        box-shadow: 0 8px 20px rgba(18, 41, 77, 0.05);
-        padding: 20px;
+        background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+        border: 1px solid #d7e2f0;
+        border-radius: 16px;
+        box-shadow: 0 10px 24px rgba(18, 41, 77, 0.06);
+        padding: 16px 15px 12px;
         height: 100%;
         display: flex;
         flex-direction: column;
-        transition: all .25s ease;
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
         position: relative;
         overflow: hidden;
     }
 
+    .plpi-feature-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #2b59b5 0%, #5c84d9 100%);
+    }
+
+    .plpi-feature-card::after {
+        content: "";
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        right: -38px;
+        top: -38px;
+        background: rgba(43, 89, 181, 0.07);
+        pointer-events: none;
+    }
+
     .plpi-feature-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 22px rgba(18, 41, 77, 0.08);
-        border-color: #ced9ea;
+        transform: translateY(-4px);
+        box-shadow: 0 16px 30px rgba(18, 41, 77, 0.12);
+        border-color: #b8cae4;
     }
 
     .plpi-feature-head {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 12px;
-        margin: -20px -20px 12px;
-        background: #fbfdff;
-        border-bottom: 1px solid var(--plpi-line);
+        gap: 12px;
+        padding: 2px 0 8px;
+        margin: 0 0 6px;
+        background: transparent;
+        border-bottom: 0;
+        position: relative;
+        z-index: 1;
     }
 
     .plpi-feature-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 10px;
-        background: #eef2ff;
-        color: #1e3a8a;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(145deg, #eaf1ff 0%, #dbe7ff 100%);
+        border: 1px solid #c7d8f3;
+        color: #214a96;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
-        margin-bottom: 12px;
+        font-size: 19px;
+        margin-bottom: 0;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        flex-shrink: 0;
     }
 
     .plpi-feature-card h3 {
         margin: 0;
-        font-size: 16px;
-        color: #1f2937;
-        font-weight: 600;
+        font-size: 1.03rem;
+        color: #173b74;
+        font-weight: 800;
+        letter-spacing: .1px;
     }
 
     .plpi-feature-card p {
         margin: 0;
-        color: #6b7280;
-        font-size: 13px;
+        color: #5a6f8f;
+        font-size: .95rem;
         line-height: 1.55;
     }
 
@@ -372,42 +477,44 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        gap: 8px;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
     }
 
     .plpi-feature-body p {
-        min-height: 72px;
+        min-height: 64px;
     }
 
     .plpi-card-action {
-        margin-top: 0;
-        padding-top: 6px;
-        border-top: 1px dashed #e5ecf6;
+        margin-top: auto;
+        padding-top: 8px;
+        border-top: 1px dashed #d8e4f3;
     }
 
     .plpi-card-link {
-        margin-top: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid var(--plpi-navy-soft);
-        background: var(--plpi-navy-soft);
-        color: #fff;
+        gap: 6px;
+        border: 1px solid #c6d8f0;
+        background: #ffffff;
+        color: #214a96;
         text-decoration: none;
-        font-size: 12px;
+        font-size: .82rem;
         font-weight: 700;
         line-height: 1;
         padding: 8px 12px;
-        border-radius: 6px;
-        transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+        border-radius: 10px;
+        transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease, color .2s ease;
         align-self: flex-start;
     }
 
     .plpi-card-link:hover {
         color: #fff;
-        background: var(--plpi-navy);
+        background: var(--plpi-navy-soft);
         border-color: var(--plpi-navy);
-        box-shadow: 0 6px 14px rgba(43, 89, 181, .25);
+        box-shadow: 0 8px 18px rgba(43, 89, 181, .24);
         transform: translateY(-1px);
     }
 
@@ -415,6 +522,159 @@
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
+    }
+
+    .plpi-journal-subtitle {
+        margin: -4px auto 16px;
+        color: #60779a;
+        font-size: .93rem;
+        line-height: 1.6;
+        text-align: center;
+        max-width: 760px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .plpi-journal-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .plpi-journal-card {
+        background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
+        border: 1px solid #d6e3f3;
+        border-radius: 14px;
+        box-shadow: 0 10px 22px rgba(18, 41, 77, 0.07);
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plpi-journal-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #2b59b5 0%, #79a0e6 100%);
+    }
+
+    .plpi-journal-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 26px rgba(18, 41, 77, 0.12);
+        border-color: #bfd2eb;
+    }
+
+    .plpi-journal-cover {
+        border: 1px solid #d6e0ee;
+        border-radius: 12px;
+        min-height: 184px;
+        padding: 10px;
+        display: flex;
+        align-items: flex-end;
+        background: linear-gradient(145deg, #eef4fd 0%, #ffffff 60%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plpi-journal-cover::before {
+        content: "";
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        border-radius: 18px;
+        right: -18px;
+        top: -18px;
+        background: rgba(43, 89, 181, 0.12);
+        transform: rotate(18deg);
+    }
+
+    .plpi-journal-cover::after {
+        content: "";
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        left: -25px;
+        bottom: -28px;
+        background: rgba(22, 59, 115, 0.10);
+    }
+
+    .plpi-journal-badge {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 5px 10px;
+        background: #ffffff;
+        border: 1px solid #cedbee;
+        color: var(--plpi-navy);
+        font-size: .75rem;
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(18, 41, 77, 0.10);
+    }
+
+    .plpi-journal-cover.siber .plpi-journal-badge {
+        color: #1f5a9d;
+    }
+
+    .plpi-journal-cover.edukasi .plpi-journal-badge {
+        color: #176548;
+    }
+
+    .plpi-journal-cover.leksikon .plpi-journal-badge {
+        color: #9f4b11;
+    }
+
+    .plpi-journal-cover.abdi .plpi-journal-badge {
+        color: #7a3d99;
+    }
+
+    .plpi-journal-title {
+        margin: 0;
+        color: #173b74;
+        font-size: .96rem;
+        font-weight: 800;
+        line-height: 1.4;
+    }
+
+    .plpi-journal-country {
+        margin: -4px 0 0;
+        color: #6f819d;
+        font-size: .8rem;
+    }
+
+    .plpi-journal-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .plpi-journal-pill {
+        border-radius: 999px;
+        border: 1px solid #d3dfef;
+        background: #f4f8fd;
+        color: #2a4774;
+        padding: 4px 10px;
+        font-size: .74rem;
+        font-weight: 700;
+    }
+
+    .plpi-journal-publisher {
+        margin: 0;
+        color: #657a99;
+        font-size: .8rem;
+        line-height: 1.45;
+        padding-top: 8px;
+        border-top: 1px dashed #d8e4f4;
     }
 
     .plpi-stat-card {
@@ -441,19 +701,22 @@
     }
 
     .plpi-table-card {
-        background: #fff;
-        border: 1px solid var(--plpi-line);
-        border-radius: 14px;
-        box-shadow: 0 8px 20px rgba(18, 41, 77, 0.05);
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #d3e0f0;
+        border-radius: 16px;
+        box-shadow: 0 12px 26px rgba(18, 41, 77, 0.07);
         overflow: hidden;
+        position: relative;
     }
 
-    .plpi-table-card .card-head {
-        padding: 12px 14px;
-        border-bottom: 1px solid var(--plpi-line);
-        background: #fbfdff;
-        color: var(--plpi-navy);
-        font-weight: 700;
+    .plpi-table-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #2b59b5 0%, #6f93dd 100%);
     }
 
     .plpi-table {
@@ -461,26 +724,36 @@
     }
 
     .plpi-table thead th {
-        background: #f3f7fc;
-        color: #476185;
-        font-size: .8rem;
-        font-weight: 700;
-        border-bottom: 1px solid var(--plpi-line);
+        background: #eef4fc;
+        color: #365884;
+        font-size: .79rem;
+        font-weight: 800;
+        border-bottom: 1px solid #cfddf0;
         text-transform: uppercase;
-        letter-spacing: .2px;
+        letter-spacing: .35px;
+        padding: 12px 10px;
     }
 
     .plpi-table tbody td {
-        font-size: .9rem;
-        color: #2f415f;
-        border-color: #edf2f8;
+        font-size: .92rem;
+        color: #2b4164;
+        border-color: #e5edf7;
         vertical-align: middle;
+        padding: 11px 10px;
+    }
+
+    .plpi-table tbody tr:nth-child(even) td {
+        background: #fbfdff;
+    }
+
+    .plpi-table tbody tr:hover td {
+        background: #f2f7ff;
     }
 
     .badge-soft {
         border-radius: 999px;
-        font-size: .74rem;
-        padding: 5px 9px;
+        font-size: .76rem;
+        padding: 5px 10px;
         font-weight: 700;
         border: 1px solid transparent;
     }
@@ -520,7 +793,15 @@
             grid-template-columns: 1fr;
         }
 
+        .plpi-hero-image {
+            width: min(100%, 360px);
+        }
+
         .plpi-feature-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .plpi-journal-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
@@ -546,7 +827,8 @@
 
         .plpi-feature-grid,
         .plpi-stat-grid,
-        .plpi-mini-cards {
+        .plpi-mini-cards,
+        .plpi-journal-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -561,8 +843,8 @@
             </a>
             <div class="plpi-menu">
                 <a href="<?= site_url('/') ?>" class="active">Beranda</a>
-                <a href="#layanan">Layanan</a>
-                <a href="<?= site_url('loa/verify') ?>">Cek Status</a>
+                <a href="<?= site_url('loa/request') ?>">Ajukan LoA</a>
+                <a href="<?= site_url('loa/verify') ?>">Verifikasi LoA</a>
                 <a href="#tentang">Tentang</a>
             </div>
             <a class="plpi-login-btn" href="<?= site_url('login') ?>">Login Admin</a>
@@ -571,14 +853,17 @@
 
     <main>
         <section class="plpi-hero">
-        <div>
+        <div class="plpi-hero-left">
+            <div class="plpi-hero-image-wrap">
+                <img class="plpi-hero-image" src="<?= base_url('assets/img/hero-laptop.png') ?>" alt="Preview sistem PLPI">
+            </div>
             <h1>Pusat Layanan Publikasi Ilmiah</h1>
             <p>
-                Pengelolaan LoA, invoice, dan layanan jurnal dalam satu sistem yang ringkas dan terintegrasi.
+                Pengajuan, verifikasi, dan penerbitan LoA dalam satu sistem yang ringkas dan terintegrasi.
             </p>
             <div class="plpi-hero-actions">
                 <a class="plpi-btn-main" href="<?= site_url('loa/request') ?>">Ajukan LoA</a>
-                <a class="plpi-btn-soft" href="<?= site_url('loa/verify') ?>">Cek Status</a>
+                <a class="plpi-btn-soft" href="<?= site_url('loa/verify') ?>">Cek Status LoA</a>
             </div>
         </div>
         <div class="plpi-mockup">
@@ -598,7 +883,7 @@
                 </div>
                 <div class="plpi-mini-card">
                     <strong>17</strong>
-                    <span>Invoice</span>
+                    <span>Menunggu Verifikasi</span>
                 </div>
             </div>
             <div class="plpi-chart">
@@ -611,13 +896,18 @@
             <div class="plpi-mockup-list">
                 <div class="plpi-mockup-row">
                     <span class="code">REQ-2026-019</span>
-                    <span>Jurnal Sains</span>
+                    <span>Naskah Pendidikan Sains</span>
                     <span class="st wait">Diproses</span>
                 </div>
                 <div class="plpi-mockup-row">
                     <span class="code">REQ-2026-018</span>
-                    <span>Jurnal Manajemen</span>
+                    <span>Naskah Manajemen Publik</span>
                     <span class="st ok">Disetujui</span>
+                </div>
+                <div class="plpi-mockup-row">
+                    <span class="code">REQ-2026-017</span>
+                    <span>Naskah Teknologi Terapan</span>
+                    <span class="st wait">Diproses</span>
                 </div>
             </div>
         </div>
@@ -625,6 +915,7 @@
 
         <section class="plpi-section" id="layanan">
         <h2 class="plpi-section-title">Layanan Utama</h2>
+        <p class="plpi-section-subtitle">Seluruh alur pengajuan LoA tersedia dalam satu dashboard terintegrasi.</p>
         <div class="plpi-feature-grid">
             <article class="plpi-feature-card">
                 <div class="plpi-feature-head">
@@ -641,70 +932,29 @@
             <article class="plpi-feature-card">
                 <div class="plpi-feature-head">
                     <span class="plpi-feature-icon"><i class="bi bi-search"></i></span>
-                    <h3>Cek Status Naskah</h3>
+                    <h3>Verifikasi LoA</h3>
                 </div>
                 <div class="plpi-feature-body">
-                    <p>Monitor proses review dan validasi LoA melalui halaman status publik.</p>
+                    <p>Monitor proses verifikasi dan validasi LoA melalui halaman status pengajuan.</p>
                     <div class="plpi-card-action">
                         <a href="<?= site_url('loa/verify') ?>" class="plpi-card-link">Lihat &rarr;</a>
                     </div>
                 </div>
-            </article>
-            <article class="plpi-feature-card">
-                <div class="plpi-feature-head">
-                    <span class="plpi-feature-icon"><i class="bi bi-receipt"></i></span>
-                    <h3>Kelola Invoice</h3>
-                </div>
-                <div class="plpi-feature-body">
-                    <p>Pengelolaan invoice penerbitan dilakukan dalam alur administrasi yang rapi.</p>
-                    <div class="plpi-card-action">
-                        <a href="<?= site_url('login') ?>" class="plpi-card-link">Lihat &rarr;</a>
-                    </div>
-                </div>
-            </article>
-            <article class="plpi-feature-card">
-                <div class="plpi-feature-head">
-                    <span class="plpi-feature-icon"><i class="bi bi-archive"></i></span>
-                    <h3>Arsip Dokumen</h3>
-                </div>
-                <div class="plpi-feature-body">
-                    <p>Dokumen LoA tersimpan dan dapat ditelusuri kembali dengan mudah.</p>
-                    <div class="plpi-card-action">
-                        <a href="<?= site_url('loa/verify') ?>" class="plpi-card-link">Lihat &rarr;</a>
-                    </div>
-                </div>
-            </article>
-        </div>
-        </section>
-
-        <section class="plpi-section" id="tentang">
-        <h2 class="plpi-section-title">Ringkasan Sistem</h2>
-        <div class="plpi-stat-grid">
-            <article class="plpi-stat-card">
-                <span>Pengajuan Diproses</span>
-                <strong>128</strong>
-            </article>
-            <article class="plpi-stat-card">
-                <span>Menunggu Verifikasi</span>
-                <strong>36</strong>
-            </article>
-            <article class="plpi-stat-card">
-                <span>LoA Terbit</span>
-                <strong>42</strong>
             </article>
         </div>
         </section>
 
         <section class="plpi-section">
+        <h2 class="plpi-section-title">Permohonan Terbaru</h2>
+        <p class="plpi-section-subtitle">Permohonan terbaru diurutkan dari data masuk paling baru untuk tindak lanjut.</p>
         <div class="plpi-table-card">
-            <div class="card-head">Permohonan Terbaru</div>
             <div class="table-responsive">
                 <table class="table plpi-table align-middle">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Kode</th>
-                            <th>Jurnal</th>
+                            <th>Judul Naskah</th>
                             <th>Status</th>
                             <th>Tanggal</th>
                         </tr>
@@ -713,34 +963,116 @@
                         <tr>
                             <td>1</td>
                             <td>REQ-2026-019</td>
-                            <td>Jurnal Pendidikan Sains</td>
+                            <td>Pengembangan Model Pembelajaran Sains</td>
                             <td><span class="badge-soft processing">Diproses</span></td>
                             <td>07 Apr 2026</td>
                         </tr>
                         <tr>
                             <td>2</td>
                             <td>REQ-2026-018</td>
-                            <td>Jurnal Manajemen Publik</td>
+                            <td>Analisis Kebijakan Manajemen Publik</td>
                             <td><span class="badge-soft approved">Disetujui</span></td>
                             <td>06 Apr 2026</td>
                         </tr>
                         <tr>
                             <td>3</td>
                             <td>REQ-2026-017</td>
-                            <td>Jurnal Teknologi Terapan</td>
+                            <td>Implementasi IoT pada Sistem Irigasi</td>
                             <td><span class="badge-soft rejected">Ditolak</span></td>
                             <td>05 Apr 2026</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>REQ-2026-016</td>
+                            <td>Metode Hybrid Learning di Perguruan Tinggi</td>
+                            <td><span class="badge-soft processing">Diproses</span></td>
+                            <td>04 Apr 2026</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>REQ-2026-015</td>
+                            <td>Evaluasi Program Kesehatan Komunitas</td>
+                            <td><span class="badge-soft approved">Disetujui</span></td>
+                            <td>03 Apr 2026</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         </section>
+
+        <section class="plpi-section" id="profil-jurnal">
+        <h2 class="plpi-section-title">Profil Jurnal</h2>
+        <p class="plpi-journal-subtitle">Profil jurnal memuat identitas utama dan nomor ISSN untuk validasi cepat.</p>
+        <div class="plpi-journal-grid">
+            <article class="plpi-journal-card">
+                <div class="plpi-journal-cover">
+                    <span class="plpi-journal-badge">ABDI UNISAP</span>
+                </div>
+                <h3 class="plpi-journal-title">ABDI UNISAP: Jurnal Pengabdian Kepada Masyarakat</h3>
+                <p class="plpi-journal-country">Indonesia</p>
+                <div class="plpi-journal-meta">
+                    <span class="plpi-journal-pill">E-ISSN 2987-9175</span>
+                    <span class="plpi-journal-pill">P-ISSN 2987-9183</span>
+                </div>
+                <p class="plpi-journal-publisher">UPT Publikasi dan Penerbitan Universitas San Pedro</p>
+            </article>
+            <article class="plpi-journal-card">
+                <div class="plpi-journal-cover siber">
+                    <span class="plpi-journal-badge">SIBERNETIK</span>
+                </div>
+                <h3 class="plpi-journal-title">SIBERNETIK: Jurnal Pendidikan dan Pembelajaran</h3>
+                <p class="plpi-journal-country">Indonesia</p>
+                <div class="plpi-journal-meta">
+                    <span class="plpi-journal-pill">E-ISSN 2988-0823</span>
+                    <span class="plpi-journal-pill">P-ISSN 2988-0858</span>
+                </div>
+                <p class="plpi-journal-publisher">UPT Publikasi dan Penerbitan Universitas San Pedro</p>
+            </article>
+            <article class="plpi-journal-card">
+                <div class="plpi-journal-cover edukasi">
+                    <span class="plpi-journal-badge">EDUKASI TEMATIK</span>
+                </div>
+                <h3 class="plpi-journal-title">EDUKASI TEMATIK: Jurnal Pendidikan Sekolah Dasar</h3>
+                <p class="plpi-journal-country">Indonesia</p>
+                <div class="plpi-journal-meta">
+                    <span class="plpi-journal-pill">E-ISSN 2746-8011</span>
+                    <span class="plpi-journal-pill">P-ISSN 2746-7996</span>
+                </div>
+                <p class="plpi-journal-publisher">Program Studi Pendidikan Guru Sekolah Dasar Universitas San Pedro</p>
+            </article>
+            <article class="plpi-journal-card">
+                <div class="plpi-journal-cover leksikon">
+                    <span class="plpi-journal-badge">LEKSIKON</span>
+                </div>
+                <h3 class="plpi-journal-title">LEKSIKON: Jurnal Pendidikan Bahasa, Sastra, &amp; Budaya</h3>
+                <p class="plpi-journal-country">Indonesia</p>
+                <div class="plpi-journal-meta">
+                    <span class="plpi-journal-pill">E-ISSN 3025-1516</span>
+                    <span class="plpi-journal-pill">P-ISSN 3025-1249</span>
+                </div>
+                <p class="plpi-journal-publisher">UPT Publikasi dan Penerbitan Universitas San Pedro</p>
+            </article>
+            <article class="plpi-journal-card">
+                <div class="plpi-journal-cover abdi">
+                    <span class="plpi-journal-badge">ABDI NUSANTARA</span>
+                </div>
+                <h3 class="plpi-journal-title">Abdi Nusantara: Jurnal Pengabdian Kepada Masyarakat</h3>
+                <p class="plpi-journal-country">Indonesia</p>
+                <div class="plpi-journal-meta">
+                    <span class="plpi-journal-pill">E-ISSN 3089-5111</span>
+                    <span class="plpi-journal-pill">P-ISSN 3089-512X</span>
+                </div>
+                <p class="plpi-journal-publisher">PT Media Edukasi Nusantara</p>
+            </article>
+        </div>
+        </section>
+
     </main>
 
-    <footer class="plpi-footer">
+    <footer class="plpi-footer" id="tentang">
         <p><strong>PLPI</strong> &copy; <?= date('Y') ?> - Pusat Layanan Publikasi Ilmiah.</p>
-        <p>Sistem layanan untuk pengelolaan LoA, Invoice, dan administrasi jurnal secara terintegrasi.</p>
+        <p>Sistem layanan untuk pengajuan, verifikasi, dan penerbitan LoA secara terintegrasi.</p>
     </footer>
 </div>
 

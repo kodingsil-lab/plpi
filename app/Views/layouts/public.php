@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="<?= base_url('assets/css/style.css') ?>" rel="stylesheet">
     <style>
-        body{background:#f6f8fc}
+        body{background:#f6f8fc;font-family:"Inter",sans-serif}
         .wrap{max-width:1100px;margin:0 auto;padding:24px}
         .card{background:#fff;border:1px solid #dbe4ef;border-radius:14px;padding:18px}
         .input{width:100%;padding:9px 10px;border:1px solid #c8d6ea;border-radius:10px;background:#fff}
