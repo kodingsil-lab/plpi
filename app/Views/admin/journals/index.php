@@ -2,17 +2,9 @@
 <?= $this->section('content') ?>
 <div class="dashboard-card letters-table-card myletters-table-card">
   <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
-    <h6 class="mb-0">Daftar Jurnal</h6>
+    <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar Jurnal</h6>
     <div class="d-flex gap-2 align-items-center">
-      <form method="get" class="d-flex align-items-center gap-2">
-        <label class="small text-muted mb-0">Per halaman</label>
-        <select name="perPage" class="form-select form-select-sm" onchange="this.form.submit()">
-          <?php foreach ([10, 25, 50] as $opt): ?>
-            <option value="<?= $opt ?>" <?= ((int) ($perPage ?? 10) === $opt) ? 'selected' : '' ?>><?= $opt ?></option>
-          <?php endforeach; ?>
-        </select>
-      </form>
-      <a class="btn btn-sm btn-primary" href="<?= site_url('admin/journals/create') ?>">Tambah Jurnal</a>
+      <a class="btn btn-primary-main" href="<?= site_url('admin/journals/create') ?>">Tambah Jurnal</a>
     </div>
   </div>
   <div class="card-body pt-2">
@@ -43,7 +35,9 @@
             <td><?= esc((string) ($r['e_issn'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['p_issn'] ?? '-')) ?></td>
             <td>
-              <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/journals/' . (string) $r['id'] . '/edit') ?>">Edit</a>
+              <div class="d-flex gap-1 myletters-actions">
+                <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/journals/' . (string) $r['id'] . '/edit') ?>">Edit</a>
+              </div>
             </td>
           </tr>
         <?php endforeach; else: ?>

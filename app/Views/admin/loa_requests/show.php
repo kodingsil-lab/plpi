@@ -13,12 +13,12 @@
         </div>
         <div class="d-flex gap-2 mt-4 myletters-actions">
             <form method="post" action="<?= site_url('admin/loa-requests/' . (string) ($row['id'] ?? 0) . '/approve') ?>">
-                <button class="btn activity-btn user-action-btn user-action-edit" type="submit">Setujui</button>
+                <button class="btn btn-primary-main" type="submit">Setujui</button>
             </form>
             <form method="post" action="<?= site_url('admin/loa-requests/' . (string) ($row['id'] ?? 0) . '/reject') ?>" onsubmit="return confirm('Tolak permohonan ini?')">
-                <button class="btn activity-btn user-action-btn user-action-delete" type="submit">Tolak</button>
+                <button class="btn btn-outline-danger" type="submit">Tolak</button>
             </form>
-            <a class="btn activity-btn user-action-btn user-action-detail" href="<?= site_url('admin/loa-requests') ?>">Kembali</a>
+            <a class="btn btn-light-soft" href="<?= site_url('admin/loa-requests') ?>">Kembali</a>
         </div>
     </div>
 </div>

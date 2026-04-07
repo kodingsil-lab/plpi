@@ -11,7 +11,7 @@ class JournalModel extends Model
     protected $returnType = 'array';
     protected $useTimestamps = true;
     protected $allowedFields = [
-        'publisher_id','name','code','slug','issn','e_issn','p_issn','website_url',
+        'publisher_id','name','code','slug','e_issn','p_issn','website_url',
         'logo_path','default_stamp_path','default_signer_name','default_signer_title',
         'default_signature_path','pdf_sig_left_px','pdf_sig_top_px','pdf_sig_height_px'
     ];

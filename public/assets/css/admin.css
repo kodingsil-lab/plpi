@@ -2785,185 +2785,6 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     width: 100%;
 }
 
-/* Global button style (samakan nuansa sapa-lppm) */
-.page-content .btn {
-    border-radius: 10px;
-    font-weight: 600;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease;
-}
-
-.page-content .btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(18, 60, 107, 0.12);
-}
-
-.page-content .btn:focus-visible {
-    box-shadow: 0 0 0 0.15rem rgba(59, 125, 221, 0.25);
-}
-
-.page-content .btn.btn-primary {
-    background: #3b7ddd;
-    border-color: #3b7ddd;
-    color: #fff;
-}
-
-.page-content .btn.btn-primary:hover {
-    background: #2f6bc0;
-    border-color: #2f6bc0;
-    color: #fff;
-}
-
-.page-content .btn.btn-outline-primary {
-    border-color: #a9c4eb;
-    color: #123c6b;
-    background: #fff;
-}
-
-.page-content .btn.btn-outline-primary:hover {
-    border-color: #93b6e6;
-    color: #123c6b;
-    background: #eef5ff;
-}
-
-.page-content .btn.btn-secondary {
-    background: #ffffff;
-    border-color: #cfd9e7;
-    color: #4b5563;
-}
-
-.page-content .btn.btn-secondary:hover {
-    background: #f6f8fb;
-    border-color: #b9c6d8;
-    color: #374151;
-}
-
-.page-content .btn.btn-outline-secondary {
-    background: #ffffff;
-    border-color: #cfd9e7;
-    color: #4b5563;
-}
-
-.page-content .btn.btn-outline-secondary:hover {
-    background: #f6f8fb;
-    border-color: #b9c6d8;
-    color: #374151;
-}
-
-.page-content .btn.btn-danger {
-    background: #dc3545;
-    border-color: #dc3545;
-    color: #fff;
-}
-
-.page-content .btn.btn-danger:hover {
-    background: #b42333;
-    border-color: #b42333;
-    color: #fff;
-}
-
-.page-content .btn.btn-outline-danger {
-    border-color: #efb4bd;
-    color: #b42333;
-    background: #fff4f6;
-}
-
-.page-content .btn.btn-outline-danger:hover {
-    border-color: #e79ea9;
-    color: #9f1d2c;
-    background: #ffe8ec;
-}
-
-.page-content .btn.btn-sm {
-    min-height: 34px;
-    border-radius: 9px;
-    padding: 0.3rem 0.7rem;
-    font-size: 0.78rem;
-}
-
-.page-content .btn:disabled,
-.page-content .btn.disabled,
-.page-content .btn[disabled] {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-    color: #8b95a7 !important;
-    cursor: not-allowed;
-    opacity: 1;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-.page-content .btn.btn-primary-main:disabled,
-.page-content .btn.btn-light-soft:disabled {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-    color: #8b95a7 !important;
-}
-
-/* Detail/Edit action buttons parity with sapa-lppm */
-.myletters-table-card .myletters-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.myletters-table-card .myletters-actions .activity-btn,
-.myletters-table-card .myletters-actions .user-action-btn {
-    min-width: 96px;
-    min-height: 36px;
-    border-radius: 10px;
-    padding: 0.42rem 0.8rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    line-height: 1.2;
-    white-space: nowrap;
-}
-
-.myletters-table-card .myletters-actions .user-action-detail {
-    border: 1px solid #a9c4eb;
-    color: #123c6b;
-    background: #ffffff;
-}
-
-.myletters-table-card .myletters-actions .user-action-detail:hover {
-    background: #eef5ff;
-    border-color: #93b6e6;
-    color: #123c6b;
-}
-
-.myletters-table-card .myletters-actions .user-action-edit {
-    border: 1px solid #ced8e5;
-    color: #4b5563;
-    background: #ffffff;
-}
-
-.myletters-table-card .myletters-actions .user-action-edit:hover {
-    background: #f6f8fb;
-    border-color: #b9c6d8;
-    color: #374151;
-}
-
-.myletters-table-card .myletters-actions .user-action-delete {
-    border: 1px solid #efb4bd;
-    color: #b42333;
-    background: #fff4f6;
-}
-
-.myletters-table-card .myletters-actions .user-action-delete:hover {
-    background: #ffe8ec;
-    border-color: #e79ea9;
-    color: #9f1d2c;
-}
-
-.myletters-table-card .myletters-actions .activity-btn:disabled,
-.myletters-table-card .myletters-actions .activity-btn.disabled,
-.myletters-table-card .myletters-actions .user-action-btn:disabled,
-.myletters-table-card .myletters-actions .user-action-btn.disabled {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-    color: #8b95a7 !important;
-}
-
 @media (max-width: 1199.98px) {
     .myletters-filter-form {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2995,6 +2816,56 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
 .myletters-table-card .myletters-table-wrap table tbody td {
     font-weight: 400;
     color: #1f2937;
+}
+
+.users-table-full {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.users-table-full th,
+.users-table-full td {
+    white-space: normal;
+    word-break: break-word;
+}
+
+.users-table-full th:nth-child(1),
+.users-table-full td:nth-child(1) { width: 5%; }
+.users-table-full th:nth-child(2),
+.users-table-full td:nth-child(2) { width: 15%; }
+.users-table-full th:nth-child(3),
+.users-table-full td:nth-child(3) { width: 20%; }
+.users-table-full th:nth-child(4),
+.users-table-full td:nth-child(4) { width: 28%; }
+.users-table-full th:nth-child(5),
+.users-table-full td:nth-child(5) { width: 12%; }
+.users-table-full th:nth-child(6),
+.users-table-full td:nth-child(6) { width: 8%; }
+.users-table-full th:nth-child(7),
+.users-table-full td:nth-child(7) { width: 12%; }
+
+.users-table-full th:nth-child(7),
+.users-table-full td:nth-child(7) {
+    text-align: right;
+}
+
+.users-table-full td:nth-child(7) .myletters-actions {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.user-form-actions {
+    width: 100%;
+}
+
+.user-form-btn-flat {
+    height: auto;
+    min-height: 34px;
+    border-radius: 8px;
+    padding: 0.38rem 0.85rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.2;
 }
 
 .myletters-table-wrap .user-action-btn {

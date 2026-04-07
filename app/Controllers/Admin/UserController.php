@@ -85,14 +85,24 @@ class UserController extends BaseController
         }
         $v = $this->validator->getValidated();
 
-        $model->update($id, [
+        $payload = [
             'username' => trim((string) $v['username']),
             'name' => trim((string) $v['name']),
             'email' => trim((string) $v['email']),
             'role' => (string) $v['role'],
             'is_active' => (int) ($this->request->getPost('is_active') ? 1 : 0),
             'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+        ];
+
+        $newPassword = trim((string) $this->request->getPost('password'));
+        if ($newPassword !== '') {
+            if (mb_strlen($newPassword) < 8 || mb_strlen($newPassword) > 100) {
+                return redirect()->back()->withInput()->with('error', 'Password minimal 8 karakter.');
+            }
+            $payload['password'] = password_hash($newPassword, PASSWORD_BCRYPT);
+        }
+
+        $model->update($id, $payload);
 
         return redirect()->to(site_url('admin/users'))->with('success', 'Pengguna berhasil diperbarui.');
     }

@@ -30,10 +30,10 @@
                 </div>
             </div>
             <div class="d-flex gap-2 mt-3 myletters-actions">
-                <button class="btn activity-btn user-action-btn user-action-edit" type="submit">Simpan</button>
-                <a class="btn activity-btn user-action-btn user-action-detail" target="_blank" href="<?= site_url('loa/v/' . (string) ($row['public_token'] ?? '') . '/preview') ?>">Preview PDF</a>
-                <button class="btn activity-btn user-action-btn user-action-edit" type="submit" formaction="<?= site_url('admin/loa-letters/' . (string) ($row['id'] ?? 0) . '/regenerate') ?>">Regenerate PDF</button>
-                <a class="btn activity-btn user-action-btn user-action-detail" href="<?= site_url('admin/loa-letters') ?>">Kembali</a>
+                <button class="btn btn-primary-main" type="submit">Simpan</button>
+                <a class="btn btn-light-soft" target="_blank" href="<?= site_url('loa/v/' . (string) ($row['public_token'] ?? '') . '/preview') ?>">Preview PDF</a>
+                <button class="btn btn-outline-primary" type="submit" formaction="<?= site_url('admin/loa-letters/' . (string) ($row['id'] ?? 0) . '/regenerate') ?>">Regenerate PDF</button>
+                <a class="btn btn-light-soft" href="<?= site_url('admin/loa-letters') ?>">Kembali</a>
             </div>
         </form>
     </div>
