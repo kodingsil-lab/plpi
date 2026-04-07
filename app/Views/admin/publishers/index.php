@@ -2,23 +2,15 @@
 <?= $this->section('content') ?>
 <div class="dashboard-card letters-table-card myletters-table-card">
   <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
-    <h6 class="mb-0">Daftar Publisher</h6>
+    <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar Publisher</h6>
     <div class="d-flex gap-2 align-items-center">
-      <form method="get" class="d-flex align-items-center gap-2">
-        <label class="small text-muted mb-0">Per halaman</label>
-        <select name="perPage" class="form-select form-select-sm" onchange="this.form.submit()">
-          <?php foreach ([10, 25, 50] as $opt): ?>
-            <option value="<?= $opt ?>" <?= ((int) ($perPage ?? 10) === $opt) ? 'selected' : '' ?>><?= $opt ?></option>
-          <?php endforeach; ?>
-        </select>
-      </form>
-      <a class="btn btn-sm btn-primary" href="<?= site_url('admin/publishers/create') ?>">Tambah Publisher</a>
+      <a class="btn btn-primary-main" href="<?= site_url('admin/publishers/create') ?>">Tambah Publisher</a>
     </div>
   </div>
   <div class="card-body pt-2">
     <div class="activity-table-wrap myletters-table-wrap table-responsive">
       <table class="table table-hover align-middle mb-0 w-100">
-        <thead><tr><th>NO</th><th>KODE</th><th>NAMA</th><th>EMAIL</th><th>PHONE</th><th>ALAMAT</th><th>AKSI</th></tr></thead>
+        <thead><tr><th>NO</th><th>KODE</th><th>NAMA PUBLISHER</th><th>EMAIL</th><th>NOMOR WHATSAPP</th><th>ALAMAT</th><th>AKSI</th></tr></thead>
         <tbody>
         <?php if (! empty($rows)): foreach ($rows as $i => $r): ?>
           <tr>
@@ -29,7 +21,7 @@
             <td><?= esc((string) ($r['phone'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['address'] ?? '-')) ?></td>
             <td>
-              <div class="d-flex gap-1">
+              <div class="d-flex gap-1 myletters-actions">
                 <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/publishers/' . (string) $r['id'] . '/edit') ?>">Edit</a>
                 <form method="post" action="<?= site_url('admin/publishers/' . (string) $r['id']) ?>" onsubmit="return confirm('Hapus publisher ini?')">
                   <input type="hidden" name="_method" value="DELETE">

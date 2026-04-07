@@ -49,7 +49,7 @@
 
 <div class="dashboard-card letters-table-card myletters-table-card">
     <div class="card-header border-0 pb-0 bg-transparent">
-        <h6 class="mb-0">Permohonan Terbaru</h6>
+        <h6 class="mb-0"><i class="bi bi-table me-2"></i>Permohonan Terbaru</h6>
     </div>
     <div class="card-body pt-2">
         <div class="activity-table-wrap myletters-table-wrap table-responsive">

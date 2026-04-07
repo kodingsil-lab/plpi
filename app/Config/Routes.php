@@ -33,11 +33,6 @@ $routes->group('admin', ['filter' => ['sessionauth', 'role:superadmin,admin_jurn
     $routes->post('loa-letters/bulk-delete', 'Admin\\LoaLetterController::bulkDelete');
 
     $routes->get('notifikasi', 'Admin\\NotificationController::index');
-    $routes->get('notifikasi/create', 'Admin\\NotificationController::create');
-    $routes->post('notifikasi', 'Admin\\NotificationController::store');
-    $routes->get('notifikasi/(\\d+)/edit', 'Admin\\NotificationController::edit/$1');
-    $routes->put('notifikasi/(\\d+)', 'Admin\\NotificationController::update/$1');
-    $routes->post('notifikasi/(\\d+)', 'Admin\\NotificationController::update/$1');
     $routes->post('notifikasi/(\\d+)/kirim-email', 'Admin\\NotificationController::sendEmail/$1');
     $routes->delete('notifikasi/(\\d+)', 'Admin\\NotificationController::destroy/$1');
     $routes->post('notifikasi/(\\d+)/delete', 'Admin\\NotificationController::destroy/$1');

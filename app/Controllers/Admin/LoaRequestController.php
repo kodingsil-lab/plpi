@@ -115,7 +115,7 @@ class LoaRequestController extends BaseController
             if (! $exists) {
                 $notifModel->insert([
                     'loa_letter_id' => $letterId,
-                    'status' => '-',
+                    'status' => 'menunggu',
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
@@ -173,9 +173,85 @@ class LoaRequestController extends BaseController
 
     private function generateLoaNumber(int $journalId): string
     {
-        $count = (new LoaLetterModel())->where('journal_id', $journalId)->countAllResults() + 1;
-        $month = date('m');
+        $db = \Config\Database::connect();
+        $journal = $db->table('journals j')
+            ->select('j.id, j.code as journal_code, j.publisher_id, p.code as publisher_code')
+            ->join('publishers p', 'p.id = j.publisher_id', 'left')
+            ->where('j.id', $journalId)
+            ->get()
+            ->getRowArray();
+
+        $journalCode = $this->normalizeCodeSegment((string) ($journal['journal_code'] ?? ('JRN-' . $journalId)));
+        $publisherCode = $this->normalizeCodeSegment((string) ($journal['publisher_code'] ?? ('PUB-' . (int) ($journal['publisher_id'] ?? 0))));
+        $monthRoman = $this->monthToRoman((int) date('n'));
         $year = date('Y');
-        return str_pad((string) $count, 3, '0', STR_PAD_LEFT) . '/LOA/JRN-' . $journalId . '/' . $month . '/' . $year;
+
+        $suffix = '/LoA/' . $journalCode . '/' . $publisherCode . '/' . $monthRoman . '/' . $year;
+        $rows = (new LoaLetterModel())
+            ->select('loa_number')
+            ->like('loa_number', '/LoA/' . $journalCode . '/')
+            ->like('loa_number', '/' . $year, 'before')
+            ->findAll();
+
+        $maxSeq = 0;
+        foreach ($rows as $r) {
+            $num = trim((string) ($r['loa_number'] ?? ''));
+            if ($num === '' || ! str_ends_with($num, '/' . $year)) {
+                continue;
+            }
+
+            $parts = explode('/', $num);
+            if (count($parts) < 6) {
+                continue;
+            }
+            if (strcasecmp((string) ($parts[1] ?? ''), 'LoA') !== 0) {
+                continue;
+            }
+            if ((string) ($parts[2] ?? '') !== $journalCode) {
+                continue;
+            }
+
+            $firstSegment = $parts[0] ?? '';
+            if (ctype_digit($firstSegment)) {
+                $maxSeq = max($maxSeq, (int) $firstSegment);
+            }
+        }
+
+        $next = $maxSeq + 1;
+        return str_pad((string) $next, 3, '0', STR_PAD_LEFT) . $suffix;
+    }
+
+    private function monthToRoman(int $month): string
+    {
+        $map = [
+            1 => 'I',
+            2 => 'II',
+            3 => 'III',
+            4 => 'IV',
+            5 => 'V',
+            6 => 'VI',
+            7 => 'VII',
+            8 => 'VIII',
+            9 => 'IX',
+            10 => 'X',
+            11 => 'XI',
+            12 => 'XII',
+        ];
+
+        return $map[$month] ?? 'I';
+    }
+
+    private function normalizeCodeSegment(string $raw): string
+    {
+        $value = strtoupper(trim($raw));
+        if ($value === '') {
+            return 'NA';
+        }
+
+        $value = preg_replace('/[^A-Z0-9-]+/', '-', $value) ?? '';
+        $value = preg_replace('/-+/', '-', $value) ?? '';
+        $value = trim($value, '-');
+
+        return $value !== '' ? $value : 'NA';
     }
 }

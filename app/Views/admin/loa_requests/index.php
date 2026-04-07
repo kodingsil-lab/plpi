@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 <div class="dashboard-card mb-3 myletters-filter-card">
     <div class="card-body">
-        <form method="get" class="myletters-filter-form myletters-filter-form-6">
+        <form method="get" class="myletters-filter-form">
             <div class="myletters-filter-item">
                 <label class="form-label">Status</label>
                 <select name="status" class="form-select">
@@ -25,14 +25,6 @@
                 <label class="form-label">Pencarian</label>
                 <input type="text" name="q" value="<?= esc((string) ($filters['q'] ?? '')) ?>" class="form-control" placeholder="Kode / judul / email">
             </div>
-            <div class="myletters-filter-item">
-                <label class="form-label">Per Halaman</label>
-                <select name="perPage" class="form-select">
-                    <?php foreach ([10, 25, 50] as $opt): ?>
-                        <option value="<?= $opt ?>" <?= ((int) ($perPage ?? 10) === $opt) ? 'selected' : '' ?>><?= $opt ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
             <div class="myletters-filter-btn-item">
                 <label class="form-label form-label-ghost">Aksi</label>
                 <button type="submit" class="btn btn-primary-main myletters-btn">Terapkan</button>
@@ -47,8 +39,8 @@
 
 <div class="dashboard-card letters-table-card myletters-table-card">
     <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
-        <h6 class="mb-0">Daftar Permohonan LoA</h6>
-        <a class="btn btn-sm btn-outline-primary" href="<?= site_url('admin/loa-requests/export/csv') ?>">Export CSV</a>
+        <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar Permohonan LoA</h6>
+        <a class="btn btn-light-soft" href="<?= site_url('admin/loa-requests/export/csv') ?>">Export CSV</a>
     </div>
     <div class="card-body pt-2">
         <div class="activity-table-wrap myletters-table-wrap table-responsive">
@@ -88,7 +80,7 @@
                             </td>
                             <td><?= esc((string) ($r['created_at'] ?? '-')) ?></td>
                             <td>
-                                <div class="d-flex gap-1 flex-wrap">
+                                <div class="d-flex gap-1 flex-wrap myletters-actions">
                                     <a class="btn btn-sm activity-btn user-action-btn user-action-detail" href="<?= site_url('admin/loa-requests/' . (string) $r['id']) ?>">Detail</a>
                                     <?php if (in_array($status, ['pending', 'revision'], true)): ?>
                                         <form method="post" action="<?= site_url('admin/loa-requests/' . (string) $r['id'] . '/approve') ?>" class="d-inline">

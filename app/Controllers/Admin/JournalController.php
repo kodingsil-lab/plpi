@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\JournalModel;
 use App\Models\PublisherModel;
+use function url_title;
 
 class JournalController extends BaseController
 {
@@ -67,8 +68,6 @@ class JournalController extends BaseController
             'publisher_id'         => 'required|is_natural_no_zero',
             'name'                 => 'required|max_length[255]',
             'code'                 => 'required|max_length[80]',
-            'slug'                 => 'required|max_length[100]',
-            'issn'                 => 'permit_empty|max_length[50]',
             'e_issn'               => 'permit_empty|max_length[50]',
             'p_issn'               => 'permit_empty|max_length[50]',
             'website_url'          => 'permit_empty|valid_url|max_length[255]',
@@ -88,17 +87,28 @@ class JournalController extends BaseController
         if ($sameCode) {
             return redirect()->back()->withInput()->with('error', 'Kode jurnal sudah digunakan.');
         }
-        $sameSlug = $model->where('slug', trim((string) $v['slug']))->where('id !=', $id)->first();
-        if ($sameSlug) {
-            return redirect()->back()->withInput()->with('error', 'Slug jurnal sudah digunakan.');
+
+        $slugSource = trim((string) ($v['name'] ?? ''));
+        if ($slugSource === '') {
+            $slugSource = trim((string) ($v['code'] ?? ''));
+        }
+        $baseSlug = url_title($slugSource, '-', true);
+        if ($baseSlug === '') {
+            $baseSlug = 'jurnal';
+        }
+
+        $slug = $baseSlug;
+        $suffix = 2;
+        while ($model->where('slug', $slug)->where('id !=', $id)->first()) {
+            $slug = $baseSlug . '-' . $suffix;
+            $suffix++;
         }
 
         $data = [
             'publisher_id'           => (int) $v['publisher_id'],
             'name'                   => trim((string) $v['name']),
             'code'                   => trim((string) $v['code']),
-            'slug'                   => trim((string) $v['slug']),
-            'issn'                   => $v['issn'] ?? null,
+            'slug'                   => $slug,
             'e_issn'                 => $v['e_issn'] ?? null,
             'p_issn'                 => $v['p_issn'] ?? null,
             'website_url'            => $v['website_url'] ?? null,
@@ -117,8 +127,12 @@ class JournalController extends BaseController
             if (! in_array($ext, $allowed, true)) {
                 return redirect()->back()->withInput()->with('error', 'Format logo harus PNG/JPG/JPEG/WEBP.');
             }
+            $logoDir = WRITEPATH . 'uploads/journals/logos';
+            if (! is_dir($logoDir) && ! @mkdir($logoDir, 0775, true) && ! is_dir($logoDir)) {
+                return redirect()->back()->withInput()->with('error', 'Folder logo jurnal belum tersedia.');
+            }
             $newName = $logo->getRandomName();
-            $logo->move(WRITEPATH . 'uploads/journals/logos', $newName, true);
+            $logo->move($logoDir, $newName, true);
             $data['logo_path'] = 'journals/logos/' . $newName;
         }
 
@@ -127,10 +141,14 @@ class JournalController extends BaseController
             $allowed = ['png', 'jpg', 'jpeg', 'webp'];
             $ext = strtolower((string) $signature->getExtension());
             if (! in_array($ext, $allowed, true)) {
-                return redirect()->back()->withInput()->with('error', 'Format signature harus PNG/JPG/JPEG/WEBP.');
+                return redirect()->back()->withInput()->with('error', 'Format cap + tanda tangan digital harus PNG/JPG/JPEG/WEBP.');
+            }
+            $signatureDir = WRITEPATH . 'uploads/journals/signatures';
+            if (! is_dir($signatureDir) && ! @mkdir($signatureDir, 0775, true) && ! is_dir($signatureDir)) {
+                return redirect()->back()->withInput()->with('error', 'Folder cap + tanda tangan jurnal belum tersedia.');
             }
             $newName = $signature->getRandomName();
-            $signature->move(WRITEPATH . 'uploads/journals/signatures', $newName, true);
+            $signature->move($signatureDir, $newName, true);
             $data['default_signature_path'] = 'journals/signatures/' . $newName;
         }
 
