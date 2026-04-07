@@ -57,18 +57,20 @@
     .plpi-brand {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         color: var(--plpi-navy);
-        font-size: 1.38rem;
+        font-size: 1.56rem;
         font-weight: 800;
-        letter-spacing: .2px;
+        letter-spacing: .35px;
         text-decoration: none;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     }
 
     .plpi-brand img {
-        width: 40px;
-        height: 40px;
+        width: 48px;
+        height: 48px;
         display: block;
+        filter: drop-shadow(0 6px 12px rgba(43, 89, 181, 0.18));
     }
 
     .plpi-menu {
@@ -812,6 +814,16 @@
     }
 
     @media (max-width: 767.98px) {
+        .plpi-brand {
+            font-size: 1.38rem;
+            gap: 10px;
+        }
+
+        .plpi-brand img {
+            width: 42px;
+            height: 42px;
+        }
+
         .plpi-nav {
             flex-wrap: wrap;
             min-height: auto;
@@ -863,7 +875,7 @@
             </p>
             <div class="plpi-hero-actions">
                 <a class="plpi-btn-main" href="<?= site_url('loa/request') ?>">Ajukan LoA</a>
-                <a class="plpi-btn-soft" href="<?= site_url('loa/verify') ?>">Cek Status LoA</a>
+                <a class="plpi-btn-soft" href="<?= site_url('loa/verify') ?>">Verifikasi LoA</a>
             </div>
         </div>
         <div class="plpi-mockup">
