@@ -34,12 +34,108 @@ class JournalController extends BaseController
 
     public function create()
     {
-        return redirect()->back()->with('info', 'Form tambah jurnal akan disiapkan pada batch berikutnya.');
+        return view('admin/journals/edit', [
+            'title'      => 'Tambah Jurnal',
+            'row'        => null,
+            'publishers' => (new PublisherModel())->orderBy('name', 'ASC')->findAll(),
+        ]);
     }
 
     public function store()
     {
-        return redirect()->back()->with('success', 'Data jurnal tersimpan.');
+        $rules = [
+            'publisher_id'         => 'required|is_natural_no_zero',
+            'name'                 => 'required|max_length[255]',
+            'code'                 => 'required|max_length[80]',
+            'e_issn'               => 'permit_empty|max_length[50]',
+            'p_issn'               => 'permit_empty|max_length[50]',
+            'website_url'          => 'permit_empty|valid_url|max_length[255]',
+            'default_signer_name'  => 'permit_empty|max_length[191]',
+            'default_signer_title' => 'permit_empty|max_length[191]',
+            'pdf_sig_left_px'      => 'permit_empty|integer',
+            'pdf_sig_top_px'       => 'permit_empty|integer',
+            'pdf_sig_height_px'    => 'permit_empty|integer',
+        ];
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Periksa kembali form jurnal.');
+        }
+
+        $model = new JournalModel();
+        $v = $this->validator->getValidated();
+
+        $code = trim((string) $v['code']);
+        $sameCode = $model->where('code', $code)->first();
+        if ($sameCode) {
+            return redirect()->back()->withInput()->with('error', 'Kode jurnal sudah digunakan.');
+        }
+
+        $slugSource = trim((string) ($v['name'] ?? ''));
+        if ($slugSource === '') {
+            $slugSource = $code;
+        }
+        $baseSlug = url_title($slugSource, '-', true);
+        if ($baseSlug === '') {
+            $baseSlug = 'jurnal';
+        }
+
+        $slug = $baseSlug;
+        $suffix = 2;
+        while ($model->where('slug', $slug)->first()) {
+            $slug = $baseSlug . '-' . $suffix;
+            $suffix++;
+        }
+
+        $data = [
+            'publisher_id'           => (int) $v['publisher_id'],
+            'name'                   => trim((string) $v['name']),
+            'code'                   => $code,
+            'slug'                   => $slug,
+            'e_issn'                 => $v['e_issn'] ?? null,
+            'p_issn'                 => $v['p_issn'] ?? null,
+            'website_url'            => $v['website_url'] ?? null,
+            'default_signer_name'    => $v['default_signer_name'] ?? null,
+            'default_signer_title'   => $v['default_signer_title'] ?? null,
+            'pdf_sig_left_px'        => ($v['pdf_sig_left_px'] ?? '') !== '' ? (int) $v['pdf_sig_left_px'] : null,
+            'pdf_sig_top_px'         => ($v['pdf_sig_top_px'] ?? '') !== '' ? (int) $v['pdf_sig_top_px'] : null,
+            'pdf_sig_height_px'      => ($v['pdf_sig_height_px'] ?? '') !== '' ? (int) $v['pdf_sig_height_px'] : null,
+        ];
+
+        $logo = $this->request->getFile('logo');
+        if ($logo && $logo->isValid() && $logo->getError() === UPLOAD_ERR_OK) {
+            $allowed = ['png', 'jpg', 'jpeg', 'webp'];
+            $ext = strtolower((string) $logo->getExtension());
+            if (! in_array($ext, $allowed, true)) {
+                return redirect()->back()->withInput()->with('error', 'Format logo harus PNG/JPG/JPEG/WEBP.');
+            }
+            $logoDir = WRITEPATH . 'uploads/journals/logos';
+            if (! is_dir($logoDir) && ! @mkdir($logoDir, 0775, true) && ! is_dir($logoDir)) {
+                return redirect()->back()->withInput()->with('error', 'Folder logo jurnal belum tersedia.');
+            }
+            $newName = $logo->getRandomName();
+            $logo->move($logoDir, $newName, true);
+            $data['logo_path'] = 'journals/logos/' . $newName;
+        }
+
+        $signature = $this->request->getFile('signature');
+        if ($signature && $signature->isValid() && $signature->getError() === UPLOAD_ERR_OK) {
+            $allowed = ['png', 'jpg', 'jpeg', 'webp'];
+            $ext = strtolower((string) $signature->getExtension());
+            if (! in_array($ext, $allowed, true)) {
+                return redirect()->back()->withInput()->with('error', 'Format cap + tanda tangan digital harus PNG/JPG/JPEG/WEBP.');
+            }
+            $signatureDir = WRITEPATH . 'uploads/journals/signatures';
+            if (! is_dir($signatureDir) && ! @mkdir($signatureDir, 0775, true) && ! is_dir($signatureDir)) {
+                return redirect()->back()->withInput()->with('error', 'Folder cap + tanda tangan jurnal belum tersedia.');
+            }
+            $newName = $signature->getRandomName();
+            $signature->move($signatureDir, $newName, true);
+            $data['default_signature_path'] = 'journals/signatures/' . $newName;
+        }
+
+        $model->insert($data);
+        $newId = (int) $model->getInsertID();
+
+        return redirect()->to(site_url('admin/journals/' . $newId . '/edit'))->with('success', 'Data jurnal berhasil ditambahkan.');
     }
 
     public function edit(int $id)

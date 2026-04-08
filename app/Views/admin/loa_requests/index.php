@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/admin') ?>
 <?= $this->section('content') ?>
+<?php helper('status_badge'); ?>
 <div class="dashboard-card mb-3 myletters-filter-card">
     <div class="card-body">
         <form method="get" class="myletters-filter-form">
@@ -7,7 +8,7 @@
                 <label class="form-label">Status</label>
                 <select name="status" class="form-select">
                     <option value="">Semua</option>
-                    <?php foreach (['pending' => 'Menunggu', 'revision' => 'Revisi', 'approved' => 'Disetujui', 'rejected' => 'Ditolak'] as $v => $l): ?>
+                    <?php foreach (plpi_request_status_filter_options() as $v => $l): ?>
                         <option value="<?= esc($v) ?>" <?= (($filters['status'] ?? '') === $v) ? 'selected' : '' ?>><?= esc($l) ?></option>
                     <?php endforeach; ?>
                 </select>
@@ -59,23 +60,19 @@
                 <tbody>
                 <?php if (! empty($rows)): ?>
                     <?php foreach ($rows as $i => $r): ?>
-                        <?php $status = (string) ($r['status'] ?? 'pending'); ?>
+                        <?php
+                            $status = (string) ($r['status'] ?? 'pending');
+                            $hasPublishedLetter = (int) ($r['has_published_letter'] ?? 0) === 1;
+                            $statusMeta = plpi_request_status_meta($status, $hasPublishedLetter);
+                        ?>
                         <tr>
                             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
                             <td class="fw-semibold text-primary"><?= esc((string) ($r['request_code'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['journal_name'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['title'] ?? '-')) ?></td>
                             <td>
-                                <?php
-                                $statusClass = [
-                                    'pending' => 'myletters-status-waiting',
-                                    'revision' => 'myletters-status-revision',
-                                    'approved' => 'myletters-status-approved',
-                                    'rejected' => 'myletters-status-revision',
-                                ][$status] ?? 'myletters-status-waiting';
-                                ?>
-                                <span class="status-pill status-table-pill myletters-status-pill <?= esc($statusClass) ?>">
-                                    <?= esc(ucfirst($status)) ?>
+                                <span class="status-pill status-table-pill myletters-status-pill <?= esc((string) ($statusMeta['class'] ?? 'myletters-status-waiting')) ?>">
+                                    <?= esc((string) ($statusMeta['label'] ?? 'Menunggu')) ?>
                                 </span>
                             </td>
                             <td><?= esc((string) ($r['created_at'] ?? '-')) ?></td>

@@ -22,12 +22,23 @@ class LoaRequestController extends BaseController
 
         $model = new LoaRequestModel();
         $builder = $model
-            ->select('loa_requests.*, journals.name as journal_name')
+            ->select("loa_requests.*, journals.name as journal_name, EXISTS(SELECT 1 FROM loa_letters ll WHERE ll.loa_request_id = loa_requests.id AND ll.status = 'published') as has_published_letter")
             ->join('journals', 'journals.id = loa_requests.journal_id', 'left')
             ->orderBy('loa_requests.id', 'DESC');
 
         if ($status !== '') {
-            $builder->where('loa_requests.status', $status);
+            if ($status === 'menunggu') {
+                $builder->whereIn('loa_requests.status', ['pending', 'revision']);
+            } elseif ($status === 'disetujui') {
+                $builder->where('loa_requests.status', 'approved');
+                $builder->where("NOT EXISTS(SELECT 1 FROM loa_letters ll WHERE ll.loa_request_id = loa_requests.id AND ll.status = 'published')", null, false);
+            } elseif ($status === 'terbit') {
+                $builder->where("EXISTS(SELECT 1 FROM loa_letters ll WHERE ll.loa_request_id = loa_requests.id AND ll.status = 'published')", null, false);
+            } elseif ($status === 'ditolak') {
+                $builder->where('loa_requests.status', 'rejected');
+            } else {
+                $builder->where('loa_requests.status', $status);
+            }
         }
         if ($journalId > 0) {
             $builder->where('loa_requests.journal_id', $journalId);
@@ -54,7 +65,7 @@ class LoaRequestController extends BaseController
     public function show(int $id)
     {
         $row = (new LoaRequestModel())
-            ->select('loa_requests.*, journals.name as journal_name')
+            ->select("loa_requests.*, journals.name as journal_name, EXISTS(SELECT 1 FROM loa_letters ll WHERE ll.loa_request_id = loa_requests.id AND ll.status = 'published') as has_published_letter")
             ->join('journals', 'journals.id = loa_requests.journal_id', 'left')
             ->where('loa_requests.id', $id)
             ->first();
@@ -136,8 +147,12 @@ class LoaRequestController extends BaseController
             return redirect()->back()->with('error', 'Permohonan yang sudah disetujui tidak bisa langsung ditolak.');
         }
 
-        $requestModel->delete($id);
-        return redirect()->to(site_url('admin/loa-requests'))->with('success', 'Permohonan berhasil ditolak dan dihapus.');
+        $requestModel->update($id, [
+            'status' => 'rejected',
+            'rejection_reason' => trim((string) ($this->request->getPost('rejection_reason') ?? 'Ditolak oleh admin.')),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+        return redirect()->to(site_url('admin/loa-requests'))->with('success', 'Permohonan berhasil ditolak.');
     }
 
     public function quickApprove(int $id)

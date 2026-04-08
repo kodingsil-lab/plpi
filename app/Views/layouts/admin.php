@@ -17,15 +17,40 @@
     </style>
 </head>
 <body class="myletters-page">
+<?php
+    $isSettingsActive = url_is('admin/journals*')
+        || url_is('admin/publishers*')
+        || url_is('admin/notifikasi*')
+        || url_is('admin/users*');
+    $sessionName = trim((string) session('name'));
+    $topbarName = $sessionName !== '' ? $sessionName : 'Super Admin';
+    $topbarRole = trim((string) session('role')) ?: 'superadmin';
+    $nameParts = preg_split('/\s+/', $topbarName) ?: [];
+    $initials = '';
+    foreach ($nameParts as $part) {
+        if ($part !== '') {
+            $initials .= strtoupper(substr($part, 0, 1));
+        }
+        if (strlen($initials) >= 2) {
+            break;
+        }
+    }
+    if ($initials === '') {
+        $initials = 'SA';
+    }
+    $profileUrl = session('user_id') ? site_url('admin/users/' . (int) session('user_id') . '/edit') : site_url('admin/users');
+?>
 <aside class="app-sidebar" id="appSidebar">
     <div class="sidebar-brand-wrap">
-        <div class="sidebar-brand">
-            <div class="brand-icon"><i class="bi bi-building"></i></div>
+        <a href="<?= site_url('/') ?>" class="sidebar-brand text-decoration-none">
+            <div class="brand-icon">
+                <img src="<?= base_url('assets/img/plpi-geo-logo-white.svg') ?>" alt="Logo PLPI" class="brand-logo-white">
+            </div>
             <div class="brand-text">
                 <h5 class="brand-plpi-title">PLPI</h5>
                 <p class="brand-plpi-sub">PUSAT LAYANAN PUBLIKASI ILMIAH</p>
             </div>
-        </div>
+        </a>
     </div>
 
     <nav class="sidebar-nav">
@@ -34,10 +59,26 @@
             <li><a href="<?= site_url('admin/loa-requests') ?>" class="sidebar-link <?= url_is('admin/loa-requests*') ? 'active' : '' ?>"><span class="sidebar-icon-wrap"><i class="bi bi-send-fill"></i></span><span class="sidebar-link-text">Permohonan LoA</span></a></li>
             <li><a href="<?= site_url('admin/loa-letters') ?>" class="sidebar-link <?= url_is('admin/loa-letters*') ? 'active' : '' ?>"><span class="sidebar-icon-wrap"><i class="bi bi-folder2-open"></i></span><span class="sidebar-link-text">LoA Terbit</span></a></li>
             <li class="sidebar-section-label">Layanan</li>
-            <li><a href="<?= site_url('admin/journals') ?>" class="sidebar-link <?= url_is('admin/journals*') ? 'active' : '' ?>"><span class="sidebar-icon-wrap"><i class="bi bi-journal-text"></i></span><span class="sidebar-link-text">Data Jurnal</span></a></li>
-            <li><a href="<?= site_url('admin/publishers') ?>" class="sidebar-link <?= url_is('admin/publishers*') ? 'active' : '' ?>"><span class="sidebar-icon-wrap"><i class="bi bi-building-gear"></i></span><span class="sidebar-link-text">Publisher</span></a></li>
-            <li><a href="<?= site_url('admin/notifikasi') ?>" class="sidebar-link <?= url_is('admin/notifikasi*') ? 'active' : '' ?>"><span class="sidebar-icon-wrap"><i class="bi bi-bell-fill"></i></span><span class="sidebar-link-text">Notifikasi</span></a></li>
-            <li><a href="<?= site_url('admin/users') ?>" class="sidebar-link <?= url_is('admin/users*') ? 'active' : '' ?>"><span class="sidebar-icon-wrap"><i class="bi bi-people-fill"></i></span><span class="sidebar-link-text">Pengguna</span></a></li>
+            <li class="has-submenu">
+                <button
+                    type="button"
+                    class="submenu-toggle <?= $isSettingsActive ? 'active' : '' ?>"
+                    aria-controls="settingsSubmenu"
+                    aria-expanded="<?= $isSettingsActive ? 'true' : 'false' ?>"
+                >
+                    <span class="link-left">
+                        <i class="bi bi-gear-fill"></i>
+                        <span>Pengaturan</span>
+                    </span>
+                    <i class="bi bi-chevron-down submenu-arrow"></i>
+                </button>
+                <ul id="settingsSubmenu" class="sidebar-submenu <?= $isSettingsActive ? 'show' : '' ?>">
+                    <li><a href="<?= site_url('admin/journals') ?>" class="sidebar-sublink <?= url_is('admin/journals*') ? 'active' : '' ?>"><i class="bi bi-journal-text"></i><span>Data Jurnal</span></a></li>
+                    <li><a href="<?= site_url('admin/publishers') ?>" class="sidebar-sublink <?= url_is('admin/publishers*') ? 'active' : '' ?>"><i class="bi bi-building-gear"></i><span>Publisher</span></a></li>
+                    <li><a href="<?= site_url('admin/notifikasi') ?>" class="sidebar-sublink <?= url_is('admin/notifikasi*') ? 'active' : '' ?>"><i class="bi bi-bell-fill"></i><span>Notifikasi</span></a></li>
+                    <li><a href="<?= site_url('admin/users') ?>" class="sidebar-sublink <?= url_is('admin/users*') ? 'active' : '' ?>"><i class="bi bi-people-fill"></i><span>Pengguna</span></a></li>
+                </ul>
+            </li>
             <li>
                 <form method="post" action="<?= site_url('logout') ?>" class="m-0">
                     <button type="submit" class="sidebar-link sidebar-link-logout w-100 border-0 bg-transparent text-start">
@@ -61,11 +102,35 @@
             </div>
         </div>
         <div class="topbar-right">
-            <div class="topbar-user-btn">
-                <span class="topbar-user-meta">
-                    <span class="topbar-user-name"><?= esc((string) session('name') ?: 'Super Admin') ?></span>
-                    <span class="topbar-user-role"><?= esc((string) session('role') ?: 'superadmin') ?></span>
-                </span>
+            <div class="topbar-user dropdown">
+                <button type="button" class="topbar-user-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="topbar-avatar-shell">
+                        <span class="topbar-avatar-img topbar-avatar-generated"><?= esc($initials) ?></span>
+                    </span>
+                    <span class="topbar-user-meta">
+                        <span class="topbar-user-name"><?= esc($topbarName) ?></span>
+                        <span class="topbar-user-role"><?= esc($topbarRole) ?></span>
+                    </span>
+                    <span class="topbar-user-caret"><i class="bi bi-chevron-down"></i></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end topbar-dropdown topbar-account-menu">
+                    <div class="topbar-account-summary">
+                        <div class="topbar-account-summary-name"><?= esc($topbarName) ?></div>
+                        <div class="topbar-account-summary-role"><?= esc($topbarRole) ?></div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="<?= $profileUrl ?>" class="dropdown-item topbar-account-item">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Profil</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <form method="post" action="<?= site_url('logout') ?>" class="m-0">
+                        <button type="submit" class="dropdown-item topbar-account-item topbar-account-item-logout w-100 border-0 bg-transparent text-start">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </header>
