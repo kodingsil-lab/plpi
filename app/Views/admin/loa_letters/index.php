@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/admin') ?>
 <?= $this->section('content') ?>
+<?php helper('status_badge'); ?>
 <div class="dashboard-card mb-3 myletters-filter-card">
     <div class="card-body">
         <form method="get" class="myletters-filter-form">
@@ -60,14 +61,15 @@
                 <?php if (! empty($rows)): ?>
                     <?php foreach ($rows as $i => $r): ?>
                         <?php $status = (string) ($r['status'] ?? 'published'); ?>
+                        <?php $statusMeta = plpi_letter_status_meta($status); ?>
                         <tr>
                             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
                             <td class="fw-semibold text-primary"><?= esc((string) ($r['loa_number'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['journal_name'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['title'] ?? '-')) ?></td>
                             <td>
-                                <span class="status-pill status-table-pill myletters-status-pill <?= esc($status === 'revoked' ? 'myletters-status-revision' : 'myletters-status-issued') ?>">
-                                    <?= esc($status === 'revoked' ? 'Dicabut' : 'LoA Terbit') ?>
+                                <span class="status-pill status-table-pill myletters-status-pill <?= esc((string) ($statusMeta['class'] ?? 'myletters-status-issued')) ?>">
+                                    <?= esc((string) ($statusMeta['label'] ?? 'Terbit')) ?>
                                 </span>
                             </td>
                             <td><?= esc((string) ($r['published_at'] ?? '-')) ?></td>

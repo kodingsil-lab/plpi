@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/admin') ?>
 <?= $this->section('content') ?>
+<?php helper('status_badge'); ?>
 <div class="dashboard-card letters-table-card myletters-table-card">
   <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
     <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar Notifikasi</h6>
@@ -17,22 +18,10 @@
             <td><?= esc((string) ($r['title'] ?? '-')) ?></td>
             <td>
               <?php
-              $statusRaw = strtolower(trim((string) ($r['status'] ?? 'menunggu')));
-              $statusClass = [
-                  'menunggu' => 'myletters-status-waiting',
-                  '-' => 'myletters-status-waiting',
-                  'notifikasi terkirim' => 'myletters-status-approved',
-                  'gagal terkirim' => 'myletters-status-revision',
-              ][$statusRaw] ?? 'myletters-status-waiting';
-              $statusLabel = [
-                  'menunggu' => 'Menunggu',
-                  '-' => 'Menunggu',
-                  'notifikasi terkirim' => 'Notifikasi Terkirim',
-                  'gagal terkirim' => 'Gagal Terkirim',
-              ][$statusRaw] ?? ucfirst((string) ($r['status'] ?? 'Menunggu'));
+              $statusMeta = plpi_notification_status_meta((string) ($r['status'] ?? 'menunggu'));
               ?>
-              <span class="status-pill status-table-pill myletters-status-pill <?= esc($statusClass) ?>">
-                <?= esc($statusLabel) ?>
+              <span class="status-pill status-table-pill myletters-status-pill <?= esc((string) ($statusMeta['class'] ?? 'myletters-status-waiting')) ?>">
+                <?= esc((string) ($statusMeta['label'] ?? 'Menunggu')) ?>
               </span>
             </td>
             <td><?= esc((string) (($r['sent_at'] ?? $r['published_at'] ?? '-'))) ?></td>

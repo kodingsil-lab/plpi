@@ -1,6 +1,15 @@
 <?= $this->extend('layouts/admin') ?>
 <?= $this->section('content') ?>
 <?php
+$isEdit = ! empty($row['id']);
+$formAction = $isEdit
+  ? site_url('admin/journals/' . (int) ($row['id'] ?? 0))
+  : site_url('admin/journals');
+$heading = $isEdit ? 'Edit Jurnal' : 'Tambah Jurnal';
+$description = $isEdit
+  ? 'Kelola identitas jurnal, penandatangan, dan konfigurasi berkas pendukung.'
+  : 'Lengkapi identitas jurnal baru, penandatangan, dan konfigurasi berkas pendukung.';
+
 $logoPreview = null;
 if (! empty($row['logo_path'])) {
   $logoFullPath = WRITEPATH . 'uploads/' . ltrim((string) $row['logo_path'], '/\\');
@@ -27,10 +36,12 @@ if (! empty($row['default_signature_path'])) {
 ?>
 <div class="dashboard-card letters-table-card myletters-table-card">
   <div class="card-body">
-    <h6 class="mb-1">Edit Jurnal</h6>
-    <p class="text-muted mb-4">Kelola identitas jurnal, penandatangan, dan konfigurasi berkas pendukung.</p>
-    <form method="post" action="<?= site_url('admin/journals/' . (int) ($row['id'] ?? 0)) ?>" enctype="multipart/form-data">
+    <h6 class="mb-1"><?= esc($heading) ?></h6>
+    <p class="text-muted mb-4"><?= esc($description) ?></p>
+    <form method="post" action="<?= $formAction ?>" enctype="multipart/form-data">
+      <?php if ($isEdit): ?>
       <input type="hidden" name="_method" value="PUT">
+      <?php endif; ?>
 
       <h6 class="mb-3">Identitas Jurnal</h6>
       <div class="row g-3">

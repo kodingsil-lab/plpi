@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/admin') ?>
 <?= $this->section('content') ?>
+<?php helper('status_badge'); ?>
 <div class="row g-3 mb-3">
     <div class="col-md-6 col-xl-3">
         <div class="dashboard-card stat-card h-100">
@@ -68,23 +69,19 @@
                 <tbody>
                 <?php if (! empty($latest)): ?>
                     <?php foreach ($latest as $i => $row): ?>
+                        <?php
+                            $statusRaw = (string) ($row['status'] ?? 'pending');
+                            $hasPublishedLetter = (int) ($row['has_published_letter'] ?? 0) === 1;
+                            $statusMeta = plpi_request_status_meta($statusRaw, $hasPublishedLetter);
+                        ?>
                         <tr>
                             <td><?= esc((string) ($i + 1)) ?></td>
                             <td class="fw-semibold text-primary"><?= esc((string) ($row['request_code'] ?? '-')) ?></td>
                             <td><?= esc((string) ($row['journal_name'] ?? '-')) ?></td>
                             <td><?= esc((string) ($row['title'] ?? '-')) ?></td>
                             <td>
-                                <?php
-                                $s = (string) ($row['status'] ?? 'pending');
-                                $statusClass = [
-                                    'pending' => 'myletters-status-waiting',
-                                    'revision' => 'myletters-status-revision',
-                                    'approved' => 'myletters-status-approved',
-                                    'rejected' => 'myletters-status-revision',
-                                ][$s] ?? 'myletters-status-waiting';
-                                ?>
-                                <span class="status-pill status-table-pill myletters-status-pill <?= esc($statusClass) ?>">
-                                    <?= esc(ucfirst($s)) ?>
+                                <span class="status-pill status-table-pill myletters-status-pill <?= esc((string) ($statusMeta['class'] ?? 'myletters-status-waiting')) ?>">
+                                    <?= esc((string) ($statusMeta['label'] ?? 'Menunggu')) ?>
                                 </span>
                             </td>
                             <td><?= esc((string) ($row['created_at'] ?? '-')) ?></td>

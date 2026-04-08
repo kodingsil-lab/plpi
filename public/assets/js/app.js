@@ -205,6 +205,23 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    document.querySelectorAll('.submenu-toggle[aria-controls]').forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+            const targetId = toggle.getAttribute('aria-controls');
+            if (!targetId) {
+                return;
+            }
+            const submenu = document.getElementById(targetId);
+            if (!submenu) {
+                return;
+            }
+
+            const expanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+            submenu.classList.toggle('show', !expanded);
+        });
+    });
+
     const barEl = document.getElementById('lettersBarChart');
     if (barEl && window.Chart) {
         const labels = JSON.parse(barEl.dataset.labels || '[]');

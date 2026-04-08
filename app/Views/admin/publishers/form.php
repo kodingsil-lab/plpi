@@ -1,5 +1,18 @@
 <?= $this->extend('layouts/admin') ?>
 <?= $this->section('content') ?>
+<?php
+$logoPreview = null;
+if (! empty($row['logo_path'])) {
+  $logoFullPath = WRITEPATH . 'uploads/' . ltrim((string) $row['logo_path'], '/\\');
+  if (is_file($logoFullPath) && is_readable($logoFullPath)) {
+    $logoMime = @mime_content_type($logoFullPath) ?: 'image/png';
+    $logoData = @file_get_contents($logoFullPath);
+    if ($logoData !== false) {
+      $logoPreview = 'data:' . $logoMime . ';base64,' . base64_encode($logoData);
+    }
+  }
+}
+?>
 <div class="dashboard-card letters-table-card myletters-table-card">
   <div class="card-body">
     <h6 class="mb-1"><?= esc($row ? 'Edit Publisher' : 'Tambah Publisher') ?></h6>
@@ -15,10 +28,12 @@
         <div class="col-md-6">
           <label class="form-label">Logo Publisher</label>
           <input class="form-control" type="file" name="logo" id="logoFileInput" accept="image/png,image/jpeg,image/webp">
-          <img id="logoPreviewImage" src="#" alt="Preview logo publisher" style="display:none;max-height:72px;width:auto;margin-top:10px;border:1px solid #dbe3ee;border-radius:8px;padding:4px;background:#fff;">
-          <?php if (! empty($row['logo_path'])): ?>
-            <small class="text-muted d-block mt-1">Path saat ini: <?= esc((string) $row['logo_path']) ?></small>
-          <?php endif; ?>
+          <img
+            id="logoPreviewImage"
+            src="<?= esc((string) ($logoPreview ?? '')) ?>"
+            alt="Preview logo publisher"
+            style="max-height:72px;width:auto;margin-top:10px;border:1px solid #dbe3ee;border-radius:8px;padding:4px;background:#fff;<?= $logoPreview ? '' : 'display:none;' ?>"
+          >
         </div>
       </div>
       <div class="d-flex gap-2 mt-4 myletters-actions user-form-actions justify-content-end">

@@ -10,16 +10,24 @@
   <div class="card-body pt-2">
     <div class="activity-table-wrap myletters-table-wrap table-responsive">
       <table class="table table-hover align-middle mb-0 w-100 users-table-full">
-        <thead><tr><th>NO</th><th>USERNAME</th><th>NAMA</th><th>EMAIL</th><th>ROLE</th><th>AKTIF</th><th>AKSI</th></tr></thead>
+        <thead><tr><th>USERNAME</th><th>NAMA ADMIN</th><th>EMAIL</th><th>ROLE</th><th>JURNAL YANG DITUGASKAN</th><th>AKSI</th></tr></thead>
         <tbody>
         <?php if (! empty($rows)): foreach ($rows as $i => $r): ?>
+          <?php
+            $roleRaw = (string) ($r['role'] ?? '-');
+            $roleLabel = $roleRaw === 'admin_jurnal' ? 'adminjurnal' : $roleRaw;
+            $assignedJournal = '-';
+            if ($roleRaw === 'admin_jurnal') {
+              $assignedCount = (int) ($r['assigned_journal_count'] ?? 0);
+              $assignedJournal = $assignedCount . ' Jurnal';
+            }
+          ?>
           <tr>
-            <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
-            <td class="fw-semibold text-primary"><?= esc((string) ($r['username'] ?? '-')) ?></td>
+            <td><?= esc((string) ($r['username'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['name'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['email'] ?? '-')) ?></td>
-            <td><?= esc((string) ($r['role'] ?? '-')) ?></td>
-            <td><?= ! empty($r['is_active']) ? 'Ya' : 'Tidak' ?></td>
+            <td><?= esc($roleLabel) ?></td>
+            <td><?= esc($assignedJournal) ?></td>
             <td>
               <div class="d-flex gap-1 myletters-actions">
                 <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/users/' . (string) $r['id'] . '/edit') ?>">Edit</a>
@@ -31,7 +39,7 @@
             </td>
           </tr>
         <?php endforeach; else: ?>
-          <tr><td colspan="7" class="text-center text-muted">Belum ada data pengguna.</td></tr>
+          <tr><td colspan="6" class="text-center text-muted">Belum ada data pengguna.</td></tr>
         <?php endif; ?>
         </tbody>
       </table>

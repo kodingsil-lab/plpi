@@ -10,16 +10,16 @@
   <div class="card-body pt-2">
     <div class="activity-table-wrap myletters-table-wrap table-responsive">
       <table class="table table-hover align-middle mb-0 w-100">
-        <thead><tr><th>NO</th><th>KODE</th><th>NAMA PUBLISHER</th><th>EMAIL</th><th>NOMOR WHATSAPP</th><th>ALAMAT</th><th>AKSI</th></tr></thead>
+        <thead><tr><th>NO</th><th>KODE</th><th>NAMA PUBLISHER</th><th>EMAIL</th><th>NOMOR WHATSAPP</th><th style="width:22%;">ALAMAT</th><th>AKSI</th></tr></thead>
         <tbody>
         <?php if (! empty($rows)): foreach ($rows as $i => $r): ?>
           <tr>
             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
-            <td class="fw-semibold text-primary"><?= esc((string) ($r['code'] ?? '-')) ?></td>
+            <td><?= esc((string) ($r['code'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['name'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['email'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['phone'] ?? '-')) ?></td>
-            <td><?= esc((string) ($r['address'] ?? '-')) ?></td>
+            <td style="width:22%; word-break:break-word;"><?= esc((string) ($r['address'] ?? '-')) ?></td>
             <td>
               <div class="d-flex gap-1 myletters-actions">
                 <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/publishers/' . (string) $r['id'] . '/edit') ?>">Edit</a>
