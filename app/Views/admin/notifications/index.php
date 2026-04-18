@@ -24,7 +24,7 @@
                 <?= esc((string) ($statusMeta['label'] ?? 'Menunggu')) ?>
               </span>
             </td>
-            <td><?= esc((string) (($r['sent_at'] ?? $r['published_at'] ?? '-'))) ?></td>
+            <td><?= esc(plpi_format_date($r['sent_at'] ?? ($r['published_at'] ?? null), true)) ?></td>
             <td>
               <div class="myletters-actions">
                 <form method="post" action="<?= site_url('admin/notifikasi/' . (string) $r['id'] . '/kirim-email') ?>" class="d-inline">

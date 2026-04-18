@@ -13,3 +13,24 @@
  *
  * @see: https://codeigniter.com/user_guide/extending/common.html
  */
+
+if (! function_exists('plpi_format_date')) {
+    function plpi_format_date($value, bool $withTime = false): string
+    {
+        if ($value === null) {
+            return '-';
+        }
+
+        $raw = trim((string) $value);
+        if ($raw === '' || $raw === '-') {
+            return '-';
+        }
+
+        $ts = strtotime($raw);
+        if ($ts === false) {
+            return '-';
+        }
+
+        return $withTime ? date('d-m-Y H:i:s', $ts) : date('d-m-Y', $ts);
+    }
+}

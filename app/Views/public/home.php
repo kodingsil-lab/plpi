@@ -321,15 +321,16 @@
         border: 1px solid var(--plpi-line);
         border-radius: 10px;
         overflow: hidden;
+        background: #ffffff;
     }
 
     .plpi-mockup-row {
         display: grid;
-        grid-template-columns: 1fr auto auto;
-        gap: 8px;
+        grid-template-columns: 112px minmax(0, 1fr) 94px;
+        gap: 10px;
         align-items: center;
-        padding: 7px 10px;
-        font-size: .76rem;
+        padding: 8px 10px;
+        font-size: .78rem;
         color: #566a8b;
         background: #fff;
     }
@@ -341,6 +342,18 @@
     .plpi-mockup-row .code {
         color: #2c446c;
         font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .plpi-mockup-row .title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
+        min-width: 0;
     }
 
     .plpi-mockup-row .st {
@@ -348,6 +361,8 @@
         font-size: .7rem;
         border-radius: 999px;
         padding: 2px 7px;
+        justify-self: end;
+        white-space: nowrap;
     }
 
     .plpi-mockup-row .st.ok {
@@ -557,18 +572,18 @@
     .plpi-journal-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 14px;
+        gap: 12px;
     }
 
     .plpi-journal-card {
-        background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
-        border: 1px solid #d6e3f3;
-        border-radius: 14px;
-        box-shadow: 0 10px 22px rgba(18, 41, 77, 0.07);
-        padding: 12px;
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #d5e1ef;
+        border-radius: 16px;
+        box-shadow: 0 8px 18px rgba(18, 41, 77, 0.06);
+        padding: 10px 10px 11px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
         position: relative;
         overflow: hidden;
@@ -585,20 +600,20 @@
     }
 
     .plpi-journal-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 14px 26px rgba(18, 41, 77, 0.12);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 22px rgba(18, 41, 77, 0.10);
         border-color: #bfd2eb;
     }
 
     .plpi-journal-cover {
         border: 1px solid #d6e0ee;
         border-radius: 12px;
-        min-height: 220px;
-        padding: 14px 12px 44px;
+        min-height: 192px;
+        padding: 10px 10px 38px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(145deg, #eef4fd 0%, #ffffff 60%);
+        background: linear-gradient(145deg, #edf3fb 0%, #ffffff 62%);
         position: relative;
         overflow: hidden;
     }
@@ -608,10 +623,10 @@
         z-index: 1;
         width: auto;
         height: auto;
-        max-width: 88%;
-        max-height: 170px;
+        max-width: 84%;
+        max-height: 156px;
         object-fit: contain;
-        filter: drop-shadow(0 10px 16px rgba(31, 49, 80, 0.22));
+        filter: drop-shadow(0 9px 14px rgba(31, 49, 80, 0.19));
     }
 
     .plpi-journal-cover::before {
@@ -639,28 +654,28 @@
 
     .plpi-journal-badge {
         position: absolute;
-        left: 10px;
-        bottom: 10px;
+        left: 9px;
+        bottom: 9px;
         z-index: 2;
         display: inline-flex;
         align-items: center;
         border-radius: 999px;
-        padding: 5px 10px;
+        padding: 4px 10px;
         background: #ffffff;
         border: 1px solid #cedbee;
         color: var(--plpi-navy);
-        font-size: .75rem;
+        font-size: .74rem;
         font-weight: 700;
         box-shadow: 0 4px 10px rgba(18, 41, 77, 0.10);
     }
 
     @media (max-width: 767.98px) {
         .plpi-journal-cover {
-            min-height: 246px;
+            min-height: 220px;
         }
 
         .plpi-journal-logo {
-            max-height: 194px;
+            max-height: 178px;
         }
     }
 
@@ -683,13 +698,39 @@
     .plpi-journal-title {
         margin: 0;
         color: #173b74;
-        font-size: .96rem;
+        font-size: .93rem;
         font-weight: 800;
-        line-height: 1.4;
+        line-height: 1.38;
+    }
+
+    .plpi-journal-card-link {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #4f6f9a;
+        text-decoration: none;
+        transition: color .2s ease, transform .2s ease, background .2s ease;
+    }
+
+    .plpi-journal-card-link:hover {
+        color: #1e4f9b;
+        background: #eaf2ff;
+        transform: translateY(-1px);
+    }
+
+    .plpi-journal-card-link.is-disabled {
+        opacity: .45;
+        pointer-events: none;
     }
 
     .plpi-journal-country {
-        margin: -4px 0 0;
+        margin: -2px 0 0;
         color: #6f819d;
         font-size: .8rem;
     }
@@ -705,17 +746,17 @@
         border: 1px solid #d3dfef;
         background: #f4f8fd;
         color: #2a4774;
-        padding: 4px 10px;
-        font-size: .74rem;
+        padding: 3px 10px;
+        font-size: .73rem;
         font-weight: 700;
     }
 
     .plpi-journal-publisher {
         margin: 0;
         color: #657a99;
-        font-size: .8rem;
-        line-height: 1.45;
-        padding-top: 8px;
+        font-size: .79rem;
+        line-height: 1.42;
+        padding-top: 7px;
         border-top: 1px dashed #d8e4f4;
     }
 
@@ -851,6 +892,10 @@
             gap: 12px;
             flex-wrap: wrap;
         }
+
+        .plpi-mockup-row {
+            grid-template-columns: 100px minmax(0, 1fr) 90px;
+        }
     }
 
     @media (max-width: 767.98px) {
@@ -882,6 +927,11 @@
         .plpi-mini-cards,
         .plpi-journal-grid {
             grid-template-columns: 1fr;
+        }
+
+        .plpi-mockup-row {
+            grid-template-columns: 92px minmax(0, 1fr) 84px;
+            font-size: .75rem;
         }
     }
 </style>
@@ -951,14 +1001,14 @@
                         <?php $statusMeta = $mapStatus((string) ($row['status'] ?? 'pending')); ?>
                         <div class="plpi-mockup-row">
                             <span class="code"><?= esc((string) ($row['request_code'] ?? '-')) ?></span>
-                            <span><?= esc((string) ($row['title'] ?? '-')) ?></span>
+                            <span class="title"><?= esc((string) ($row['title'] ?? '-')) ?></span>
                             <span class="st <?= $statusMeta['class'] === 'approved' ? 'ok' : 'wait' ?>"><?= esc($statusMeta['label']) ?></span>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="plpi-mockup-row">
                         <span class="code">-</span>
-                        <span>Belum ada permohonan</span>
+                        <span class="title">Belum ada permohonan</span>
                         <span class="st wait">Diproses</span>
                     </div>
                 <?php endif; ?>
@@ -1021,7 +1071,7 @@
                                     <td><?= esc((string) ($row['request_code'] ?? '-')) ?></td>
                                     <td><?= esc((string) ($row['title'] ?? '-')) ?></td>
                                     <td><span class="badge-soft <?= esc($statusMeta['class']) ?>"><?= esc($statusMeta['label']) ?></span></td>
-                                    <td><?= esc(date('d M Y', strtotime((string) ($row['created_at'] ?? 'now')))) ?></td>
+                                    <td><?= esc(plpi_format_date($row['created_at'] ?? null)) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -1044,6 +1094,7 @@
                     <?php
                         $journalCode = strtoupper((string) ($journal['code'] ?? 'JURNAL'));
                         $logoDataUri = trim((string) ($journal['logo_data_uri'] ?? ''));
+                        $journalUrl = trim((string) ($journal['website_url'] ?? ''));
                     ?>
                     <article class="plpi-journal-card">
                         <div class="plpi-journal-cover">
@@ -1059,6 +1110,12 @@
                             <span class="plpi-journal-pill">P-ISSN <?= esc((string) ($journal['p_issn'] ?: '-')) ?></span>
                         </div>
                         <p class="plpi-journal-publisher"><?= esc((string) (($journal['publisher_name'] ?? '-') ?: '-')) ?></p>
+                        <a
+                            href="<?= $journalUrl !== '' ? esc($journalUrl) : '#' ?>"
+                            class="plpi-journal-card-link <?= $journalUrl === '' ? 'is-disabled' : '' ?>"
+                            <?= $journalUrl !== '' ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+                            aria-label="Buka website jurnal"
+                        ><i class="bi bi-arrow-up-right"></i></a>
                     </article>
                 <?php endforeach; ?>
             <?php else: ?>
@@ -1073,6 +1130,7 @@
                         <span class="plpi-journal-pill">P-ISSN -</span>
                     </div>
                     <p class="plpi-journal-publisher">Tambahkan jurnal dari panel admin.</p>
+                    <span class="plpi-journal-card-link is-disabled" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
                 </article>
             <?php endif; ?>
         </div>

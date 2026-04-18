@@ -119,7 +119,7 @@
             <strong>Judul</strong><span><?= esc((string) ($letter['title'] ?? '-')) ?></span>
             <strong>Jurnal</strong><span><?= esc((string) ($journal['name'] ?? '-')) ?></span>
             <strong>Status</strong><span><?= esc((string) ($letter['status'] ?? '-')) ?></span>
-            <strong>Diterbitkan</strong><span><?= esc((string) ($letter['published_at'] ?? '-')) ?></span>
+            <strong>Diterbitkan</strong><span><?= esc(plpi_format_date($letter['published_at'] ?? null, true)) ?></span>
         </div>
         <div class="verify-result-actions">
             <a class="verify-btn-main" href="<?= site_url('loa/v/' . (string) ($letter['public_token'] ?? '')) ?>" target="_blank">Lihat Dokumen</a>

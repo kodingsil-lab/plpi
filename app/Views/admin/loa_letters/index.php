@@ -81,7 +81,7 @@
                                     <?= esc((string) ($statusMeta['label'] ?? 'Terbit')) ?>
                                 </span>
                             </td>
-                            <td><?= esc((string) ($r['published_at'] ?? '-')) ?></td>
+                            <td><?= esc(plpi_format_date($r['published_at'] ?? null, true)) ?></td>
                             <td>
                                 <div class="myletters-actions">
                                     <a class="btn btn-sm activity-btn user-action-btn user-action-detail user-action-preview action-solid action-solid-preview myletters-icon-only" href="<?= site_url('loa/v/' . (string) ($r['public_token'] ?? '') . '/preview') ?>" target="_blank" aria-label="Preview" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Preview">
