@@ -1,5 +1,21 @@
 <?= $this->extend('layouts/public') ?>
 <?= $this->section('content') ?>
+<?php
+    $latestRequests = is_array($latestRequests ?? null) ? $latestRequests : [];
+    $journalProfiles = is_array($journalProfiles ?? null) ? $journalProfiles : [];
+    $requestStats = is_array($requestStats ?? null) ? $requestStats : ['total' => 0, 'pending' => 0, 'letters' => 0];
+
+    $mapStatus = static function (string $statusRaw): array {
+        $status = strtolower(trim($statusRaw));
+        if ($status === 'approved') {
+            return ['label' => 'Disetujui', 'class' => 'approved'];
+        }
+        if (in_array($status, ['rejected', 'revision'], true)) {
+            return ['label' => 'Ditolak', 'class' => 'rejected'];
+        }
+        return ['label' => 'Diproses', 'class' => 'processing'];
+    };
+?>
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -577,13 +593,25 @@
     .plpi-journal-cover {
         border: 1px solid #d6e0ee;
         border-radius: 12px;
-        min-height: 184px;
-        padding: 10px;
+        min-height: 220px;
+        padding: 14px 12px 44px;
         display: flex;
-        align-items: flex-end;
+        align-items: center;
+        justify-content: center;
         background: linear-gradient(145deg, #eef4fd 0%, #ffffff 60%);
         position: relative;
         overflow: hidden;
+    }
+
+    .plpi-journal-logo {
+        position: relative;
+        z-index: 1;
+        width: auto;
+        height: auto;
+        max-width: 88%;
+        max-height: 170px;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 16px rgba(31, 49, 80, 0.22));
     }
 
     .plpi-journal-cover::before {
@@ -610,8 +638,10 @@
     }
 
     .plpi-journal-badge {
-        position: relative;
-        z-index: 1;
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        z-index: 2;
         display: inline-flex;
         align-items: center;
         border-radius: 999px;
@@ -622,6 +652,16 @@
         font-size: .75rem;
         font-weight: 700;
         box-shadow: 0 4px 10px rgba(18, 41, 77, 0.10);
+    }
+
+    @media (max-width: 767.98px) {
+        .plpi-journal-cover {
+            min-height: 246px;
+        }
+
+        .plpi-journal-logo {
+            max-height: 194px;
+        }
     }
 
     .plpi-journal-cover.siber .plpi-journal-badge {
@@ -886,15 +926,15 @@
             </div>
             <div class="plpi-mini-cards">
                 <div class="plpi-mini-card">
-                    <strong>128</strong>
+                    <strong><?= esc((string) ($requestStats['total'] ?? 0)) ?></strong>
                     <span>Permohonan</span>
                 </div>
                 <div class="plpi-mini-card">
-                    <strong>42</strong>
+                    <strong><?= esc((string) ($requestStats['letters'] ?? 0)) ?></strong>
                     <span>LoA Terbit</span>
                 </div>
                 <div class="plpi-mini-card">
-                    <strong>17</strong>
+                    <strong><?= esc((string) ($requestStats['pending'] ?? 0)) ?></strong>
                     <span>Menunggu Verifikasi</span>
                 </div>
             </div>
@@ -906,21 +946,22 @@
                 </svg>
             </div>
             <div class="plpi-mockup-list">
-                <div class="plpi-mockup-row">
-                    <span class="code">REQ-2026-019</span>
-                    <span>Naskah Pendidikan Sains</span>
-                    <span class="st wait">Diproses</span>
-                </div>
-                <div class="plpi-mockup-row">
-                    <span class="code">REQ-2026-018</span>
-                    <span>Naskah Manajemen Publik</span>
-                    <span class="st ok">Disetujui</span>
-                </div>
-                <div class="plpi-mockup-row">
-                    <span class="code">REQ-2026-017</span>
-                    <span>Naskah Teknologi Terapan</span>
-                    <span class="st wait">Diproses</span>
-                </div>
+                <?php if (! empty($latestRequests)): ?>
+                    <?php foreach (array_slice($latestRequests, 0, 3) as $row): ?>
+                        <?php $statusMeta = $mapStatus((string) ($row['status'] ?? 'pending')); ?>
+                        <div class="plpi-mockup-row">
+                            <span class="code"><?= esc((string) ($row['request_code'] ?? '-')) ?></span>
+                            <span><?= esc((string) ($row['title'] ?? '-')) ?></span>
+                            <span class="st <?= $statusMeta['class'] === 'approved' ? 'ok' : 'wait' ?>"><?= esc($statusMeta['label']) ?></span>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="plpi-mockup-row">
+                        <span class="code">-</span>
+                        <span>Belum ada permohonan</span>
+                        <span class="st wait">Diproses</span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         </section>
@@ -972,41 +1013,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>REQ-2026-019</td>
-                            <td>Pengembangan Model Pembelajaran Sains</td>
-                            <td><span class="badge-soft processing">Diproses</span></td>
-                            <td>07 Apr 2026</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>REQ-2026-018</td>
-                            <td>Analisis Kebijakan Manajemen Publik</td>
-                            <td><span class="badge-soft approved">Disetujui</span></td>
-                            <td>06 Apr 2026</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>REQ-2026-017</td>
-                            <td>Implementasi IoT pada Sistem Irigasi</td>
-                            <td><span class="badge-soft rejected">Ditolak</span></td>
-                            <td>05 Apr 2026</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>REQ-2026-016</td>
-                            <td>Metode Hybrid Learning di Perguruan Tinggi</td>
-                            <td><span class="badge-soft processing">Diproses</span></td>
-                            <td>04 Apr 2026</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>REQ-2026-015</td>
-                            <td>Evaluasi Program Kesehatan Komunitas</td>
-                            <td><span class="badge-soft approved">Disetujui</span></td>
-                            <td>03 Apr 2026</td>
-                        </tr>
+                        <?php if (! empty($latestRequests)): ?>
+                            <?php foreach ($latestRequests as $idx => $row): ?>
+                                <?php $statusMeta = $mapStatus((string) ($row['status'] ?? 'pending')); ?>
+                                <tr>
+                                    <td><?= esc((string) ($idx + 1)) ?></td>
+                                    <td><?= esc((string) ($row['request_code'] ?? '-')) ?></td>
+                                    <td><?= esc((string) ($row['title'] ?? '-')) ?></td>
+                                    <td><span class="badge-soft <?= esc($statusMeta['class']) ?>"><?= esc($statusMeta['label']) ?></span></td>
+                                    <td><?= esc(date('d M Y', strtotime((string) ($row['created_at'] ?? 'now')))) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Belum ada data permohonan.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -1017,66 +1039,42 @@
         <h2 class="plpi-section-title">Profil Jurnal</h2>
         <p class="plpi-journal-subtitle">Profil jurnal memuat identitas utama dan nomor ISSN untuk validasi cepat.</p>
         <div class="plpi-journal-grid">
-            <article class="plpi-journal-card">
-                <div class="plpi-journal-cover">
-                    <span class="plpi-journal-badge">ABDI UNISAP</span>
-                </div>
-                <h3 class="plpi-journal-title">ABDI UNISAP: Jurnal Pengabdian Kepada Masyarakat</h3>
-                <p class="plpi-journal-country">Indonesia</p>
-                <div class="plpi-journal-meta">
-                    <span class="plpi-journal-pill">E-ISSN 2987-9175</span>
-                    <span class="plpi-journal-pill">P-ISSN 2987-9183</span>
-                </div>
-                <p class="plpi-journal-publisher">UPT Publikasi dan Penerbitan Universitas San Pedro</p>
-            </article>
-            <article class="plpi-journal-card">
-                <div class="plpi-journal-cover siber">
-                    <span class="plpi-journal-badge">SIBERNETIK</span>
-                </div>
-                <h3 class="plpi-journal-title">SIBERNETIK: Jurnal Pendidikan dan Pembelajaran</h3>
-                <p class="plpi-journal-country">Indonesia</p>
-                <div class="plpi-journal-meta">
-                    <span class="plpi-journal-pill">E-ISSN 2988-0823</span>
-                    <span class="plpi-journal-pill">P-ISSN 2988-0858</span>
-                </div>
-                <p class="plpi-journal-publisher">UPT Publikasi dan Penerbitan Universitas San Pedro</p>
-            </article>
-            <article class="plpi-journal-card">
-                <div class="plpi-journal-cover edukasi">
-                    <span class="plpi-journal-badge">EDUKASI TEMATIK</span>
-                </div>
-                <h3 class="plpi-journal-title">EDUKASI TEMATIK: Jurnal Pendidikan Sekolah Dasar</h3>
-                <p class="plpi-journal-country">Indonesia</p>
-                <div class="plpi-journal-meta">
-                    <span class="plpi-journal-pill">E-ISSN 2746-8011</span>
-                    <span class="plpi-journal-pill">P-ISSN 2746-7996</span>
-                </div>
-                <p class="plpi-journal-publisher">Program Studi Pendidikan Guru Sekolah Dasar Universitas San Pedro</p>
-            </article>
-            <article class="plpi-journal-card">
-                <div class="plpi-journal-cover leksikon">
-                    <span class="plpi-journal-badge">LEKSIKON</span>
-                </div>
-                <h3 class="plpi-journal-title">LEKSIKON: Jurnal Pendidikan Bahasa, Sastra, &amp; Budaya</h3>
-                <p class="plpi-journal-country">Indonesia</p>
-                <div class="plpi-journal-meta">
-                    <span class="plpi-journal-pill">E-ISSN 3025-1516</span>
-                    <span class="plpi-journal-pill">P-ISSN 3025-1249</span>
-                </div>
-                <p class="plpi-journal-publisher">UPT Publikasi dan Penerbitan Universitas San Pedro</p>
-            </article>
-            <article class="plpi-journal-card">
-                <div class="plpi-journal-cover abdi">
-                    <span class="plpi-journal-badge">ABDI NUSANTARA</span>
-                </div>
-                <h3 class="plpi-journal-title">Abdi Nusantara: Jurnal Pengabdian Kepada Masyarakat</h3>
-                <p class="plpi-journal-country">Indonesia</p>
-                <div class="plpi-journal-meta">
-                    <span class="plpi-journal-pill">E-ISSN 3089-5111</span>
-                    <span class="plpi-journal-pill">P-ISSN 3089-512X</span>
-                </div>
-                <p class="plpi-journal-publisher">PT Media Edukasi Nusantara</p>
-            </article>
+            <?php if (! empty($journalProfiles)): ?>
+                <?php foreach ($journalProfiles as $journal): ?>
+                    <?php
+                        $journalCode = strtoupper((string) ($journal['code'] ?? 'JURNAL'));
+                        $logoDataUri = trim((string) ($journal['logo_data_uri'] ?? ''));
+                    ?>
+                    <article class="plpi-journal-card">
+                        <div class="plpi-journal-cover">
+                            <?php if ($logoDataUri !== ''): ?>
+                                <img src="<?= esc($logoDataUri) ?>" alt="<?= esc((string) ($journal['name'] ?? 'Logo Jurnal')) ?>" class="plpi-journal-logo">
+                            <?php endif; ?>
+                            <span class="plpi-journal-badge"><?= esc($journalCode) ?></span>
+                        </div>
+                        <h3 class="plpi-journal-title"><?= esc((string) ($journal['name'] ?? '-')) ?></h3>
+                        <p class="plpi-journal-country">Indonesia</p>
+                        <div class="plpi-journal-meta">
+                            <span class="plpi-journal-pill">E-ISSN <?= esc((string) ($journal['e_issn'] ?: '-')) ?></span>
+                            <span class="plpi-journal-pill">P-ISSN <?= esc((string) ($journal['p_issn'] ?: '-')) ?></span>
+                        </div>
+                        <p class="plpi-journal-publisher"><?= esc((string) (($journal['publisher_name'] ?? '-') ?: '-')) ?></p>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <article class="plpi-journal-card">
+                    <div class="plpi-journal-cover">
+                        <span class="plpi-journal-badge">JURNAL</span>
+                    </div>
+                    <h3 class="plpi-journal-title">Belum ada data jurnal</h3>
+                    <p class="plpi-journal-country">Indonesia</p>
+                    <div class="plpi-journal-meta">
+                        <span class="plpi-journal-pill">E-ISSN -</span>
+                        <span class="plpi-journal-pill">P-ISSN -</span>
+                    </div>
+                    <p class="plpi-journal-publisher">Tambahkan jurnal dari panel admin.</p>
+                </article>
+            <?php endif; ?>
         </div>
         </section>
 

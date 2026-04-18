@@ -3570,6 +3570,21 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     line-height: 1;
 }
 
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.status-pill .status-pill-icon {
+    width: 0.95em;
+    height: 0.95em;
+    font-size: 12px;
+    line-height: 1;
+    flex: 0 0 auto;
+}
+
 .status-pill.myletters-status-ready {
     background: #e8f2ff;
     color: #1558c0;
@@ -3630,9 +3645,263 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
 }
 
+.myletters-page .myletters-icon-btn,
+.myletters-page .myletters-table-wrap .user-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.38rem;
+}
+
+.myletters-page .myletters-icon-btn .bi,
+.myletters-page .myletters-table-wrap .user-action-btn .bi {
+    font-size: 0.86rem;
+    line-height: 1;
+}
+
+.myletters-page .myletters-table-wrap .user-action-btn iconify-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.myletters-page .myletters-icon-btn {
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: 0 6px 14px rgba(16, 63, 114, 0.08);
+}
+
+.myletters-page .myletters-icon-btn-primary {
+    background: linear-gradient(135deg, #3f81d8 0%, #2f6bc0 100%);
+    border-color: #2f6bc0;
+    color: #ffffff;
+}
+
+.myletters-page .myletters-icon-btn-primary:hover {
+    background: linear-gradient(135deg, #3b7ad0 0%, #285fad 100%);
+    border-color: #285fad;
+    color: #ffffff;
+}
+
+.myletters-page .myletters-icon-btn-light {
+    background: #ffffff;
+    border-color: #cfd9e7;
+    color: #3d4f67;
+}
+
+.myletters-page .myletters-icon-btn-light:hover {
+    background: #f4f8fe;
+    border-color: #b9c6d8;
+    color: #2f4259;
+}
+
+.myletters-page .myletters-table-wrap .user-action-detail {
+    border-color: #91c7ff;
+    color: #0f4f8f;
+    background: #eaf5ff;
+}
+
+.myletters-page .myletters-table-wrap .user-action-detail:hover {
+    background: #dff0ff;
+    border-color: #73b3f5;
+    color: #0d4177;
+}
+
+.myletters-page .myletters-table-wrap .user-action-preview {
+    border-color: #7cd7d2;
+    color: #0b6f6a;
+    background: #e8fffc;
+}
+
+.myletters-page .myletters-table-wrap .user-action-preview:hover {
+    background: #dcf8f5;
+    border-color: #5fcac4;
+    color: #095d59;
+}
+
+.myletters-page .myletters-table-wrap .user-action-download {
+    border-color: #9ac5ff;
+    color: #1559b3;
+    background: #edf4ff;
+}
+
+.myletters-page .myletters-table-wrap .user-action-download:hover {
+    background: #e1ecff;
+    border-color: #7baef0;
+    color: #114894;
+}
+
+.myletters-page .myletters-table-wrap .user-action-edit {
+    border-color: #c6b6ff;
+    color: #5c3ec4;
+    background: #f4efff;
+}
+
+.myletters-page .myletters-table-wrap .user-action-edit:hover {
+    background: #ece4ff;
+    border-color: #b19bef;
+    color: #4b2faa;
+}
+
+.myletters-page .myletters-table-wrap .user-action-regenerate {
+    border-color: #f2c57b;
+    color: #b56b00;
+    background: #fff5e6;
+}
+
+.myletters-page .myletters-table-wrap .user-action-regenerate:hover {
+    background: #ffecd0;
+    border-color: #e7ad57;
+    color: #955800;
+}
+
+.myletters-page .myletters-table-wrap .user-action-delete {
+    border-color: #f3a9b3;
+    color: #bd1f35;
+    background: #fff1f3;
+}
+
+.myletters-page .myletters-table-wrap .user-action-delete:hover {
+    background: #ffe4e8;
+    border-color: #e58a98;
+    color: #a51b2f;
+}
+
+.myletters-page .myletters-table-wrap .user-action-btn.myletters-icon-only {
+    width: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    padding: 0;
+    border-radius: 10px;
+    gap: 0;
+}
+
 .myletters-page .myletters-table-wrap .activity-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 14px rgba(18, 60, 107, 0.12);
+}
+
+/* Force-stable action buttons (icon only) for LoA table */
+.myletters-page .myletters-table-wrap .myletters-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.myletters-page .myletters-table-wrap .action-solid {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+    border: 1px solid transparent !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.16);
+}
+
+.myletters-page .myletters-table-wrap .action-solid iconify-icon {
+    width: 1em;
+    height: 1em;
+    font-size: 1.02rem;
+}
+
+.myletters-page .myletters-table-wrap .myletters-actions form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.myletters-page .myletters-table-wrap table tbody td:last-child {
+    white-space: nowrap;
+    min-width: 170px;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-detail {
+    background: #356fd3 !important;
+    border-color: #2c60bf !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-detail:hover {
+    background: #2f61b8 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-preview {
+    background: #1396b9 !important;
+    border-color: #107f9d !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-preview:hover {
+    background: #117f9c !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-download {
+    background: #4956d8 !important;
+    border-color: #3d48be !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-download:hover {
+    background: #3f4ac0 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-edit {
+    background: #f59e0b !important;
+    border-color: #de8e09 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-edit:hover {
+    background: #de8f09 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-regenerate {
+    background: #4b5563 !important;
+    border-color: #3f4854 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-regenerate:hover {
+    background: #3f4854 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-delete {
+    background: #dc2626 !important;
+    border-color: #c32020 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-delete:hover {
+    background: #c32020 !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-approve {
+    background: #16a34a !important;
+    border-color: #12873d !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-approve:hover {
+    background: #12873d !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-mail {
+    background: #0ea5a3 !important;
+    border-color: #0b8f8d !important;
+}
+
+.myletters-page .myletters-table-wrap .action-solid-mail:hover {
+    background: #0b8f8d !important;
+}
+
+/* LoA letters badge style aligned with LoA requests */
+.myletters-page .myletters-table-wrap .status-pill.status-table-pill.myletters-status-pill {
+    min-width: 96px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
 }
 
 /* Log Aktivitas: samakan spacing/tinggi baris dengan tabel Persuratan Dosen */
@@ -4006,5 +4275,168 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
 
     #adminActivityTable .admin-activity-col-action {
         min-width: 280px;
+    }
+}
+
+/* =========================================
+   GLOBAL FLEXIBLE TABLES (ADMIN)
+========================================= */
+.myletters-page .myletters-table-card .myletters-table-wrap.table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table {
+    width: 100%;
+    table-layout: auto;
+    min-width: 760px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table tbody td {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table tbody td:first-child {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    width: 56px;
+    min-width: 56px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap .status-pill,
+.myletters-page .myletters-table-card .myletters-table-wrap .myletters-actions,
+.myletters-page .myletters-table-card .myletters-table-wrap table tbody td:last-child {
+    white-space: nowrap;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap .myletters-actions {
+    flex-wrap: nowrap;
+}
+
+.myletters-page .myletters-table-card .users-table-full {
+    min-width: 980px;
+}
+
+.myletters-page .myletters-table-card .users-table-full th:nth-child(1),
+.myletters-page .myletters-table-card .users-table-full td:nth-child(1),
+.myletters-page .myletters-table-card .users-table-full th:nth-child(2),
+.myletters-page .myletters-table-card .users-table-full td:nth-child(2),
+.myletters-page .myletters-table-card .users-table-full th:nth-child(3),
+.myletters-page .myletters-table-card .users-table-full td:nth-child(3),
+.myletters-page .myletters-table-card .users-table-full th:nth-child(4),
+.myletters-page .myletters-table-card .users-table-full td:nth-child(4),
+.myletters-page .myletters-table-card .users-table-full th:nth-child(5),
+.myletters-page .myletters-table-card .users-table-full td:nth-child(5),
+.myletters-page .myletters-table-card .users-table-full th:nth-child(6),
+.myletters-page .myletters-table-card .users-table-full td:nth-child(6) {
+    width: auto;
+}
+
+@media (max-width: 1199.98px) {
+    .myletters-page .myletters-table-card .myletters-table-wrap table {
+        min-width: 960px;
+    }
+
+    .myletters-page .myletters-table-card .users-table-full {
+        min-width: 1120px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .myletters-page .myletters-table-card .myletters-table-wrap.table-responsive {
+        overflow: visible;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table {
+        min-width: 0 !important;
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table,
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody,
+    .myletters-page .myletters-table-card .myletters-table-wrap table tr,
+    .myletters-page .myletters-table-card .myletters-table-wrap table td {
+        display: block;
+        width: 100%;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody tr {
+        margin: 0 0 12px;
+        padding: 10px 12px;
+        border: 1px solid #dfe8f3;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 3px 12px rgba(17, 24, 39, 0.06);
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody tr:last-child {
+        margin-bottom: 0;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody td {
+        display: grid;
+        grid-template-columns: minmax(96px, 36%) 1fr;
+        gap: 8px;
+        align-items: start;
+        padding: 7px 0;
+        border: 0;
+        border-bottom: 1px dashed #e6edf6;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody td:first-child {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody td:last-child {
+        border-bottom: 0;
+        min-width: 0;
+        white-space: normal;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody td::before {
+        content: attr(data-label);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        color: #4b617a;
+        text-transform: uppercase;
+        line-height: 1.3;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody td[colspan] {
+        display: block;
+        padding: 10px 0;
+        border: 0;
+        text-align: left !important;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap table tbody td[colspan]::before {
+        content: none;
+    }
+
+    .myletters-page .myletters-table-card .myletters-table-wrap .myletters-actions {
+        justify-content: flex-start;
+        gap: 6px;
     }
 }

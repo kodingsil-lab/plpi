@@ -85,7 +85,13 @@
                                 </span>
                             </td>
                             <td><?= esc((string) ($row['created_at'] ?? '-')) ?></td>
-                            <td><a class="btn btn-sm activity-btn user-action-btn user-action-detail" href="<?= site_url('admin/loa-requests/' . (string) $row['id']) ?>">Detail</a></td>
+                            <td>
+                                <div class="myletters-actions">
+                                    <a class="btn btn-sm activity-btn user-action-btn user-action-detail action-solid action-solid-detail myletters-icon-only" href="<?= site_url('admin/loa-requests/' . (string) $row['id']) ?>" aria-label="Detail" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Detail">
+                                        <iconify-icon icon="heroicons-outline:information-circle" aria-hidden="true"></iconify-icon>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>

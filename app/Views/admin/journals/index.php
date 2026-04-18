@@ -34,8 +34,10 @@
             <td><?= esc((string) ($r['e_issn'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['p_issn'] ?? '-')) ?></td>
             <td>
-              <div class="d-flex gap-1 myletters-actions">
-                <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/journals/' . (string) $r['id'] . '/edit') ?>">Edit</a>
+              <div class="myletters-actions">
+                <a class="btn btn-sm activity-btn user-action-btn user-action-edit action-solid action-solid-edit myletters-icon-only" href="<?= site_url('admin/journals/' . (string) $r['id'] . '/edit') ?>" aria-label="Edit" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
+                  <iconify-icon icon="heroicons-outline:pencil" aria-hidden="true"></iconify-icon>
+                </a>
               </div>
             </td>
           </tr>
