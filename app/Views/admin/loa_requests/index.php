@@ -77,14 +77,20 @@
                             </td>
                             <td><?= esc((string) ($r['created_at'] ?? '-')) ?></td>
                             <td>
-                                <div class="d-flex gap-1 flex-wrap myletters-actions">
-                                    <a class="btn btn-sm activity-btn user-action-btn user-action-detail" href="<?= site_url('admin/loa-requests/' . (string) $r['id']) ?>">Detail</a>
+                                <div class="myletters-actions">
+                                    <a class="btn btn-sm activity-btn user-action-btn user-action-detail action-solid action-solid-detail myletters-icon-only" href="<?= site_url('admin/loa-requests/' . (string) $r['id']) ?>" aria-label="Detail" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Detail">
+                                        <iconify-icon icon="heroicons-outline:information-circle" aria-hidden="true"></iconify-icon>
+                                    </a>
                                     <?php if (in_array($status, ['pending', 'revision'], true)): ?>
                                         <form method="post" action="<?= site_url('admin/loa-requests/' . (string) $r['id'] . '/approve') ?>" class="d-inline">
-                                            <button class="btn btn-sm activity-btn user-action-btn user-action-edit" type="submit">Setujui</button>
+                                            <button class="btn btn-sm activity-btn user-action-btn user-action-edit action-solid action-solid-approve myletters-icon-only" type="submit" aria-label="Setujui" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Setujui">
+                                                <iconify-icon icon="heroicons-outline:check" aria-hidden="true"></iconify-icon>
+                                            </button>
                                         </form>
                                         <form method="post" action="<?= site_url('admin/loa-requests/' . (string) $r['id'] . '/reject') ?>" class="d-inline" onsubmit="return confirm('Tolak permohonan ini?')">
-                                            <button class="btn btn-sm activity-btn user-action-btn user-action-delete" type="submit">Tolak</button>
+                                            <button class="btn btn-sm activity-btn user-action-btn user-action-delete action-solid action-solid-delete myletters-icon-only" type="submit" aria-label="Tolak" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tolak">
+                                                <iconify-icon icon="heroicons-outline:x-mark" aria-hidden="true"></iconify-icon>
+                                            </button>
                                         </form>
                                     <?php endif; ?>
                                 </div>

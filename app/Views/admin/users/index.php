@@ -29,11 +29,15 @@
             <td><?= esc($roleLabel) ?></td>
             <td><?= esc($assignedJournal) ?></td>
             <td>
-              <div class="d-flex gap-1 myletters-actions">
-                <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/users/' . (string) $r['id'] . '/edit') ?>">Edit</a>
+              <div class="myletters-actions">
+                <a class="btn btn-sm activity-btn user-action-btn user-action-edit action-solid action-solid-edit myletters-icon-only" href="<?= site_url('admin/users/' . (string) $r['id'] . '/edit') ?>" aria-label="Edit" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
+                  <iconify-icon icon="heroicons-outline:pencil" aria-hidden="true"></iconify-icon>
+                </a>
                 <form method="post" action="<?= site_url('admin/users/' . (string) $r['id']) ?>" onsubmit="return confirm('Hapus pengguna ini?')">
                   <input type="hidden" name="_method" value="DELETE">
-                  <button class="btn btn-sm activity-btn user-action-btn user-action-delete" type="submit">Hapus</button>
+                  <button class="btn btn-sm activity-btn user-action-btn user-action-delete action-solid action-solid-delete myletters-icon-only" type="submit" aria-label="Hapus" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Hapus">
+                    <iconify-icon icon="solar:trash-bin-trash-outline" aria-hidden="true"></iconify-icon>
+                  </button>
                 </form>
               </div>
             </td>

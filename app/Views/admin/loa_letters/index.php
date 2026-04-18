@@ -28,11 +28,17 @@
             </div>
             <div class="myletters-filter-btn-item">
                 <label class="form-label form-label-ghost">Aksi</label>
-                <button type="submit" class="btn btn-primary-main myletters-btn">Terapkan</button>
+                <button type="submit" class="btn btn-primary-main myletters-btn myletters-icon-btn myletters-icon-btn-primary">
+                    <i class="bi bi-funnel-fill" aria-hidden="true"></i>
+                    <span>Terapkan</span>
+                </button>
             </div>
             <div class="myletters-filter-btn-item">
                 <label class="form-label form-label-ghost">Aksi</label>
-                <a href="<?= site_url('admin/loa-letters') ?>" class="btn btn-light-soft myletters-btn">Reset</a>
+                <a href="<?= site_url('admin/loa-letters') ?>" class="btn btn-light-soft myletters-btn myletters-icon-btn myletters-icon-btn-light">
+                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                    <span>Reset</span>
+                </a>
             </div>
         </form>
     </div>
@@ -41,7 +47,10 @@
 <div class="dashboard-card letters-table-card myletters-table-card">
     <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
         <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar LoA Terbit</h6>
-        <a class="btn btn-light-soft" href="<?= site_url('admin/loa-letters/export/csv') ?>">Export CSV</a>
+        <a class="btn btn-light-soft myletters-icon-btn myletters-icon-btn-light" href="<?= site_url('admin/loa-letters/export/csv') ?>">
+            <i class="bi bi-filetype-csv" aria-hidden="true"></i>
+            <span>Export CSV</span>
+        </a>
     </div>
     <div class="card-body pt-2">
         <div class="activity-table-wrap myletters-table-wrap table-responsive">
@@ -74,16 +83,20 @@
                             </td>
                             <td><?= esc((string) ($r['published_at'] ?? '-')) ?></td>
                             <td>
-                                <div class="d-flex gap-1 flex-wrap myletters-actions">
-                                    <a class="btn btn-sm activity-btn user-action-btn user-action-detail" href="<?= site_url('loa/v/' . (string) ($r['public_token'] ?? '')) ?>" target="_blank">Detail</a>
-                                    <a class="btn btn-sm activity-btn user-action-btn user-action-detail" href="<?= site_url('loa/v/' . (string) ($r['public_token'] ?? '') . '/preview') ?>" target="_blank">Preview</a>
-                                    <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('loa/v/' . (string) ($r['public_token'] ?? '') . '/download') ?>">Unduh</a>
-                                    <a class="btn btn-sm activity-btn user-action-btn user-action-edit" href="<?= site_url('admin/loa-letters/' . (string) $r['id'] . '/edit') ?>">Edit</a>
-                                    <form method="post" action="<?= site_url('admin/loa-letters/' . (string) $r['id'] . '/regenerate') ?>" class="d-inline">
-                                        <button type="submit" class="btn btn-sm activity-btn user-action-btn user-action-edit">Regenerate</button>
-                                    </form>
+                                <div class="myletters-actions">
+                                    <a class="btn btn-sm activity-btn user-action-btn user-action-detail user-action-preview action-solid action-solid-preview myletters-icon-only" href="<?= site_url('loa/v/' . (string) ($r['public_token'] ?? '') . '/preview') ?>" target="_blank" aria-label="Preview" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Preview">
+                                        <iconify-icon icon="heroicons-outline:eye" aria-hidden="true"></iconify-icon>
+                                    </a>
+                                    <a class="btn btn-sm activity-btn user-action-btn user-action-edit user-action-download action-solid action-solid-download myletters-icon-only" href="<?= site_url('loa/v/' . (string) ($r['public_token'] ?? '') . '/download') ?>" aria-label="Unduh" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Unduh">
+                                        <iconify-icon icon="heroicons-outline:download" aria-hidden="true"></iconify-icon>
+                                    </a>
+                                    <a class="btn btn-sm activity-btn user-action-btn user-action-edit action-solid action-solid-edit myletters-icon-only" href="<?= site_url('admin/loa-letters/' . (string) $r['id'] . '/edit') ?>" aria-label="Edit" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
+                                        <iconify-icon icon="heroicons-outline:pencil" aria-hidden="true"></iconify-icon>
+                                    </a>
                                     <form method="post" action="<?= site_url('admin/loa-letters/' . (string) $r['id'] . '/delete') ?>" class="d-inline" onsubmit="return confirm('Hapus LoA ini?')">
-                                        <button type="submit" class="btn btn-sm activity-btn user-action-btn user-action-delete">Hapus</button>
+                                        <button type="submit" class="btn btn-sm activity-btn user-action-btn user-action-delete action-solid action-solid-delete myletters-icon-only" aria-label="Hapus" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Hapus">
+                                            <iconify-icon icon="solar:trash-bin-trash-outline" aria-hidden="true"></iconify-icon>
+                                        </button>
                                     </form>
                                 </div>
                             </td>

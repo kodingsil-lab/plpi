@@ -26,19 +26,24 @@
             </td>
             <td><?= esc((string) (($r['sent_at'] ?? $r['published_at'] ?? '-'))) ?></td>
             <td>
-              <div class="d-flex gap-1 myletters-actions">
+              <div class="myletters-actions">
                 <form method="post" action="<?= site_url('admin/notifikasi/' . (string) $r['id'] . '/kirim-email') ?>" class="d-inline">
                   <button
-                    class="btn btn-sm activity-btn user-action-btn user-action-detail"
+                    class="btn btn-sm activity-btn user-action-btn user-action-detail action-solid action-solid-mail myletters-icon-only"
                     type="submit"
-                    title="Kirim Email"
+                    aria-label="Kirim Email"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    data-bs-title="Kirim Email"
                     <?= strtolower(trim((string) ($r['status'] ?? ''))) === 'notifikasi terkirim' ? 'disabled' : '' ?>
                   >
-                    <i class="bi bi-envelope"></i>
+                    <iconify-icon icon="heroicons-outline:mail" aria-hidden="true"></iconify-icon>
                   </button>
                 </form>
                 <form method="post" action="<?= site_url('admin/notifikasi/' . (string) $r['id'] . '/delete') ?>" class="d-inline" onsubmit="return confirm('Hapus item notifikasi ini?')">
-                  <button class="btn btn-sm activity-btn user-action-btn user-action-delete" type="submit">Delete</button>
+                  <button class="btn btn-sm activity-btn user-action-btn user-action-delete action-solid action-solid-delete myletters-icon-only" type="submit" aria-label="Hapus" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Hapus">
+                    <iconify-icon icon="solar:trash-bin-trash-outline" aria-hidden="true"></iconify-icon>
+                  </button>
                 </form>
               </div>
             </td>

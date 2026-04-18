@@ -154,6 +154,7 @@
 </div>
 
 <script src="<?= base_url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
 <script src="<?= base_url('assets/js/app.js') ?>"></script>
 <script>
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -161,6 +162,68 @@
     if (sidebarToggle && appSidebar) {
         sidebarToggle.addEventListener('click', function () { appSidebar.classList.toggle('collapsed'); });
     }
+
+    if (window.bootstrap && window.bootstrap.Tooltip) {
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+            new window.bootstrap.Tooltip(el);
+        });
+    }
+
+    document.querySelectorAll('.myletters-table-card .myletters-table-wrap table').forEach(function (tableEl) {
+        const headerCells = Array.from(tableEl.querySelectorAll('thead tr:first-child th'));
+        if (!headerCells.length) {
+            return;
+        }
+
+        const headerLabels = headerCells.map(function (th) {
+            return (th.textContent || '').trim();
+        });
+
+        tableEl.querySelectorAll('tbody tr').forEach(function (row) {
+            const cells = Array.from(row.children).filter(function (cell) {
+                return cell.tagName === 'TD';
+            });
+
+            cells.forEach(function (cell, idx) {
+                if (cell.hasAttribute('data-label')) {
+                    return;
+                }
+                if (cell.colSpan && cell.colSpan > 1) {
+                    cell.setAttribute('data-label', '');
+                    return;
+                }
+                cell.setAttribute('data-label', headerLabels[idx] || '');
+            });
+        });
+    });
+
+    const badgeIconMap = [
+        { cls: 'myletters-status-waiting', icon: 'heroicons-outline:clock' },
+        { cls: 'myletters-status-approved', icon: 'heroicons-outline:check-badge' },
+        { cls: 'myletters-status-issued', icon: 'heroicons-outline:check-circle' },
+        { cls: 'myletters-status-revision', icon: 'heroicons-outline:exclamation-triangle' },
+        { cls: 'myletters-status-ready', icon: 'heroicons-outline:sparkles' },
+    ];
+
+    document.querySelectorAll('.status-pill').forEach(function (pill) {
+        if (pill.querySelector('.status-pill-icon')) {
+            return;
+        }
+
+        const match = badgeIconMap.find(function (item) {
+            return pill.classList.contains(item.cls);
+        });
+
+        if (!match) {
+            return;
+        }
+
+        const iconEl = document.createElement('iconify-icon');
+        iconEl.setAttribute('icon', match.icon);
+        iconEl.setAttribute('aria-hidden', 'true');
+        iconEl.className = 'status-pill-icon';
+        pill.prepend(iconEl);
+    });
 </script>
 </body>
 </html>
