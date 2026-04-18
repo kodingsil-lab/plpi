@@ -9,6 +9,9 @@ use function url_title;
 
 class JournalController extends BaseController
 {
+    private const LOGO_TARGET_WIDTH = 900;
+    private const LOGO_TARGET_HEIGHT = 1200;
+
     public function index()
     {
         $allowedPerPage = [10, 25, 50];
@@ -113,7 +116,12 @@ class JournalController extends BaseController
             }
             $newName = $logo->getRandomName();
             $logo->move($logoDir, $newName, true);
-            $data['logo_path'] = 'journals/logos/' . $newName;
+            $logoAbsPath = $logoDir . DIRECTORY_SEPARATOR . $newName;
+            $normalizedPath = $this->standardizeLogoImage($logoAbsPath);
+            if (! is_string($normalizedPath) || $normalizedPath === '') {
+                return redirect()->back()->withInput()->with('error', 'Logo jurnal gagal diproses ke PNG transparan 900x1200.');
+            }
+            $data['logo_path'] = 'journals/logos/' . basename($normalizedPath);
         }
 
         $signature = $this->request->getFile('signature');
@@ -229,7 +237,12 @@ class JournalController extends BaseController
             }
             $newName = $logo->getRandomName();
             $logo->move($logoDir, $newName, true);
-            $data['logo_path'] = 'journals/logos/' . $newName;
+            $logoAbsPath = $logoDir . DIRECTORY_SEPARATOR . $newName;
+            $normalizedPath = $this->standardizeLogoImage($logoAbsPath);
+            if (! is_string($normalizedPath) || $normalizedPath === '') {
+                return redirect()->back()->withInput()->with('error', 'Logo jurnal gagal diproses ke PNG transparan 900x1200.');
+            }
+            $data['logo_path'] = 'journals/logos/' . basename($normalizedPath);
         }
 
         $signature = $this->request->getFile('signature');
@@ -256,5 +269,69 @@ class JournalController extends BaseController
     public function destroy(int $id)
     {
         return redirect()->back()->with('success', "Jurnal #{$id} dihapus.");
+    }
+
+    private function standardizeLogoImage(string $filePath): ?string
+    {
+        $meta = @getimagesize($filePath);
+        if (! is_array($meta) || count($meta) < 3) {
+            return null;
+        }
+
+        $srcW = (int) ($meta[0] ?? 0);
+        $srcH = (int) ($meta[1] ?? 0);
+        $imageType = (int) ($meta[2] ?? 0);
+        if ($srcW <= 0 || $srcH <= 0) {
+            return null;
+        }
+
+        $source = null;
+        if ($imageType === IMAGETYPE_JPEG) {
+            $source = @imagecreatefromjpeg($filePath);
+        } elseif ($imageType === IMAGETYPE_PNG) {
+            $source = @imagecreatefrompng($filePath);
+        } elseif ($imageType === IMAGETYPE_WEBP && function_exists('imagecreatefromwebp')) {
+            $source = @imagecreatefromwebp($filePath);
+        }
+
+        if (! $source) {
+            return null;
+        }
+
+        $targetW = self::LOGO_TARGET_WIDTH;
+        $targetH = self::LOGO_TARGET_HEIGHT;
+        $canvas = imagecreatetruecolor($targetW, $targetH);
+        if (! $canvas) {
+            imagedestroy($source);
+            return null;
+        }
+
+        imagealphablending($canvas, false);
+        imagesavealpha($canvas, true);
+        $transparent = imagecolorallocatealpha($canvas, 0, 0, 0, 127);
+        imagefill($canvas, 0, 0, $transparent);
+
+        $scale = min($targetW / $srcW, $targetH / $srcH);
+        $drawW = max(1, (int) round($srcW * $scale));
+        $drawH = max(1, (int) round($srcH * $scale));
+        $offsetX = (int) floor(($targetW - $drawW) / 2);
+        $offsetY = (int) floor(($targetH - $drawH) / 2);
+
+        imagecopyresampled($canvas, $source, $offsetX, $offsetY, 0, 0, $drawW, $drawH, $srcW, $srcH);
+        $pngPath = dirname($filePath) . DIRECTORY_SEPARATOR . pathinfo($filePath, PATHINFO_FILENAME) . '.png';
+        $saved = imagepng($canvas, $pngPath, 6);
+
+        imagedestroy($source);
+        imagedestroy($canvas);
+
+        if (! $saved) {
+            return null;
+        }
+
+        if (realpath($filePath) !== realpath($pngPath) && is_file($filePath)) {
+            @unlink($filePath);
+        }
+
+        return $pngPath;
     }
 }

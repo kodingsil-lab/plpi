@@ -84,7 +84,7 @@
                                     <?= esc((string) ($statusMeta['label'] ?? 'Menunggu')) ?>
                                 </span>
                             </td>
-                            <td><?= esc((string) ($row['created_at'] ?? '-')) ?></td>
+                            <td><?= esc(plpi_format_date($row['created_at'] ?? null, true)) ?></td>
                             <td>
                                 <div class="myletters-actions">
                                     <a class="btn btn-sm activity-btn user-action-btn user-action-detail action-solid action-solid-detail myletters-icon-only" href="<?= site_url('admin/loa-requests/' . (string) $row['id']) ?>" aria-label="Detail" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Detail">

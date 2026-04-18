@@ -3512,6 +3512,21 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     color: #b96b00;
 }
 
+.detail-page .btn-outline-danger {
+    border: 1px solid #efb4bd;
+    color: #b42333;
+    background: #fff4f6;
+    border-radius: 12px;
+    padding: 9px 18px;
+    font-weight: 700;
+}
+
+.detail-page .btn-outline-danger:hover {
+    background: #ffe8ec;
+    border-color: #e39ba7;
+    color: #9f1d2c;
+}
+
 .detail-page .btn-secondary {
     border-radius: 12px;
     padding: 9px 18px;

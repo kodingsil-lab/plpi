@@ -21,7 +21,7 @@ class HomeController extends BaseController
             ->findAll(5);
 
         $journalProfiles = $journalModel
-            ->select('journals.id, journals.name, journals.code, journals.e_issn, journals.p_issn, journals.logo_path, publishers.name as publisher_name')
+            ->select('journals.id, journals.name, journals.code, journals.e_issn, journals.p_issn, journals.logo_path, journals.website_url, publishers.name as publisher_name')
             ->join('publishers', 'publishers.id = journals.publisher_id', 'left')
             ->orderBy('journals.id', 'DESC')
             ->findAll(8);
