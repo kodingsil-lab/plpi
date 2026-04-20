@@ -6,6 +6,8 @@ use App\Models\JournalModel;
 use App\Models\PublisherModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 class LoaPdfService
 {
@@ -32,6 +34,7 @@ class LoaPdfService
         $logoBase64 = $this->toBase64Image((string) ($journal['logo_path'] ?? ''));
         $publisherLogoBase64 = $this->toBase64Image((string) ($publisher['logo_path'] ?? ''));
         $sigBase64 = $this->toBase64Image((string) ($journal['default_signature_path'] ?? ''));
+        $qrcodeBase64 = $this->generateQrCodeBase64($verifyUrl);
 
         $html = view('pdf/loa_issued', [
             'letter' => $letter,
@@ -44,6 +47,7 @@ class LoaPdfService
             'logoBase64' => $logoBase64,
             'publisherLogoBase64' => $publisherLogoBase64,
             'sigBase64' => $sigBase64,
+            'qrcodeBase64' => $qrcodeBase64,
             'loaNumber' => (string) ($letter['loa_number'] ?? '-'),
         ]);
 
@@ -122,5 +126,21 @@ class LoaPdfService
         }
 
         return null;
+    }
+
+    private function generateQrCodeBase64(string $verifyUrl): ?string
+    {
+        try {
+            $qrCode = new QrCode($verifyUrl);
+            $writer = new PngWriter();
+            $result = $writer->write($qrCode);
+            
+            // Gunakan getDataUri() untuk mendapatkan data:image/png;base64,...
+            return $result->getDataUri();
+        } catch (\Throwable $e) {
+            // Fallback jika gagal
+            error_log('QR Code generation failed: ' . $e->getMessage());
+            return null;
+        }
     }
 }

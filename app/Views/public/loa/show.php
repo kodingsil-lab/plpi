@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 <div class="card">
     <h3 style="margin-top:0">Detail LoA Terbit</h3>
-    <p><b>Nomor LoA:</b> <?= esc((string) ($letter['loa_number'] ?? '-')) ?></p>
+    <p><b>Nomor LoA:</b> <?= esc(plpi_format_loa_number($letter['loa_number'] ?? '-')) ?></p>
     <p><b>Jurnal:</b> <?= esc((string) ($journal['name'] ?? '-')) ?></p>
     <p><b>Judul:</b> <?= esc((string) ($letter['title'] ?? '-')) ?></p>
     <p><b>Status:</b> <?= esc((string) ($letter['status'] ?? '-')) ?></p>

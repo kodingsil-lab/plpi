@@ -34,3 +34,17 @@ if (! function_exists('plpi_format_date')) {
         return $withTime ? date('d-m-Y H:i:s', $ts) : date('d-m-Y', $ts);
     }
 }
+
+if (! function_exists('plpi_format_loa_number')) {
+    function plpi_format_loa_number($value): string
+    {
+        $raw = trim((string) $value);
+        if ($raw === '' || $raw === '-') {
+            return '-';
+        }
+
+        return preg_replace_callback('/(?<=^|\/)(loa)(?=\/|$)/i', static function ($match) {
+            return strtoupper($match[1]);
+        }, $raw);
+    }
+}

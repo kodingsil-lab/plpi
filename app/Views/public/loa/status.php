@@ -115,8 +115,8 @@
         color: #4e6483;
         font-size: .86rem;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .3px;
+        text-transform: capitalize;
+        letter-spacing: .2px;
     }
 
     .status-value {
@@ -130,6 +130,23 @@
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
+    }
+
+    .status-actions .btn,
+    .status-actions .btn2 {
+        min-width: 130px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        line-height: 1;
+    }
+
+    .status-actions .btn:hover,
+    .status-actions .btn2:hover {
+        opacity: .95;
     }
 
     @media (max-width: 767.98px) {
@@ -172,8 +189,8 @@
         </div>
 
         <div class="status-actions">
-            <a class="btn2" href="<?= site_url('loa/request') ?>">Ajukan Lagi</a>
-            <a class="btn" href="<?= site_url('/') ?>">Kembali ke Beranda</a>
+            <a class="btn" href="<?= site_url('loa/request') ?>">Ajukan Lagi</a>
+            <a class="btn2" href="<?= site_url('/') ?>">Kembali ke Beranda</a>
         </div>
     </div>
 </div>

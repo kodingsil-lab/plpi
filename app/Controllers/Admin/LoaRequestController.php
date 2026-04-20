@@ -201,10 +201,10 @@ class LoaRequestController extends BaseController
         $monthRoman = $this->monthToRoman((int) date('n'));
         $year = date('Y');
 
-        $suffix = '/LoA/' . $journalCode . '/' . $publisherCode . '/' . $monthRoman . '/' . $year;
+        $suffix = '/LOA/' . $journalCode . '/' . $publisherCode . '/' . $monthRoman . '/' . $year;
         $rows = (new LoaLetterModel())
             ->select('loa_number')
-            ->like('loa_number', '/LoA/' . $journalCode . '/')
+            ->like('loa_number', '/LOA/' . $journalCode . '/')
             ->like('loa_number', '/' . $year, 'before')
             ->findAll();
 

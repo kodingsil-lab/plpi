@@ -61,15 +61,27 @@ class LoaLetterController extends BaseController
             return redirect()->to(site_url('admin/loa-letters'))->with('error', 'LoA tidak ditemukan.');
         }
 
-        return view('admin/loa_letters/edit', ['title' => 'Edit LoA', 'row' => $row]);
+        $row = $this->normalizeLetter($row);
+
+        return view('admin/loa_letters/edit', [
+            'title' => 'Edit LoA',
+            'row' => $row,
+            'journals' => (new JournalModel())->orderBy('name', 'ASC')->findAll(),
+        ]);
     }
 
     public function update(int $id)
     {
         $rules = [
-            'title' => 'required|max_length[255]',
+            'journal_id' => 'required|is_natural_no_zero',
+            'title' => 'required|string|max_length[255]',
             'article_url' => 'permit_empty|valid_url|max_length[500]',
-            'corresponding_email' => 'permit_empty|valid_email|max_length[255]',
+            'corresponding_email' => 'required|valid_email|max_length[255]',
+            'volume' => 'permit_empty|max_length[50]',
+            'issue_number' => 'permit_empty|max_length[50]',
+            'published_year' => 'permit_empty|regex_match[/^[0-9]{4}$/]',
+            'authors_text' => 'required|string|min_length[3]|max_length[5000]',
+            'affiliations_text' => 'permit_empty|string|max_length[5000]',
             'status' => 'required|in_list[published,revoked]',
         ];
         if (! $this->validate($rules)) {
@@ -77,10 +89,39 @@ class LoaLetterController extends BaseController
         }
 
         $v = $this->validator->getValidated();
+        $journalId = (int) ($v['journal_id'] ?? 0);
+        if ($journalId <= 0 || ! (new JournalModel())->find($journalId)) {
+            return redirect()->back()->withInput()->with('error', 'Silakan pilih jurnal yang valid.');
+        }
+
+        [$slug, $articleId] = $this->parseOjsArticleUrl((string) ($v['article_url'] ?? ''));
+
+        $authors = array_values(array_filter(array_map(
+            static fn($line) => trim((string) $line),
+            preg_split("/\r\n|\n|\r/", trim((string) $v['authors_text'])) ?: []
+        )));
+        $authorsJson = array_map(static fn($name) => ['name' => $name], $authors);
+
+        $affiliationsJson = null;
+        if (! empty($v['affiliations_text'])) {
+            $affiliations = array_values(array_filter(array_map(
+                static fn($line) => trim((string) $line),
+                preg_split("/\r\n|\n|\r/", trim((string) $v['affiliations_text'])) ?: []
+            )));
+            $affiliationsJson = $affiliations === [] ? null : $affiliations;
+        }
+
         (new LoaLetterModel())->update($id, [
+            'journal_id' => $journalId,
             'title' => $v['title'],
             'article_url' => $v['article_url'] ?? null,
-            'corresponding_email' => $v['corresponding_email'] ?? null,
+            'article_id_external' => $articleId,
+            'corresponding_email' => $v['corresponding_email'],
+            'volume' => $v['volume'] ?? null,
+            'issue_number' => $v['issue_number'] ?? null,
+            'published_year' => $v['published_year'] ?? null,
+            'authors_json' => json_encode($authorsJson, JSON_UNESCAPED_UNICODE),
+            'affiliations_json' => $affiliationsJson ? json_encode($affiliationsJson, JSON_UNESCAPED_UNICODE) : null,
             'status' => $v['status'],
             'revoked_at' => ($v['status'] === 'revoked') ? date('Y-m-d H:i:s') : null,
             'updated_at' => date('Y-m-d H:i:s'),
@@ -206,7 +247,46 @@ class LoaLetterController extends BaseController
                 $decoded = json_decode($letter[$field], true);
                 $letter[$field] = is_array($decoded) ? $decoded : [];
             }
+            if (! isset($letter[$field]) || $letter[$field] === null) {
+                $letter[$field] = [];
+            }
         }
+
+        $authorLines = [];
+        foreach ((array) $letter['authors_json'] as $author) {
+            if (is_array($author) && isset($author['name'])) {
+                $authorLines[] = trim((string) $author['name']);
+            } elseif (is_string($author)) {
+                $authorLines[] = trim($author);
+            }
+        }
+        $letter['authors_text'] = implode("\n", array_filter($authorLines, static fn($value) => $value !== ''));
+
+        $affLines = [];
+        foreach ((array) $letter['affiliations_json'] as $aff) {
+            if (is_string($aff)) {
+                $affLines[] = trim($aff);
+            } elseif (is_array($aff) && isset($aff['affiliation'])) {
+                $affLines[] = trim((string) $aff['affiliation']);
+            }
+        }
+        $letter['affiliations_text'] = implode("\n", array_filter($affLines, static fn($value) => $value !== ''));
+
         return $letter;
+    }
+
+    private function parseOjsArticleUrl(string $url): array
+    {
+        $path = parse_url($url, PHP_URL_PATH) ?? '';
+
+        if (preg_match('#/index\.php/([^/]+)/article/view/(\d+)#', $path, $m)) {
+            return [$m[1], $m[2]];
+        }
+
+        if (preg_match('#/([^/]+)/article/view/(\d+)#', $path, $m)) {
+            return [$m[1], $m[2]];
+        }
+
+        return [null, null];
     }
 }

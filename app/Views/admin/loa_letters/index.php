@@ -73,7 +73,7 @@
                         <?php $statusMeta = plpi_letter_status_meta($status); ?>
                         <tr>
                             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
-                            <td class="fw-semibold text-primary"><?= esc((string) ($r['loa_number'] ?? '-')) ?></td>
+                            <td class="fw-semibold text-primary"><?= esc(plpi_format_loa_number($r['loa_number'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['journal_name'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['title'] ?? '-')) ?></td>
                             <td>

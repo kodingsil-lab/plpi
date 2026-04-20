@@ -13,13 +13,7 @@ class LoaLetterController extends BaseController
     public function show(string $token)
     {
         $letter = $this->findLetterByToken($token);
-        $journal = (new JournalModel())->find((int) $letter['journal_id']);
-
-        return view('public/loa/show', [
-            'title' => 'LoA Publik',
-            'letter' => $this->normalizeLetter($letter),
-            'journal' => $journal ?: [],
-        ]);
+        return redirect()->to(site_url('loa/verify/result') . '?number=' . urlencode((string) $letter['loa_number']));
     }
 
     public function preview(string $token)
