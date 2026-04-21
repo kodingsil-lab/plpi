@@ -54,7 +54,7 @@
     </div>
     <div class="card-body pt-2">
         <div class="activity-table-wrap myletters-table-wrap table-responsive">
-            <table class="table table-hover align-middle mb-0 w-100">
+            <table class="table table-hover align-middle mb-0 w-100 dashboard-latest-table">
                 <thead>
                 <tr>
                     <th>NO</th>

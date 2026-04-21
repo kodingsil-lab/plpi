@@ -56,7 +56,7 @@ class HomeController extends BaseController
 
         return view('public/home', [
             'title' => 'PLPI',
-            'subtitle' => 'Sistem Informasi Pengelolaan LoA, Invoice, dan Layanan Jurnal',
+            'subtitle' => 'Pusat Layanan Publikasi Ilmiah',
             'latestRequests' => $latestRequests,
             'journalProfiles' => $journalProfiles,
             'requestStats' => $requestStats,

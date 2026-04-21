@@ -20,6 +20,9 @@ $routes->group('admin', ['filter' => ['sessionauth', 'role:superadmin,admin_jurn
     $routes->get('loa-requests/(\\d+)', 'Admin\\LoaRequestController::show/$1');
     $routes->post('loa-requests/(\\d+)/approve', 'Admin\\LoaRequestController::approve/$1');
     $routes->post('loa-requests/(\\d+)/reject', 'Admin\\LoaRequestController::reject/$1');
+    $routes->delete('loa-requests/(\\d+)', 'Admin\\LoaRequestController::destroy/$1');
+    $routes->post('loa-requests/(\\d+)/delete', 'Admin\\LoaRequestController::destroy/$1');
+    $routes->post('loa-requests/bulk-delete', 'Admin\\LoaRequestController::bulkDelete');
 
     $routes->get('loa-letters', 'Admin\\LoaLetterController::index');
     $routes->get('loa-letters/export/csv', 'Admin\\LoaLetterController::exportCsv');
@@ -36,6 +39,7 @@ $routes->group('admin', ['filter' => ['sessionauth', 'role:superadmin,admin_jurn
     $routes->post('notifikasi/(\\d+)/kirim-email', 'Admin\\NotificationController::sendEmail/$1');
     $routes->delete('notifikasi/(\\d+)', 'Admin\\NotificationController::destroy/$1');
     $routes->post('notifikasi/(\\d+)/delete', 'Admin\\NotificationController::destroy/$1');
+    $routes->post('notifikasi/bulk-delete', 'Admin\\NotificationController::bulkDelete');
 
     $routes->get('journals', 'Admin\\JournalController::index');
     $routes->get('journals/create', 'Admin\\JournalController::create', ['filter' => 'role:superadmin']);
@@ -43,6 +47,8 @@ $routes->group('admin', ['filter' => ['sessionauth', 'role:superadmin,admin_jurn
     $routes->get('journals/(\\d+)/edit', 'Admin\\JournalController::edit/$1');
     $routes->put('journals/(\\d+)', 'Admin\\JournalController::update/$1');
     $routes->delete('journals/(\\d+)', 'Admin\\JournalController::destroy/$1', ['filter' => 'role:superadmin']);
+    $routes->post('journals/(\\d+)/delete', 'Admin\\JournalController::destroy/$1', ['filter' => 'role:superadmin']);
+    $routes->post('journals/bulk-delete', 'Admin\\JournalController::bulkDelete', ['filter' => 'role:superadmin']);
 
     $routes->get('publishers', 'Admin\\PublisherController::index', ['filter' => 'role:superadmin']);
     $routes->get('publishers/create', 'Admin\\PublisherController::create', ['filter' => 'role:superadmin']);
@@ -50,6 +56,7 @@ $routes->group('admin', ['filter' => ['sessionauth', 'role:superadmin,admin_jurn
     $routes->get('publishers/(\\d+)/edit', 'Admin\\PublisherController::edit/$1', ['filter' => 'role:superadmin']);
     $routes->put('publishers/(\\d+)', 'Admin\\PublisherController::update/$1', ['filter' => 'role:superadmin']);
     $routes->delete('publishers/(\\d+)', 'Admin\\PublisherController::destroy/$1', ['filter' => 'role:superadmin']);
+    $routes->post('publishers/bulk-delete', 'Admin\\PublisherController::bulkDelete', ['filter' => 'role:superadmin']);
 
     $routes->get('users', 'Admin\\UserController::index', ['filter' => 'role:superadmin']);
     $routes->get('users/create', 'Admin\\UserController::create', ['filter' => 'role:superadmin']);
@@ -60,6 +67,7 @@ $routes->group('admin', ['filter' => ['sessionauth', 'role:superadmin,admin_jurn
     $routes->post('users/(\\d+)/password', 'Admin\\UserController::updatePassword/$1', ['filter' => 'role:superadmin']);
     $routes->delete('users/(\\d+)', 'Admin\\UserController::destroy/$1', ['filter' => 'role:superadmin']);
     $routes->post('users/(\\d+)/delete', 'Admin\\UserController::destroy/$1', ['filter' => 'role:superadmin']);
+    $routes->post('users/bulk-delete', 'Admin\\UserController::bulkDelete', ['filter' => 'role:superadmin']);
 });
 
 $routes->group('superadmin/settings', ['filter' => ['sessionauth', 'role:superadmin']], static function ($routes): void {

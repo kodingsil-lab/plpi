@@ -41,13 +41,30 @@
 <div class="dashboard-card letters-table-card myletters-table-card">
     <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
         <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar Permohonan LoA</h6>
-        <a class="btn btn-light-soft" href="<?= site_url('admin/loa-requests/export/csv') ?>">Export CSV</a>
+        <div class="d-flex gap-2 align-items-center">
+            <form
+                id="bulk-delete-requests"
+                class="bulk-delete-form m-0"
+                method="post"
+                action="<?= site_url('admin/loa-requests/bulk-delete') ?>"
+                data-bulk-target="#loaRequestsTableScope"
+                data-confirm="Hapus permohonan yang dipilih?"
+            >
+                <div class="bulk-hidden-inputs"></div>
+                <div class="bulk-actions-bar">
+                    <span class="bulk-selection-count">Belum ada yang dipilih</span>
+                    <button type="submit" class="btn btn-danger bulk-delete-trigger" disabled>Hapus Massal</button>
+                </div>
+            </form>
+            <a class="btn btn-light-soft" href="<?= site_url('admin/loa-requests/export/csv') ?>">Export CSV</a>
+        </div>
     </div>
     <div class="card-body pt-2">
-        <div class="activity-table-wrap myletters-table-wrap table-responsive">
-            <table class="table table-hover align-middle mb-0 w-100">
+        <div class="activity-table-wrap myletters-table-wrap table-responsive" id="loaRequestsTableScope">
+            <table class="table table-hover align-middle mb-0 w-100 table-layout-request-bulk">
                 <thead>
                 <tr>
+                    <th class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-select-all" aria-label="Pilih semua"></th>
                     <th>NO</th>
                     <th>KODE</th>
                     <th>JURNAL</th>
@@ -66,6 +83,7 @@
                             $statusMeta = plpi_request_status_meta($status, $hasPublishedLetter);
                         ?>
                         <tr>
+                            <td class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-row-check" value="<?= esc((string) $r['id']) ?>" aria-label="Pilih permohonan"></td>
                             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
                             <td class="fw-semibold text-primary"><?= esc((string) ($r['request_code'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['journal_name'] ?? '-')) ?></td>
@@ -93,12 +111,17 @@
                                             </button>
                                         </form>
                                     <?php endif; ?>
+                                    <form method="post" action="<?= site_url('admin/loa-requests/' . (string) $r['id'] . '/delete') ?>" class="d-inline" onsubmit="return confirm('Hapus permohonan ini?')">
+                                        <button class="btn btn-sm activity-btn user-action-btn user-action-delete action-solid action-solid-delete myletters-icon-only" type="submit" aria-label="Hapus" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Hapus">
+                                            <iconify-icon icon="solar:trash-bin-trash-outline" aria-hidden="true"></iconify-icon>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr><td colspan="7" class="text-center text-muted">Belum ada data.</td></tr>
+                    <tr><td colspan="8" class="text-center text-muted">Belum ada data.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>

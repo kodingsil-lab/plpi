@@ -263,4 +263,83 @@
     .pdf-paragraph {
         margin-top: 6px;
     }
+
+    /* LoA Signature Section Styles */
+    .loa-signature-cell {
+        width: 65%;
+        padding-left: 30px;
+        text-align: right;
+        vertical-align: top;
+        font-family: "Times New Roman", serif;
+    }
+
+    .loa-signature-date {
+        font-size: 11pt;
+        font-weight: 400;
+        margin-bottom: 10px;
+        text-align: right;
+    }
+
+    .loa-signature-title {
+        font-size: 11pt;
+        font-weight: 400;
+        margin-bottom: 18px;
+        text-align: right;
+    }
+
+    .loa-signature-box {
+        width: 260px;
+        height: 110px;
+        margin: 0 0 14px auto;
+        text-align: center;
+    }
+
+    .loa-signature-box img {
+        max-height: 110px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    .loa-signer-name {
+        font-size: 11pt;
+        font-weight: 700;
+        line-height: 1.35;
+        text-align: right;
+    }
+
+    .loa-signer-meta {
+        font-size: 9pt;
+        font-weight: 400;
+        margin-top: 3px;
+        text-align: right;
+    }
+
+    /* Footer Kontak Redaksi - Simple Pattern from loa-center */
+    .footer-meta {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding-top: 8px;
+        padding-left: 16mm;
+        padding-right: 16mm;
+        padding-bottom: 8px;
+        margin: 0;
+        border-top: 1px solid #9ca3af;
+        background-color: #fff;
+        font-size: 10pt;
+        line-height: 1.25;
+        color: #111;
+        text-align: left;
+        page-break-inside: avoid;
+    }
+
+    .footer-meta p {
+        margin: 0 0 1px 0;
+        padding: 0;
+    }
+
+    .footer-meta p:first-child {
+        margin-bottom: 4px;
+    }
 </style>

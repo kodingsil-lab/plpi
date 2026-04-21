@@ -33,6 +33,7 @@ class LoaPdfService
         $affiliations = $this->decodeJson($letter['affiliations_json'] ?? null);
         $logoBase64 = $this->toBase64Image((string) ($journal['logo_path'] ?? ''));
         $publisherLogoBase64 = $this->toBase64Image((string) ($publisher['logo_path'] ?? ''));
+        $stampBase64 = $this->toBase64Image((string) ($journal['default_stamp_path'] ?? ''));
         $sigBase64 = $this->toBase64Image((string) ($journal['default_signature_path'] ?? ''));
         $qrcodeBase64 = $this->generateQrCodeBase64($verifyUrl);
 
@@ -46,6 +47,7 @@ class LoaPdfService
             'affiliations' => $affiliations,
             'logoBase64' => $logoBase64,
             'publisherLogoBase64' => $publisherLogoBase64,
+            'stampBase64' => $stampBase64,
             'sigBase64' => $sigBase64,
             'qrcodeBase64' => $qrcodeBase64,
             'loaNumber' => (string) ($letter['loa_number'] ?? '-'),

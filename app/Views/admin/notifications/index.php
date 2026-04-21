@@ -4,16 +4,31 @@
 <div class="dashboard-card letters-table-card myletters-table-card">
   <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
     <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar Notifikasi</h6>
+    <form
+      id="bulk-delete-notifications"
+      class="bulk-delete-form m-0"
+      method="post"
+      action="<?= site_url('admin/notifikasi/bulk-delete') ?>"
+      data-bulk-target="#notificationsTableScope"
+      data-confirm="Hapus notifikasi yang dipilih?"
+    >
+      <div class="bulk-hidden-inputs"></div>
+      <div class="bulk-actions-bar">
+        <span class="bulk-selection-count">Belum ada yang dipilih</span>
+        <button type="submit" class="btn btn-danger bulk-delete-trigger" disabled>Hapus Massal</button>
+      </div>
+    </form>
   </div>
   <div class="card-body pt-2">
-    <div class="activity-table-wrap myletters-table-wrap table-responsive">
-      <table class="table table-hover align-middle mb-0 w-100">
-        <thead><tr><th>NO</th><th>NOMOR LOA</th><th>JURNAL</th><th>JUDUL</th><th>STATUS</th><th>TANGGAL</th><th>AKSI</th></tr></thead>
+    <div class="activity-table-wrap myletters-table-wrap table-responsive" id="notificationsTableScope">
+      <table class="table table-hover align-middle mb-0 w-100 table-layout-notification-bulk">
+        <thead><tr><th class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-select-all" aria-label="Pilih semua"></th><th>NO</th><th>NOMOR LOA</th><th>JURNAL</th><th>JUDUL</th><th>STATUS</th><th>TANGGAL</th><th>AKSI</th></tr></thead>
         <tbody>
         <?php if (! empty($rows)): foreach ($rows as $i => $r): ?>
           <tr>
+            <td class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-row-check" value="<?= esc((string) $r['id']) ?>" aria-label="Pilih notifikasi"></td>
             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
-            <td class="fw-semibold text-primary"><?= esc(plpi_format_loa_number($r['loa_number'] ?? '-')) ?></td>
+            <td><?= esc(plpi_format_loa_number($r['loa_number'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['journal_name'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['title'] ?? '-')) ?></td>
             <td>
@@ -49,7 +64,7 @@
             </td>
           </tr>
         <?php endforeach; else: ?>
-          <tr><td colspan="7" class="text-center text-muted">Belum ada item notifikasi. Item notifikasi akan muncul dari LoA yang sudah terbit dan siap dikirim ke email penulis.</td></tr>
+          <tr><td colspan="8" class="text-center text-muted">Belum ada item notifikasi. Item notifikasi akan muncul dari LoA yang sudah terbit dan siap dikirim ke email penulis.</td></tr>
         <?php endif; ?>
         </tbody>
       </table>
@@ -63,5 +78,3 @@
   </div>
 </div>
 <?= $this->endSection() ?>
-
-

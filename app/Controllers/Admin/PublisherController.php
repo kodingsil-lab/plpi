@@ -131,4 +131,29 @@ class PublisherController extends BaseController
 
         return redirect()->to(site_url('admin/publishers'))->with('success', 'Publisher berhasil dihapus.');
     }
+
+    public function bulkDelete()
+    {
+        $ids = $this->request->getPost('ids');
+        if (! is_array($ids) || $ids === []) {
+            return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+
+        $publisherIds = [];
+        foreach ($ids as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $publisherIds[] = $id;
+            }
+        }
+        $publisherIds = array_values(array_unique($publisherIds));
+
+        if ($publisherIds === []) {
+            return redirect()->back()->with('error', 'Tidak ada data valid yang dipilih.');
+        }
+
+        (new PublisherModel())->delete($publisherIds);
+
+        return redirect()->to(site_url('admin/publishers'))->with('success', 'Publisher terpilih berhasil dihapus.');
+    }
 }

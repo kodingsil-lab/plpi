@@ -9,6 +9,7 @@ $heading = $isEdit ? 'Edit Jurnal' : 'Tambah Jurnal';
 $description = $isEdit
   ? 'Kelola identitas jurnal, penandatangan, dan konfigurasi berkas pendukung.'
   : 'Lengkapi identitas jurnal baru, penandatangan, dan konfigurasi berkas pendukung.';
+$pdfDefaults = is_array($pdfDefaults ?? null) ? $pdfDefaults : ['left' => 20, 'top' => 10, 'height' => 85];
 
 $logoPreview = null;
 if (! empty($row['logo_path'])) {
@@ -101,17 +102,17 @@ if (! empty($row['default_signature_path'])) {
       <div class="row g-3">
         <div class="col-md-4">
           <label class="form-label">Posisi TTD Kiri/Kanan (px)</label>
-          <input class="form-control" type="number" name="pdf_sig_left_px" value="<?= esc((string) old('pdf_sig_left_px', (string) ($row['pdf_sig_left_px'] ?? ''))) ?>">
+          <input class="form-control" type="number" name="pdf_sig_left_px" value="<?= esc((string) old('pdf_sig_left_px', (string) ($row['pdf_sig_left_px'] ?? $pdfDefaults['left']))) ?>">
         </div>
 
         <div class="col-md-4">
           <label class="form-label">Posisi TTD Atas/Bawah (px)</label>
-          <input class="form-control" type="number" name="pdf_sig_top_px" value="<?= esc((string) old('pdf_sig_top_px', (string) ($row['pdf_sig_top_px'] ?? ''))) ?>">
+          <input class="form-control" type="number" name="pdf_sig_top_px" value="<?= esc((string) old('pdf_sig_top_px', (string) ($row['pdf_sig_top_px'] ?? $pdfDefaults['top']))) ?>">
         </div>
 
         <div class="col-md-4">
           <label class="form-label">Tinggi TTD (px)</label>
-          <input class="form-control" type="number" name="pdf_sig_height_px" value="<?= esc((string) old('pdf_sig_height_px', (string) ($row['pdf_sig_height_px'] ?? ''))) ?>">
+          <input class="form-control" type="number" name="pdf_sig_height_px" value="<?= esc((string) old('pdf_sig_height_px', (string) ($row['pdf_sig_height_px'] ?? $pdfDefaults['height']))) ?>">
         </div>
       </div>
 

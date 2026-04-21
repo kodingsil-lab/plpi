@@ -227,6 +227,30 @@ class UserController extends BaseController
         return redirect()->to(site_url('admin/users'))->with('success', 'Pengguna berhasil dihapus.');
     }
 
+    public function bulkDelete()
+    {
+        $ids = $this->request->getPost('ids');
+        if (! is_array($ids) || $ids === []) {
+            return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+
+        $userIds = [];
+        foreach ($ids as $id) {
+            $id = (int) $id;
+            if ($id > 0 && $id !== (int) session('user_id')) {
+                $userIds[] = $id;
+            }
+        }
+        $userIds = array_values(array_unique($userIds));
+
+        if ($userIds === []) {
+            return redirect()->back()->with('error', 'Tidak ada data valid yang dipilih. Akun yang sedang login tidak bisa dihapus.');
+        }
+
+        (new UserModel())->delete($userIds);
+        return redirect()->to(site_url('admin/users'))->with('success', 'Pengguna terpilih berhasil dihapus.');
+    }
+
     /**
      * @param mixed $journalIdsInput
      * @return int[]

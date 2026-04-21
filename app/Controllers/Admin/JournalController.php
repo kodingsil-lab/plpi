@@ -11,6 +11,9 @@ class JournalController extends BaseController
 {
     private const LOGO_TARGET_WIDTH = 900;
     private const LOGO_TARGET_HEIGHT = 1200;
+    private const DEFAULT_PDF_SIG_LEFT = 20;
+    private const DEFAULT_PDF_SIG_TOP = 10;
+    private const DEFAULT_PDF_SIG_HEIGHT = 85;
 
     public function index()
     {
@@ -41,6 +44,7 @@ class JournalController extends BaseController
             'title'      => 'Tambah Jurnal',
             'row'        => null,
             'publishers' => (new PublisherModel())->orderBy('name', 'ASC')->findAll(),
+            'pdfDefaults' => $this->getPdfDefaults(),
         ]);
     }
 
@@ -98,9 +102,9 @@ class JournalController extends BaseController
             'website_url'            => $v['website_url'] ?? null,
             'default_signer_name'    => $v['default_signer_name'] ?? null,
             'default_signer_title'   => $v['default_signer_title'] ?? null,
-            'pdf_sig_left_px'        => ($v['pdf_sig_left_px'] ?? '') !== '' ? (int) $v['pdf_sig_left_px'] : null,
-            'pdf_sig_top_px'         => ($v['pdf_sig_top_px'] ?? '') !== '' ? (int) $v['pdf_sig_top_px'] : null,
-            'pdf_sig_height_px'      => ($v['pdf_sig_height_px'] ?? '') !== '' ? (int) $v['pdf_sig_height_px'] : null,
+            'pdf_sig_left_px'        => ($v['pdf_sig_left_px'] ?? '') !== '' ? (int) $v['pdf_sig_left_px'] : self::DEFAULT_PDF_SIG_LEFT,
+            'pdf_sig_top_px'         => ($v['pdf_sig_top_px'] ?? '') !== '' ? (int) $v['pdf_sig_top_px'] : self::DEFAULT_PDF_SIG_TOP,
+            'pdf_sig_height_px'      => ($v['pdf_sig_height_px'] ?? '') !== '' ? (int) $v['pdf_sig_height_px'] : self::DEFAULT_PDF_SIG_HEIGHT,
         ];
 
         $logo = $this->request->getFile('logo');
@@ -157,6 +161,7 @@ class JournalController extends BaseController
             'title'      => 'Edit Jurnal',
             'row'        => $row,
             'publishers' => (new PublisherModel())->orderBy('name', 'ASC')->findAll(),
+            'pdfDefaults' => $this->getPdfDefaults(),
         ]);
     }
 
@@ -218,9 +223,9 @@ class JournalController extends BaseController
             'website_url'            => $v['website_url'] ?? null,
             'default_signer_name'    => $v['default_signer_name'] ?? null,
             'default_signer_title'   => $v['default_signer_title'] ?? null,
-            'pdf_sig_left_px'        => ($v['pdf_sig_left_px'] ?? '') !== '' ? (int) $v['pdf_sig_left_px'] : null,
-            'pdf_sig_top_px'         => ($v['pdf_sig_top_px'] ?? '') !== '' ? (int) $v['pdf_sig_top_px'] : null,
-            'pdf_sig_height_px'      => ($v['pdf_sig_height_px'] ?? '') !== '' ? (int) $v['pdf_sig_height_px'] : null,
+            'pdf_sig_left_px'        => ($v['pdf_sig_left_px'] ?? '') !== '' ? (int) $v['pdf_sig_left_px'] : self::DEFAULT_PDF_SIG_LEFT,
+            'pdf_sig_top_px'         => ($v['pdf_sig_top_px'] ?? '') !== '' ? (int) $v['pdf_sig_top_px'] : self::DEFAULT_PDF_SIG_TOP,
+            'pdf_sig_height_px'      => ($v['pdf_sig_height_px'] ?? '') !== '' ? (int) $v['pdf_sig_height_px'] : self::DEFAULT_PDF_SIG_HEIGHT,
             'updated_at'             => date('Y-m-d H:i:s'),
         ];
 
@@ -268,7 +273,38 @@ class JournalController extends BaseController
 
     public function destroy(int $id)
     {
-        return redirect()->back()->with('success', "Jurnal #{$id} dihapus.");
+        $model = new JournalModel();
+        $row = $model->find($id);
+        if (! $row) {
+            return redirect()->to(site_url('admin/journals'))->with('error', 'Jurnal tidak ditemukan.');
+        }
+
+        $model->delete($id);
+        return redirect()->to(site_url('admin/journals'))->with('success', 'Jurnal berhasil dihapus.');
+    }
+
+    public function bulkDelete()
+    {
+        $ids = $this->request->getPost('ids');
+        if (! is_array($ids) || $ids === []) {
+            return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+
+        $journalIds = [];
+        foreach ($ids as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $journalIds[] = $id;
+            }
+        }
+        $journalIds = array_values(array_unique($journalIds));
+
+        if ($journalIds === []) {
+            return redirect()->back()->with('error', 'Tidak ada data valid yang dipilih.');
+        }
+
+        (new JournalModel())->delete($journalIds);
+        return redirect()->to(site_url('admin/journals'))->with('success', 'Jurnal terpilih berhasil dihapus.');
     }
 
     private function standardizeLogoImage(string $filePath): ?string
@@ -333,5 +369,14 @@ class JournalController extends BaseController
         }
 
         return $pngPath;
+    }
+
+    private function getPdfDefaults(): array
+    {
+        return [
+            'left' => self::DEFAULT_PDF_SIG_LEFT,
+            'top' => self::DEFAULT_PDF_SIG_TOP,
+            'height' => self::DEFAULT_PDF_SIG_HEIGHT,
+        ];
     }
 }

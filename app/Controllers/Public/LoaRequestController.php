@@ -69,9 +69,7 @@ class LoaRequestController extends BaseController
         }
 
         $requestModel = new LoaRequestModel();
-        do {
-            $requestCode = 'REQ-' . strtoupper(bin2hex(random_bytes(5)));
-        } while ($requestModel->where('request_code', $requestCode)->first());
+        $requestCode = $this->generateRequestCode($requestModel);
 
         $requestModel->insert([
             'journal_id'          => $journalId,
@@ -139,5 +137,25 @@ class LoaRequestController extends BaseController
         }
         $decoded = json_decode((string) $value, true);
         return is_array($decoded) ? $decoded : null;
+    }
+
+    private function generateRequestCode(LoaRequestModel $requestModel): string
+    {
+        $rows = $requestModel->select('request_code')->findAll();
+        $maxSeq = 0;
+
+        foreach ($rows as $row) {
+            $code = trim((string) ($row['request_code'] ?? ''));
+            if (! preg_match('/^(?:PLPI|IMP|MPL|REQ)-(\d+)$/', $code, $matches)) {
+                continue;
+            }
+
+            $seq = (int) $matches[1];
+            if ($seq > $maxSeq) {
+                $maxSeq = $seq;
+            }
+        }
+
+        return 'PLPI-' . str_pad((string) ($maxSeq + 1), 5, '0', STR_PAD_LEFT);
     }
 }

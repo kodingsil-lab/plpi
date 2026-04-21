@@ -4,16 +4,31 @@
   <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
     <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar Publisher</h6>
     <div class="d-flex gap-2 align-items-center">
+      <form
+        id="bulk-delete-publishers"
+        class="bulk-delete-form m-0"
+        method="post"
+        action="<?= site_url('admin/publishers/bulk-delete') ?>"
+        data-bulk-target="#publishersTableScope"
+        data-confirm="Hapus publisher yang dipilih?"
+      >
+        <div class="bulk-hidden-inputs"></div>
+        <div class="bulk-actions-bar">
+          <span class="bulk-selection-count">Belum ada yang dipilih</span>
+          <button type="submit" class="btn btn-danger bulk-delete-trigger" disabled>Hapus Massal</button>
+        </div>
+      </form>
       <a class="btn btn-primary-main" href="<?= site_url('admin/publishers/create') ?>">Tambah Publisher</a>
     </div>
   </div>
   <div class="card-body pt-2">
-    <div class="activity-table-wrap myletters-table-wrap table-responsive">
-      <table class="table table-hover align-middle mb-0 w-100">
-        <thead><tr><th>NO</th><th>KODE</th><th>NAMA PUBLISHER</th><th>EMAIL</th><th>NOMOR WHATSAPP</th><th style="width:22%;">ALAMAT</th><th>AKSI</th></tr></thead>
+    <div class="activity-table-wrap myletters-table-wrap table-responsive" id="publishersTableScope">
+      <table class="table table-hover align-middle mb-0 w-100 table-layout-publisher-bulk">
+        <thead><tr><th class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-select-all" aria-label="Pilih semua"></th><th>NO</th><th>KODE</th><th>NAMA PUBLISHER</th><th>EMAIL</th><th>NOMOR WHATSAPP</th><th style="width:22%;">ALAMAT</th><th>AKSI</th></tr></thead>
         <tbody>
         <?php if (! empty($rows)): foreach ($rows as $i => $r): ?>
           <tr>
+            <td class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-row-check" value="<?= esc((string) $r['id']) ?>" aria-label="Pilih publisher"></td>
             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
             <td><?= esc((string) ($r['code'] ?? '-')) ?></td>
             <td><?= esc((string) ($r['name'] ?? '-')) ?></td>
@@ -35,7 +50,7 @@
             </td>
           </tr>
         <?php endforeach; else: ?>
-          <tr><td colspan="7" class="text-center text-muted">Belum ada data publisher.</td></tr>
+          <tr><td colspan="8" class="text-center text-muted">Belum ada data publisher.</td></tr>
         <?php endif; ?>
         </tbody>
       </table>

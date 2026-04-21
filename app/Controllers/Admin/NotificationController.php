@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\EmailService;
 use App\Models\LoaLetterModel;
 use App\Models\LoaNotificationModel;
 
@@ -51,15 +52,77 @@ class NotificationController extends BaseController
             return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Email penulis/pengaju LoA belum tersedia.');
         }
 
-        // TODO: Integrasikan SMTP service nyata.
-        $model->update($id, [
-            'status' => 'notifikasi terkirim',
-            'sent_to_email' => $email,
-            'sent_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+        // Check if PDF exists
+        $pdfPath = $letter['pdf_path'] ?? null;
+        
+        // Try different path possibilities
+        $possiblePaths = [
+            FCPATH . 'uploads/' . $pdfPath,  // public/uploads/
+            ROOTPATH . 'writable/uploads/' . $pdfPath,  // writable/uploads/
+            dirname(FCPATH) . '/writable/uploads/' . $pdfPath,  // ../writable/uploads/
+        ];
+        
+        $pdfFullPath = null;
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path)) {
+                $pdfFullPath = $path;
+                break;
+            }
+        }
+        
+        if (empty($pdfPath) || empty($pdfFullPath)) {
+            // Debug info
+            log_message('error', 'PDF not found. Checked paths: ' . json_encode($possiblePaths));
+            return redirect()->to(site_url('admin/notifikasi'))->with('error', 'File PDF LoA tidak ditemukan. Pastikan PDF telah di-generate.');
+        }
 
-        return redirect()->to(site_url('admin/notifikasi'))->with('success', 'Email notifikasi berhasil dikirim ke penulis/pengaju LoA.');
+        try {
+            // Get journal and publisher info
+            $db = \Config\Database::connect();
+            $journalData = $db->table('journals')
+                ->select('journals.name, publishers.name as publisher_name, publishers.email, publishers.phone, publishers.address, journals.default_signer_name, journals.default_signer_title')
+                ->join('publishers', 'publishers.id = journals.publisher_id', 'left')
+                ->where('journals.id', $letter['journal_id'])
+                ->get()
+                ->getRowArray();
+
+            // Send email using EmailService
+            $emailService = new EmailService();
+            $publisherData = [
+                'journal_name' => $journalData['name'] ?? 'Jurnal',
+                'name' => $journalData['publisher_name'] ?? 'Penerbit',
+                'email' => $journalData['email'] ?? '',
+                'phone' => $journalData['phone'] ?? '',
+                'address' => $journalData['address'] ?? '',
+                'editor_name' => $journalData['default_signer_name'] ?? 'Pimpinan Redaksi',
+                'signer_name' => $journalData['default_signer_title'] ?? 'Pimpinan Redaksi',
+            ];
+
+            // $pdfFullPath is already determined in the path check above
+            $sent = $emailService->sendLoaApprovedNotification(
+                $email,
+                $letter,
+                $pdfFullPath,
+                $publisherData
+            );
+
+            if ($sent) {
+                // Update notification status
+                $model->update($id, [
+                    'status' => 'notifikasi terkirim',
+                    'sent_to_email' => $email,
+                    'sent_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+
+                return redirect()->to(site_url('admin/notifikasi'))->with('success', 'Email notifikasi berhasil dikirim ke penulis/pengaju LoA.');
+            } else {
+                return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Gagal mengirim email notifikasi. Silakan periksa konfigurasi email dan coba lagi.');
+            }
+        } catch (\Throwable $e) {
+            log_message('error', 'Notification email error: ' . $e->getMessage());
+            return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Terjadi kesalahan saat mengirim email: ' . $e->getMessage());
+        }
     }
 
     public function destroy(int $id)
@@ -72,5 +135,30 @@ class NotificationController extends BaseController
         $model->delete($id);
 
         return redirect()->to(site_url('admin/notifikasi'))->with('success', 'Item notifikasi berhasil dihapus.');
+    }
+
+    public function bulkDelete()
+    {
+        $ids = $this->request->getPost('ids');
+        if (! is_array($ids) || $ids === []) {
+            return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+
+        $notificationIds = [];
+        foreach ($ids as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $notificationIds[] = $id;
+            }
+        }
+        $notificationIds = array_values(array_unique($notificationIds));
+
+        if ($notificationIds === []) {
+            return redirect()->back()->with('error', 'Tidak ada data valid yang dipilih.');
+        }
+
+        (new LoaNotificationModel())->delete($notificationIds);
+
+        return redirect()->to(site_url('admin/notifikasi'))->with('success', 'Item notifikasi terpilih berhasil dihapus.');
     }
 }

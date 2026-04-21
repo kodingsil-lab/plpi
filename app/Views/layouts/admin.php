@@ -98,7 +98,7 @@
             <span class="topbar-accent-badge" aria-hidden="true"></span>
             <div class="topbar-appmeta">
                 <div class="topbar-appname">PLPI</div>
-                <div class="topbar-appsub">LoA, Invoice, dan Layanan Jurnal</div>
+                <div class="topbar-appsub">Pusat Layanan Publikasi Ilmiah</div>
             </div>
         </div>
         <div class="topbar-right">
@@ -148,7 +148,7 @@
     </div>
 
     <footer class="app-footer">
-        <div class="footer-left">PLPI &copy; <?= date('Y') ?> - Sistem Informasi Pengelolaan LoA, Invoice, dan Layanan Jurnal</div>
+        <div class="footer-left">PLPI &copy; <?= date('Y') ?> - Pusat Layanan Publikasi Ilmiah</div>
         <div class="footer-right">Developed By <span class="footer-dev-link">KSJ</span> <span class="footer-heart">?</span></div>
     </footer>
 </div>
@@ -223,6 +223,87 @@
         iconEl.setAttribute('aria-hidden', 'true');
         iconEl.className = 'status-pill-icon';
         pill.prepend(iconEl);
+    });
+
+    document.querySelectorAll('.bulk-delete-form').forEach(function (form) {
+        const targetSelector = form.getAttribute('data-bulk-target') || '';
+        const scope = targetSelector ? document.querySelector(targetSelector) : null;
+        if (!scope) {
+            return;
+        }
+
+        const selectAll = scope.querySelector('.bulk-select-all');
+        const rowCheckboxes = Array.from(scope.querySelectorAll('.bulk-row-check'));
+        const enabledCheckboxes = rowCheckboxes.filter(function (checkbox) {
+            return !checkbox.disabled;
+        });
+        const hiddenContainer = form.querySelector('.bulk-hidden-inputs');
+        const submitBtn = form.querySelector('.bulk-delete-trigger');
+        const countLabel = form.querySelector('.bulk-selection-count');
+
+        const syncState = function () {
+            const checked = rowCheckboxes.filter(function (checkbox) {
+                return !checkbox.disabled && checkbox.checked;
+            });
+
+            if (selectAll) {
+                selectAll.checked = enabledCheckboxes.length > 0 && checked.length === enabledCheckboxes.length;
+                selectAll.indeterminate = checked.length > 0 && checked.length < enabledCheckboxes.length;
+            }
+
+            if (submitBtn) {
+                submitBtn.disabled = checked.length === 0;
+            }
+
+            if (countLabel) {
+                countLabel.textContent = checked.length > 0
+                    ? checked.length + ' dipilih'
+                    : 'Belum ada yang dipilih';
+            }
+        };
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                enabledCheckboxes.forEach(function (checkbox) {
+                    checkbox.checked = selectAll.checked;
+                });
+                syncState();
+            });
+        }
+
+        rowCheckboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', syncState);
+        });
+
+        form.addEventListener('submit', function (event) {
+            const checked = rowCheckboxes.filter(function (checkbox) {
+                return !checkbox.disabled && checkbox.checked;
+            });
+
+            if (checked.length === 0) {
+                event.preventDefault();
+                return;
+            }
+
+            const message = form.getAttribute('data-confirm') || 'Hapus data terpilih?';
+            if (!window.confirm(message)) {
+                event.preventDefault();
+                return;
+            }
+
+            if (hiddenContainer) {
+                hiddenContainer.innerHTML = '';
+                checked.forEach(function (checkbox) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'ids[]';
+                    input.value = checkbox.value;
+                    hiddenContainer.appendChild(input);
+                });
+            }
+        });
+
+        syncState();
     });
 </script>
 </body>

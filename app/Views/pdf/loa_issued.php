@@ -8,21 +8,22 @@
       font-family: "Times New Roman", "Times", "Liberation Serif", "DejaVu Serif", serif;
       font-size: 12pt;
       color: #111;
+      line-height: 1.45;
     }
     .small { font-size:9pt; color:#444; }
     .tiny { font-size:8.7pt; color:#444; }
     .hr { border-top:2px solid #000; margin: 0 0 10px; }
     .center { text-align: center; }
-    .justify { text-align:justify; line-height:1.35; }
+    .justify { text-align:justify; line-height:1.45; }
     .nowrap { white-space: nowrap; }
     .avoid { page-break-inside: avoid; }
     .meta { width:100%; border-collapse:collapse; margin-top: 6px; }
-    .meta td { padding:1px 0; vertical-align:top; }
+    .meta td { padding:2px 0; vertical-align:top; }
     .meta .k { width:34mm; }
     .meta .s { width:4mm; }
     .value { overflow-wrap: break-word; word-break: normal; text-align: justify; }
     .url { word-break: break-word; overflow-wrap: anywhere; }
-    p { margin: 6px 0; }
+    p { margin: 7px 0; }
     .pdf-header { width: 100%; border-collapse: collapse; margin: 0; }
     .pdf-header td { vertical-align: middle; text-align: center; }
     .pdf-header-logo img { object-fit: contain; width: auto; max-width: 100%; }
@@ -33,6 +34,9 @@
     .hdr-meta .mono { letter-spacing: 0.2px; }
     .footer-meta { position: fixed; left: 0; right: 0; bottom: 0; padding-top: 8px; border-top: 1px solid #9ca3af; font-size: 10pt; line-height: 1.18; color: #111; padding-left: 16mm; padding-right: 16mm; }
     .footer-meta p { margin: 0 0 1px 0; }
+    .loa-title-block { margin-bottom: 16px; line-height: 1.2; }
+    .loa-title-main { margin-bottom: 7px; }
+    .section-gap-sm { margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -105,13 +109,19 @@
   if (!empty($letter['issue_number'])) {
     $editionParts[] = 'Nomor ' . $letter['issue_number'];
   }
-  // Prioritas: published_year (input user) > published_at (tanggal sistem)
-  if (!empty($letter['published_year'])) {
-    $editionParts[] = (string) $letter['published_year'];
-  } elseif (!empty($letter['published_at'])) {
-    $editionParts[] = date('Y', strtotime((string) $letter['published_at']));
-  }
   $editionText = !empty($editionParts) ? implode(', ', $editionParts) : 'edisi yang ditetapkan redaksi';
+  // Prioritas: published_year (input user) > published_at (tanggal sistem)
+  $editionYear = null;
+  if (!empty($letter['published_year'])) {
+    $editionYear = (string) $letter['published_year'];
+  } elseif (!empty($letter['published_at'])) {
+    $editionYear = date('Y', strtotime((string) $letter['published_at']));
+  }
+  if ($editionYear !== null && $editionYear !== '') {
+    $editionText = $editionText === 'edisi yang ditetapkan redaksi'
+      ? 'Tahun ' . $editionYear
+      : $editionText . ' Tahun ' . $editionYear;
+  }
   
   // Pengaturan layout
   $publisherLogoHeightCm = 2.55;
@@ -135,15 +145,21 @@
   $signatureMarginTopPx = (int) ($journal['pdf_signature_margin_top_px'] ?? 28);
   $overlayWidth = 300;
   $overlayHeight = 116;
-  $sigLeft = (int) ($journal['pdf_sig_left_px'] ?? 28);
-  $sigTop = (int) ($journal['pdf_sig_top_px'] ?? 0);
-  $sigHeight = (int) ($journal['pdf_sig_height_px'] ?? 135);
+  $sigLeft = ($journal['pdf_sig_left_px'] ?? '') !== '' ? (int) $journal['pdf_sig_left_px'] : 28;
+  $sigTop = ($journal['pdf_sig_top_px'] ?? '') !== '' ? (int) $journal['pdf_sig_top_px'] : 14;
+  $sigHeight = ($journal['pdf_sig_height_px'] ?? '') !== '' ? (int) $journal['pdf_sig_height_px'] : 78;
+  $sigHeight = max(45, min(180, $sigHeight));
+  $stampMaxHeightPx = max(36, min(140, (int) round($sigHeight * 0.9)));
+  $stampMaxWidthPx = max(48, min(140, (int) round($stampMaxHeightPx * 1.05)));
+  $signatureMaxHeightPx = $sigHeight;
+  $signatureMaxWidthPx = max(90, min(260, (int) round($signatureMaxHeightPx * 2.35)));
+  $signatureWrapWidthPx = $stampMaxWidthPx + $signatureMaxWidthPx + 24;
   
   $journalName = trim((string) ($journal['name'] ?? '-'));
   $publisherAddress = trim((string) ($publisher['address'] ?? '-'));
   $city = trim((string) ($journal['city'] ?? 'Kupang'));
   $editorName = trim((string) ($journal['default_signer_name'] ?? '-'));
-  $editorTitle = trim((string) ($journal['signer_position'] ?? 'Pimpinan Redaksi'));
+  $editorTitle = trim((string) ($journal['default_signer_title'] ?? 'Pimpinan Redaksi'));
   $editorNidn = trim((string) ($journal['editor_nidn'] ?? ''));
 ?>
 
@@ -183,8 +199,8 @@
   <div class="hr"></div>
 
   <!-- TITLE -->
-  <div class="center avoid" style="margin-top:<?= $titleMarginTopPx ?>px; margin-bottom:12px; line-height:1.1;">
-    <div style="font-weight:700; text-decoration: underline; font-size:<?= $loaTitlePt ?>pt;">Surat Keterangan Penerimaan (LoA)</div>
+  <div class="center avoid loa-title-block" style="margin-top:<?= $titleMarginTopPx ?>px;">
+    <div class="loa-title-main" style="font-weight:700; text-decoration: underline; font-size:<?= $loaTitlePt ?>pt;">Letter of Acceptance (LoA)</div>
     <div style="font-weight:700; font-size:<?= $loaNumberPt ?>pt;">No: <?= esc((string) ($loaNumber ?? '-')) ?></div>
   </div>
 
@@ -216,89 +232,94 @@
     </tr>
   </table>
 
-  <div class="justify" style="margin-top:6px;">
+  <div class="justify section-gap-sm">
     Telah melalui proses seleksi dan penelaahan sesuai standar dan kebijakan editorial yang berlaku.
     Berdasarkan hasil evaluasi tersebut, naskah dinyatakan <b>diterima</b> dan layak untuk dipublikasikan pada edisi
     <b><?= esc($editionText) ?></b>.
   </div>
 
-  <div class="justify" style="margin-top:6px;">
+  <div class="justify section-gap-sm">
     Sehubungan dengan prinsip etika publikasi ilmiah dan untuk menghindari duplikasi terbitan, kami mengharapkan agar naskah/artikel tersebut tidak dikirimkan maupun dipublikasikan pada jurnal atau penerbit lain.
   </div>
 
-  <div class="justify" style="margin-top:6px;">
+  <div class="justify section-gap-sm">
     Demikian surat keterangan ini dibuat untuk dipergunakan sebagaimana mestinya. Atas kepercayaan, partisipasi, dan kerja sama yang baik, kami sampaikan terima kasih.
   </div>
 
-  <!-- SIGNATURE SECTION -->
-  <div class="avoid" style="margin-top:<?= $signatureMarginTopPx ?>px;">
-  <!-- SIGNATURE SECTION -->
-  <div class="avoid" style="margin-top:<?= $signatureMarginTopPx ?>px; border-top:1px solid #ccc; padding-top:20px;">
+  <!-- SIGNATURE SECTION - Proven Pattern -->
+  <div class="avoid" style="margin-top:<?= $signatureMarginTopPx ?>px; padding-top:4px;">
     <table width="100%" style="border-collapse:collapse; margin:0; padding:0;">
       <tr>
-        <!-- KOLOM KIRI: QR CODE -->
-        <td width="35%" valign="top" style="padding-right:20px; text-align:left;">
-          <!-- QR CODE & TEXT CONTAINER -->
-          <div style="margin-bottom:15px;">
-            <!-- QR CODE LEFT FLOAT -->
+        <!-- KOLOM KIRI: QR + KETERANGAN -->
+        <td width="46%" valign="top" style="padding:0;">
+          <div style="width:132px; text-align:center;">
             <?php if (!empty($qrcodeBase64)): ?>
-              <img src="<?= esc((string) $qrcodeBase64) ?>" style="width:100px; height:100px; border:1px solid #999; padding:4px; background:#fff; float:left; margin-right:10px; object-fit:contain;">
+              <img src="<?= esc((string) $qrcodeBase64) ?>" width="120px" style="border:1px solid #999; padding:4px; background:#fff;">
             <?php endif; ?>
-            
-            <!-- QR CODE TEXT RIGHT -->
-            <div style="font-size:8pt; line-height:1.4; color:#666; padding-top:5px;">
-              Keaslian LoA dapat<br>
-              diperiksa dengan<br>
-              memindai QR Code<br>
-              di samping.
-            </div>
-            
-            <div style="clear:both;"></div>
+            <p style="font-size:7pt; line-height:1.25; margin:4px 0 0 0;">Validasi LoA dapat dilakukan dengan memindai QR Code di atas.</p>
           </div>
-          
-          <!-- NOMOR LOA -->
-          <div style="font-size:9pt; font-weight:700; text-align:left; color:#333; margin-top:10px;">No: <?= esc((string) ($loaNumber ?? '-')) ?></div>
         </td>
 
-        <!-- KOLOM KANAN: TANDA TANGAN -->
-        <td width="65%" valign="top" style="padding-left:30px;">
-          <!-- KOTA & TANGGAL -->
-          <div style="font-size:11pt; margin-bottom:20px; font-weight:400; text-align:right;">
+        <!-- KOLOM KANAN: TANDA TANGAN & NAMA -->
+        <td width="54%" valign="top" align="left" style="padding:0; padding-left:<?= $sigLeft ?>px; font-family:'Times New Roman', serif;">
+          <p style="font-size:11pt; margin:0; white-space:nowrap;">
             <?= esc($city) ?>, <?= esc((string) ($issuedDate ?? '')) ?>
-          </div>
+          </p>
+          <p style="font-size:11pt; margin:0; white-space:nowrap;">
+            <?= esc($editorTitle) ?>
+          </p>
+          <div style="height:<?= $sigTop ?>px;"></div>
           
-          <!-- JABATAN -->
-          <div style="font-size:11pt; margin-bottom:50px; font-weight:500; text-align:center;">
-            <?= esc($editorTitle) ?>,
-          </div>
-          
-          <!-- TANDA TANGAN & STEMPEL -->
-          <div style="position:relative; width:100%; height:<?= $overlayHeight ?>px; margin-bottom:20px; margin-top:10px;">
+          <!-- CAP & TANDA TANGAN - Ukuran terpisah -->
+          <div style="width:<?= $signatureWrapWidthPx ?>px; height:auto; margin:0; white-space:nowrap;">
+            <?php if (!empty($stampBase64)): ?>
+              <img
+                src="<?= esc((string) $stampBase64) ?>"
+                style="max-width:<?= $stampMaxWidthPx ?>px; max-height:<?= $stampMaxHeightPx ?>px; width:auto; height:auto; display:inline-block; vertical-align:bottom; object-fit:contain; margin-right:8px;"
+              >
+            <?php endif; ?>
             <?php if (!empty($sigBase64)): ?>
               <img
                 src="<?= esc((string) $sigBase64) ?>"
-                style="position:absolute; left:50%; transform:translateX(-50%); top:0; height:<?= $sigHeight ?>px; width:auto; z-index:2; object-fit:contain;"
+                style="max-width:<?= $signatureMaxWidthPx ?>px; max-height:<?= $signatureMaxHeightPx ?>px; width:auto; height:auto; display:inline-block; vertical-align:bottom; object-fit:contain;"
               >
             <?php endif; ?>
           </div>
           
-          <!-- NAMA & GELAR -->
-          <div style="font-size:11pt; font-weight:700; line-height:1.4; text-align:center;">
-            <div><?= esc($editorName) ?></div>
-            <?php if (!empty($editorNidn)): ?>
-              <div style="font-size:9pt; font-weight:400; margin-top:3px;">NIDN. <?= esc($editorNidn) ?></div>
-            <?php endif; ?>
-          </div>
+          <!-- NAMA -->
+          <p style="font-size:11pt; margin:-2px 0 0 0; font-weight:700; white-space:nowrap;">
+            <?= esc($editorName) ?>
+          </p>
+          <?php if (!empty($editorNidn)): ?>
+            <p style="font-size:9pt; margin:0; white-space:nowrap;">
+              NIDN. <?= esc($editorNidn) ?>
+            </p>
+          <?php endif; ?>
         </td>
       </tr>
     </table>
   </div>
 
-  <div class="footer-meta avoid">
-    <p><b>Kontak Redaksi</b></p>
-    <p>Email: <?= esc($publisherEmail) ?></p>
-    <p>Whatsapp: <?= esc($publisherPhone) ?></p>
-    <p>Alamat: <?= esc($publisherAddress) ?></p>
+  <!-- FOOTER FIXED - Garis dan Kontak Redaksi -->
+  <div style="position: fixed; left: 0; right: 0; bottom: 0; width: 100%; text-align: left; padding-left: 0; padding-right: 16mm; margin: 0;">
+    <!-- SEPARATOR -->
+    <hr style="margin:4px 0; border:none; border-top:1px solid #9ca3af; padding:0;">
+    
+    <!-- FOOTER INFO PENERBIT -->
+    <div style="text-align:left;">
+      <p style="margin:2px 0; font-size:10pt; font-weight:700;">
+        <b>Kontak Redaksi</b>
+      </p>
+      <p style="margin:0; font-size:9pt;">
+        Email: <?= esc($publisherEmail) ?>
+      </p>
+      <p style="margin:0; font-size:9pt;">
+        Whatsapp: <?= esc($publisherPhone) ?>
+      </p>
+      <p style="margin:0; font-size:9pt;">
+        Alamat: <?= esc($publisherAddress) ?>
+      </p>
+    </div>
   </div>
 </body>
 </html>

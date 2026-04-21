@@ -1609,6 +1609,7 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     line-height: 1.25;
     position: relative;
     transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    text-decoration: none;
 }
 
 .table-page-btn:first-child {
@@ -1637,6 +1638,7 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     border-color: #3b7ddd;
     color: #ffffff;
     z-index: 2;
+    text-decoration: none;
 }
 
 .table-page-btn.disabled,
@@ -3835,7 +3837,8 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
 
 .myletters-page .myletters-table-wrap table tbody td:last-child {
     white-space: nowrap;
-    min-width: 170px;
+    width: 1%;
+    min-width: 120px;
 }
 
 .myletters-page .myletters-table-wrap .action-solid-detail {
@@ -4304,8 +4307,8 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
 
 .myletters-page .myletters-table-card .myletters-table-wrap table {
     width: 100%;
-    table-layout: auto;
-    min-width: 760px;
+    table-layout: fixed;
+    min-width: 100%;
 }
 
 .myletters-page .myletters-table-card .myletters-table-wrap table thead th,
@@ -4325,6 +4328,51 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     min-width: 56px;
 }
 
+.myletters-page .myletters-table-card .bulk-check-col {
+    width: 46px !important;
+    min-width: 46px !important;
+    text-align: center;
+}
+
+.myletters-page .myletters-table-card .bulk-check-input {
+    width: 18px;
+    height: 18px;
+    accent-color: #3b7ddd;
+    cursor: pointer;
+}
+
+.myletters-page .bulk-actions-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.myletters-page .bulk-selection-count {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.myletters-page .myletters-table-card .card-header .bulk-delete-trigger,
+.myletters-page .myletters-table-card .card-header .btn-primary-main,
+.myletters-page .myletters-table-card .card-header .btn-light-soft {
+    height: 40px;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table tbody td:last-child {
+    width: 1%;
+    min-width: 120px;
+    white-space: nowrap !important;
+    text-align: right;
+}
+
 .myletters-page .myletters-table-card .myletters-table-wrap .status-pill,
 .myletters-page .myletters-table-card .myletters-table-wrap .myletters-actions,
 .myletters-page .myletters-table-card .myletters-table-wrap table tbody td:last-child {
@@ -4333,6 +4381,222 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
 
 .myletters-page .myletters-table-card .myletters-table-wrap .myletters-actions {
     flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table {
+    table-layout: auto;
+    min-width: 100%;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table tbody td:first-child {
+    width: 52px;
+    min-width: 52px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table tbody td:nth-child(2) {
+    width: 96px;
+    min-width: 96px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table thead th:nth-child(3),
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table tbody td:nth-child(3) {
+    width: 250px;
+    min-width: 210px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table tbody td:nth-child(5) {
+    width: 120px;
+    min-width: 120px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table tbody td:nth-child(6) {
+    width: 122px;
+    min-width: 122px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table tbody td:last-child {
+    width: 72px;
+    min-width: 72px;
+    text-align: right;
+}
+
+/* Request bulk: CHECK | NO | KODE | JURNAL | JUDUL | STATUS | TANGGAL | AKSI */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(3),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(3) {
+    width: 90px;
+    min-width: 90px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(4),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(4) {
+    width: 235px;
+    min-width: 200px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(6) {
+    width: 130px;
+    min-width: 120px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(7) {
+    width: 125px;
+    min-width: 125px;
+}
+
+/* Letter bulk: CHECK | NO | NOMOR LOA | JURNAL | JUDUL | STATUS | TANGGAL | AKSI */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(3),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(3) {
+    width: 180px;
+    min-width: 165px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(4),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(4) {
+    width: 220px;
+    min-width: 190px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(6) {
+    width: 130px;
+    min-width: 120px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(7) {
+    width: 125px;
+    min-width: 125px;
+}
+
+/* Notification bulk: CHECK | NO | NOMOR LOA | JURNAL | JUDUL | STATUS | TANGGAL | AKSI */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(3),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(3) {
+    width: 180px;
+    min-width: 165px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(4),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(4) {
+    width: 220px;
+    min-width: 190px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(6) {
+    width: 145px;
+    min-width: 130px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(7) {
+    width: 125px;
+    min-width: 125px;
+}
+
+/* Journal without bulk: NO | KODE | NAMA JURNAL | PUBLISHER | E-ISSN | P-ISSN | AKSI */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:nth-child(2) {
+    width: 110px;
+    min-width: 100px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:nth-child(4),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:nth-child(4) {
+    width: 230px;
+    min-width: 180px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:nth-child(6) {
+    width: 110px;
+    min-width: 110px;
+}
+
+/* Journal bulk: CHECK | NO | KODE | NAMA JURNAL | PUBLISHER | E-ISSN | P-ISSN | AKSI */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:nth-child(3),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:nth-child(3) {
+    width: 110px;
+    min-width: 100px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:nth-child(5) {
+    width: 230px;
+    min-width: 180px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:nth-child(7) {
+    width: 110px;
+    min-width: 110px;
+}
+
+/* Publisher bulk: CHECK | NO | KODE | NAMA | EMAIL | WHATSAPP | ALAMAT | AKSI */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:nth-child(3),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:nth-child(3) {
+    width: 110px;
+    min-width: 100px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:nth-child(5) {
+    width: 230px;
+    min-width: 190px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:nth-child(6) {
+    width: 150px;
+    min-width: 135px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:nth-child(7) {
+    width: 300px;
+    min-width: 240px;
+}
+
+/* User bulk: CHECK | USERNAME | NAMA | EMAIL | ROLE | JURNAL | AKSI */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td:nth-child(2) {
+    width: 150px;
+    min-width: 130px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th:nth-child(3),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td:nth-child(3) {
+    width: 180px;
+    min-width: 160px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th:nth-child(4),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td:nth-child(4) {
+    width: 240px;
+    min-width: 210px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td:nth-child(5) {
+    width: 130px;
+    min-width: 120px;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td:nth-child(6) {
+    width: 170px;
+    min-width: 150px;
 }
 
 .myletters-page .myletters-table-card .users-table-full {
@@ -4354,9 +4618,175 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     width: auto;
 }
 
+/* =========================================
+   SIMPLIFIED TABLE RESET
+========================================= */
+.myletters-page .myletters-table-card .myletters-table-wrap table:not(.dashboard-latest-table) {
+    table-layout: auto;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td {
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:first-child {
+    width: 46px !important;
+    min-width: 46px !important;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td:last-child {
+    width: 1% !important;
+    min-width: 152px !important;
+    white-space: nowrap !important;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:last-child {
+    width: 1% !important;
+    min-width: 208px !important;
+    white-space: nowrap !important;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(6) {
+    min-width: 118px !important;
+    white-space: nowrap !important;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(7),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(7) {
+    min-width: 122px !important;
+    white-space: nowrap !important;
+}
+
+/* =========================================
+   CENTERED ADMIN TABLE COLUMNS
+========================================= */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk thead th:last-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-user-bulk tbody td:last-child {
+    text-align: center !important;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal thead th:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal tbody td:first-child,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-journal-bulk tbody td:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk thead th:nth-child(2),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-publisher-bulk tbody td:nth-child(2) {
+    min-width: 56px !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(6),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(6) {
+    white-space: nowrap;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:last-child .myletters-actions,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:last-child .myletters-actions,
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:last-child .myletters-actions {
+    justify-content: center;
+}
+
+/* =========================================
+   TITLE COLUMN BALANCE
+========================================= */
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-request-bulk tbody td:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-letter-bulk tbody td:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk thead th:nth-child(5),
+.myletters-page .myletters-table-card .myletters-table-wrap table.table-layout-notification-bulk tbody td:nth-child(5) {
+    width: 31%;
+}
+
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table thead th:nth-child(4),
+.myletters-page .myletters-table-card .myletters-table-wrap table.dashboard-latest-table tbody td:nth-child(4) {
+    width: 34%;
+}
+
 @media (max-width: 1199.98px) {
     .myletters-page .myletters-table-card .myletters-table-wrap table {
-        min-width: 960px;
+        min-width: 900px;
     }
 
     .myletters-page .myletters-table-card .users-table-full {

@@ -47,16 +47,33 @@
 <div class="dashboard-card letters-table-card myletters-table-card">
     <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
         <h6 class="mb-0"><i class="bi bi-table me-2"></i>Daftar LoA Terbit</h6>
-        <a class="btn btn-light-soft myletters-icon-btn myletters-icon-btn-light" href="<?= site_url('admin/loa-letters/export/csv') ?>">
-            <i class="bi bi-filetype-csv" aria-hidden="true"></i>
-            <span>Export CSV</span>
-        </a>
+        <div class="d-flex gap-2 align-items-center">
+            <form
+                id="bulk-delete-letters"
+                class="bulk-delete-form m-0"
+                method="post"
+                action="<?= site_url('admin/loa-letters/bulk-delete') ?>"
+                data-bulk-target="#loaLettersTableScope"
+                data-confirm="Hapus LoA yang dipilih?"
+            >
+                <div class="bulk-hidden-inputs"></div>
+                <div class="bulk-actions-bar">
+                    <span class="bulk-selection-count">Belum ada yang dipilih</span>
+                    <button type="submit" class="btn btn-danger bulk-delete-trigger" disabled>Hapus Massal</button>
+                </div>
+            </form>
+            <a class="btn btn-light-soft myletters-icon-btn myletters-icon-btn-light" href="<?= site_url('admin/loa-letters/export/csv') ?>">
+                <i class="bi bi-filetype-csv" aria-hidden="true"></i>
+                <span>Export CSV</span>
+            </a>
+        </div>
     </div>
     <div class="card-body pt-2">
-        <div class="activity-table-wrap myletters-table-wrap table-responsive">
-            <table class="table table-hover align-middle mb-0 w-100">
+        <div class="activity-table-wrap myletters-table-wrap table-responsive" id="loaLettersTableScope">
+            <table class="table table-hover align-middle mb-0 w-100 table-layout-letter-bulk">
                 <thead>
                 <tr>
+                    <th class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-select-all" aria-label="Pilih semua"></th>
                     <th>NO</th>
                     <th>NOMOR LOA</th>
                     <th>JURNAL</th>
@@ -72,8 +89,9 @@
                         <?php $status = (string) ($r['status'] ?? 'published'); ?>
                         <?php $statusMeta = plpi_letter_status_meta($status); ?>
                         <tr>
+                            <td class="bulk-check-col"><input type="checkbox" class="bulk-check-input bulk-row-check" value="<?= esc((string) $r['id']) ?>" aria-label="Pilih LoA"></td>
                             <td><?= esc((string) (($startNumber ?? 1) + $i)) ?></td>
-                            <td class="fw-semibold text-primary"><?= esc(plpi_format_loa_number($r['loa_number'] ?? '-')) ?></td>
+                            <td><?= esc(plpi_format_loa_number($r['loa_number'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['journal_name'] ?? '-')) ?></td>
                             <td><?= esc((string) ($r['title'] ?? '-')) ?></td>
                             <td>
@@ -103,7 +121,7 @@
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr><td colspan="7" class="text-center text-muted">Belum ada data LoA.</td></tr>
+                    <tr><td colspan="8" class="text-center text-muted">Belum ada data LoA.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>

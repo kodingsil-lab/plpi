@@ -178,7 +178,7 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
             </div>
             <p class="auth-subtitle">
                 Pusat Layanan Publikasi Ilmiah<br>
-                Sistem Informasi LoA, Invoice, dan Layanan Jurnal
+                Pusat Layanan Publikasi Ilmiah
             </p>
 
             <?php if (session('error')): ?>

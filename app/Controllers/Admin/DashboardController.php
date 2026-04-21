@@ -37,7 +37,7 @@ class DashboardController extends BaseController
 
         $data = [
             'title' => 'Dashboard PLPI',
-            'subtitle' => 'Sistem Informasi Pengelolaan LoA, Invoice, dan Layanan Jurnal',
+            'subtitle' => 'Pusat Layanan Publikasi Ilmiah',
             'stats' => [
                 'menunggu' => $pending,
                 'disetujui' => $approved,

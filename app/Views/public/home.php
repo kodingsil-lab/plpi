@@ -96,6 +96,9 @@
     }
 
     .plpi-menu a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         text-decoration: none;
         color: #4a5d7a;
         font-size: .94rem;
@@ -127,6 +130,11 @@
     .plpi-menu a:hover::after,
     .plpi-menu a.active::after {
         transform: scaleX(1);
+    }
+
+    .plpi-menu a i {
+        font-size: .95rem;
+        line-height: 1;
     }
 
     .plpi-login-btn {
@@ -944,10 +952,9 @@
                 <span>PLPI</span>
             </a>
             <div class="plpi-menu">
-                <a href="<?= site_url('/') ?>" class="active">Beranda</a>
-                <a href="<?= site_url('loa/request') ?>">Ajukan LoA</a>
-                <a href="<?= site_url('loa/verify') ?>">Verifikasi LoA</a>
-                <a href="#tentang">Tentang</a>
+                <a href="<?= site_url('/') ?>" class="active"><i class="bi bi-house-door"></i><span>Beranda</span></a>
+                <a href="<?= site_url('loa/request') ?>"><i class="bi bi-send"></i><span>Ajukan LoA</span></a>
+                <a href="<?= site_url('loa/verify') ?>"><i class="bi bi-shield-check"></i><span>Verifikasi LoA</span></a>
             </div>
             <a class="plpi-login-btn" href="<?= site_url('login') ?>">Login Admin</a>
         </nav>

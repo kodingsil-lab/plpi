@@ -160,6 +160,45 @@ class LoaRequestController extends BaseController
         return $this->approve($id);
     }
 
+    public function destroy(int $id)
+    {
+        $row = (new LoaRequestModel())->find($id);
+        if (! $row) {
+            return redirect()->back()->with('error', 'Permohonan tidak ditemukan.');
+        }
+
+        $this->cleanupAssociatedLetters([$id]);
+        (new LoaRequestModel())->delete($id);
+
+        return redirect()->back()->with('success', 'Permohonan berhasil dihapus.');
+    }
+
+    public function bulkDelete()
+    {
+        $ids = $this->request->getPost('ids');
+        if (! is_array($ids) || $ids === []) {
+            return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+
+        $requestIds = [];
+        foreach ($ids as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $requestIds[] = $id;
+            }
+        }
+        $requestIds = array_values(array_unique($requestIds));
+
+        if ($requestIds === []) {
+            return redirect()->back()->with('error', 'Tidak ada data valid yang dipilih.');
+        }
+
+        $this->cleanupAssociatedLetters($requestIds);
+        (new LoaRequestModel())->delete($requestIds);
+
+        return redirect()->back()->with('success', 'Permohonan terpilih berhasil dihapus.');
+    }
+
     public function exportCsv()
     {
         $rows = (new LoaRequestModel())->orderBy('id', 'DESC')->findAll(5000);
@@ -268,5 +307,31 @@ class LoaRequestController extends BaseController
         $value = trim($value, '-');
 
         return $value !== '' ? $value : 'NA';
+    }
+
+    /**
+     * @param int[] $requestIds
+     */
+    private function cleanupAssociatedLetters(array $requestIds): void
+    {
+        if ($requestIds === []) {
+            return;
+        }
+
+        $letters = (new LoaLetterModel())
+            ->whereIn('loa_request_id', $requestIds)
+            ->findAll();
+
+        foreach ($letters as $letter) {
+            $pdfPath = trim((string) ($letter['pdf_path'] ?? ''));
+            if ($pdfPath === '') {
+                continue;
+            }
+
+            $absolutePath = WRITEPATH . 'uploads/' . ltrim($pdfPath, '/');
+            if (is_file($absolutePath)) {
+                @unlink($absolutePath);
+            }
+        }
     }
 }
