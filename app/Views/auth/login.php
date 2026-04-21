@@ -176,10 +176,7 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
                     <span class="auth-app-title">PLPI</span>
                 </div>
             </div>
-            <p class="auth-subtitle">
-                Pusat Layanan Publikasi Ilmiah<br>
-                Pusat Layanan Publikasi Ilmiah
-            </p>
+            <p class="auth-subtitle">Pusat Layanan Publikasi Ilmiah</p>
 
             <?php if (session('error')): ?>
                 <div class="alert alert-danger" role="alert">
@@ -222,10 +219,6 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
 
                 <button type="submit" class="btn btn-signin w-100">Masuk</button>
             </form>
-
-            <div class="auth-note">
-                Gunakan akun admin yang sudah terdaftar untuk mengakses dashboard PLPI.
-            </div>
         </div>
     </div>
 </body>
