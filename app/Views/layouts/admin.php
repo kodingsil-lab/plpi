@@ -1,10 +1,15 @@
 <!doctype html>
 <html lang="id">
 <head>
+    <?php
+        helper('app_settings');
+        $adminFaviconUrl = plpi_asset_url_versioned((string) plpi_app_setting('favicon_path', ''), 'unisap_favicon.ico');
+        $adminHeaderLogoUrl = plpi_asset_url_versioned((string) plpi_app_setting('header_logo_path', ''), 'assets/img/plpi-geo-logo-white.svg');
+    ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title ?? 'PLPI') ?></title>
-    <link rel="icon" type="image/x-icon" href="<?= base_url('unisap_favicon.ico') ?>">
+    <link rel="icon" href="<?= esc($adminFaviconUrl) ?>">
     <link href="<?= base_url('assets/vendor/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css') ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,7 +26,8 @@
     $isSettingsActive = url_is('admin/journals*')
         || url_is('admin/publishers*')
         || url_is('admin/notifikasi*')
-        || url_is('admin/users*');
+        || url_is('admin/users*')
+        || url_is('superadmin/settings/application*');
     $sessionName = trim((string) session('name'));
     $topbarName = $sessionName !== '' ? $sessionName : 'Super Admin';
     $topbarRole = trim((string) session('role')) ?: 'superadmin';
@@ -44,7 +50,7 @@
     <div class="sidebar-brand-wrap">
         <a href="<?= site_url('/') ?>" class="sidebar-brand text-decoration-none">
             <div class="brand-icon">
-                <img src="<?= base_url('assets/img/plpi-geo-logo-white.svg') ?>" alt="Logo PLPI" class="brand-logo-white">
+                <img src="<?= esc($adminHeaderLogoUrl) ?>" alt="Logo PLPI" class="brand-logo-white">
             </div>
             <div class="brand-text">
                 <h5 class="brand-plpi-title">PLPI</h5>
@@ -73,6 +79,7 @@
                     <i class="bi bi-chevron-down submenu-arrow"></i>
                 </button>
                 <ul id="settingsSubmenu" class="sidebar-submenu <?= $isSettingsActive ? 'show' : '' ?>">
+                    <li><a href="<?= site_url('superadmin/settings/application') ?>" class="sidebar-sublink <?= url_is('superadmin/settings/application*') ? 'active' : '' ?>"><i class="bi bi-sliders"></i><span>Aplikasi</span></a></li>
                     <li><a href="<?= site_url('admin/journals') ?>" class="sidebar-sublink <?= url_is('admin/journals*') ? 'active' : '' ?>"><i class="bi bi-journal-text"></i><span>Data Jurnal</span></a></li>
                     <li><a href="<?= site_url('admin/publishers') ?>" class="sidebar-sublink <?= url_is('admin/publishers*') ? 'active' : '' ?>"><i class="bi bi-building-gear"></i><span>Publisher</span></a></li>
                     <li><a href="<?= site_url('admin/notifikasi') ?>" class="sidebar-sublink <?= url_is('admin/notifikasi*') ? 'active' : '' ?>"><i class="bi bi-bell-fill"></i><span>Notifikasi</span></a></li>

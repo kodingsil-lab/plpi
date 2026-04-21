@@ -71,6 +71,8 @@ $routes->group('admin', ['filter' => ['sessionauth', 'role:superadmin,admin_jurn
 });
 
 $routes->group('superadmin/settings', ['filter' => ['sessionauth', 'role:superadmin']], static function ($routes): void {
+    $routes->get('application', 'Admin\\Settings\\ApplicationController::index');
+    $routes->post('application', 'Admin\\Settings\\ApplicationController::update');
     $routes->get('journals', 'Admin\\Settings\\JournalProfileController::index');
     $routes->get('journals/create', 'Admin\\Settings\\JournalProfileController::create');
     $routes->post('journals', 'Admin\\Settings\\JournalProfileController::store');

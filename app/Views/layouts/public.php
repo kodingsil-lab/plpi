@@ -1,9 +1,14 @@
 <!doctype html>
 <html lang="id">
 <head>
+    <?php
+        helper('app_settings');
+        $publicFaviconUrl = plpi_asset_url_versioned((string) plpi_app_setting('favicon_path', ''), 'favicon.ico');
+    ?>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= esc($title ?? 'PLPI') ?></title>
+    <link rel="icon" href="<?= esc($publicFaviconUrl) ?>">
     <link href="<?= base_url('assets/vendor/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css') ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">

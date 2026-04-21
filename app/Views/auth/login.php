@@ -1,13 +1,12 @@
 <?php
+helper('app_settings');
 $bootstrapCssPath = FCPATH . 'assets/vendor/bootstrap/css/bootstrap.min.css';
 $bootstrapIconsCssPath = FCPATH . 'assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css';
-$logoPath = FCPATH . 'assets/img/plpi-geo-logo.svg';
-$faviconPath = FCPATH . 'favicon.ico';
 
 $bootstrapCssVersion = is_file($bootstrapCssPath) ? (string) filemtime($bootstrapCssPath) : '1';
 $bootstrapIconsCssVersion = is_file($bootstrapIconsCssPath) ? (string) filemtime($bootstrapIconsCssPath) : '1';
-$logoVersion = is_file($logoPath) ? (string) filemtime($logoPath) : '1';
-$faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1';
+$loginLogoUrl = plpi_asset_url_versioned((string) plpi_app_setting('login_logo_path', ''), 'assets/img/plpi-geo-logo.svg');
+$faviconUrl = plpi_asset_url_versioned((string) plpi_app_setting('favicon_path', ''), 'favicon.ico');
 ?>
 <!doctype html>
 <html lang="id">
@@ -15,7 +14,7 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= esc((string) ($title ?? 'Login PLPI')) ?></title>
-    <link rel="icon" type="image/x-icon" href="<?= esc(base_url('favicon.ico?v=' . $faviconVersion)) ?>">
+    <link rel="icon" href="<?= esc($faviconUrl) ?>">
     <link href="<?= esc(base_url('assets/vendor/bootstrap/css/bootstrap.min.css?v=' . $bootstrapCssVersion)) ?>" rel="stylesheet">
     <link href="<?= esc(base_url('assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css?v=' . $bootstrapIconsCssVersion)) ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -172,7 +171,7 @@ $faviconVersion = is_file($faviconPath) ? (string) filemtime($faviconPath) : '1'
         <div class="card-body">
             <div style="text-align:center;">
                 <div class="logo-wrap">
-                    <img src="<?= esc(base_url('assets/img/plpi-geo-logo.svg?v=' . $logoVersion)) ?>" alt="Logo PLPI">
+                    <img src="<?= esc($loginLogoUrl) ?>" alt="Logo PLPI">
                     <span class="auth-app-title">PLPI</span>
                 </div>
             </div>

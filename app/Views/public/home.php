@@ -1,9 +1,11 @@
 <?= $this->extend('layouts/public') ?>
 <?= $this->section('content') ?>
 <?php
+    helper('app_settings');
     $latestRequests = is_array($latestRequests ?? null) ? $latestRequests : [];
     $journalProfiles = is_array($journalProfiles ?? null) ? $journalProfiles : [];
     $requestStats = is_array($requestStats ?? null) ? $requestStats : ['total' => 0, 'pending' => 0, 'letters' => 0];
+    $publicLogoUrl = plpi_asset_url_versioned((string) plpi_app_setting('public_logo_path', ''), 'assets/img/plpi-geo-logo.svg');
 
     $mapStatus = static function (string $statusRaw): array {
         $status = strtolower(trim($statusRaw));
@@ -948,7 +950,7 @@
     <header class="plpi-header">
         <nav class="plpi-nav">
             <a class="plpi-brand" href="<?= site_url('/') ?>">
-                <img src="<?= base_url('assets/img/plpi-geo-logo.svg') ?>" alt="PLPI">
+                <img src="<?= esc($publicLogoUrl) ?>" alt="PLPI">
                 <span>PLPI</span>
             </a>
             <div class="plpi-menu">
