@@ -23,10 +23,7 @@ class AuthController extends BaseController
 
         $userModel = new UserModel();
         $user = $userModel
-            ->groupStart()
             ->where('username', $username)
-            ->orWhere('email', $username)
-            ->groupEnd()
             ->first();
 
         if (! $user || ! (bool) ($user['is_active'] ?? 0)) {

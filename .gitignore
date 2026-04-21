@@ -128,3 +128,8 @@ _modules/*
 /results/
 /phpunit*.xml
 .phpunit.result.cache
+
+#-------------------------
+# Markdown Documentation
+#-------------------------
+*.md

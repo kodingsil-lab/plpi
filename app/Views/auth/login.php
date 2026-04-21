@@ -191,13 +191,13 @@ $faviconUrl = plpi_asset_url_versioned((string) plpi_app_setting('favicon_path',
             <form method="post" action="<?= site_url('login') ?>">
                 <?= csrf_field() ?>
                 <div class="mb-3">
-                    <label for="usernameField" class="form-label">Username / Email</label>
+                    <label for="usernameField" class="form-label">Username</label>
                     <input
                         type="text"
                         name="username"
                         id="usernameField"
                         class="form-control"
-                        placeholder="Masukkan username atau email"
+                        placeholder="Masukkan username"
                         value="<?= esc((string) old('username')) ?>"
                         required
                         autofocus
