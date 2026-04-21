@@ -33,6 +33,7 @@ class EmailService
             // Prepare email data
             $journalName = $publisher['journal_name'] ?? $publisher['name'] ?? 'Jurnal';
             $editorName = $publisher['editor_name'] ?? $publisher['signer_name'] ?? 'Pimpinan Redaksi';
+            $journalUrl = $publisher['journal_url'] ?? '';
 
             // Parse authors from JSON
             $authors = $this->parseAuthors($letter['authors_json'] ?? '[]');
@@ -43,7 +44,7 @@ class EmailService
                 config('Email')->fromName ?: env('MAIL_FROM_NAME', 'PLPI - Sistem Manajemen LoA')
             );
             $this->email->setTo($recipientEmail);
-            $this->email->setSubject('Notifikasi LoA Approved - ' . ($letter['loa_number'] ?? 'LoA'));
+            $this->email->setSubject('Notifikasi Letter of Acceptance (LoA) - ' . ($letter['loa_number'] ?? 'LoA'));
 
             // Render email content
             $emailContent = view('email/loa_approved_notification', [
@@ -51,6 +52,7 @@ class EmailService
                 'authors' => $authors,
                 'journalName' => $journalName,
                 'editorName' => $editorName,
+                'journalUrl' => $journalUrl,
             ]);
 
             $this->email->setMessage($emailContent);

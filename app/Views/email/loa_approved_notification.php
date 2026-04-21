@@ -1,10 +1,11 @@
 <?php
 /**
- * Email Template untuk Notifikasi LoA Approved
+ * Email Template untuk Notifikasi Letter of Acceptance (LoA)
  * 
  * @var array $letter Data surat LoA
  * @var string $journalName Nama jurnal
  * @var string $editorName Nama editor
+ * @var string $journalUrl URL jurnal
  */
 ?>
 <!DOCTYPE html>
@@ -35,6 +36,14 @@
             color: #666;
             font-size: 14px;
             margin: 0;
+        }
+        .journal-link {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #0066cc;
+            text-decoration: none;
+            word-break: break-all;
         }
         .content {
             margin: 20px 0;
@@ -81,7 +90,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Surat Keterangan Penerimaan (LoA)</h1>
+        <h1>Letter of Acceptance (LoA)</h1>
         <p class="journal-name"><?= esc($journalName ?? 'Jurnal') ?></p>
     </div>
 
@@ -115,9 +124,9 @@
             <?php endif; ?>
         </div>
 
-        <p>Surat Keterangan Penerimaan (LoA) dalam format PDF telah kami sertakan sebagai lampiran email ini. Anda dapat mengunduh dan menyimpannya untuk keperluan administratif.</p>
+        <p>Letter of Acceptance (LoA) dalam format PDF telah kami sertakan sebagai lampiran email ini. Anda dapat mengunduh dan menyimpannya untuk keperluan administratif.</p>
 
-        <p>Untuk verifikasi keaslian LoA, Anda dapat memindai QR Code yang terdapat di dokumen PDF atau mengunjungi halaman verifikasi kami dengan menggunakan nomor LoA di atas.</p>
+        <p>Untuk verifikasi keaslian Letter of Acceptance (LoA), Anda dapat memindai QR Code yang terdapat di dokumen PDF atau mengunjungi halaman verifikasi kami dengan menggunakan nomor LoA di atas.</p>
 
         <p>Terima kasih atas kontribusi berharga Anda. Kami sangat menghargai kesempatan untuk menerbitkan karya berkualitas ini.</p>
 
@@ -125,6 +134,11 @@
             <div class="best-regards">Salam hormat,</div>
             <p><strong><?= esc($editorName ?? 'Pimpinan Redaksi') ?></strong></p>
             <p><?= esc($journalName ?? 'Jurnal') ?></p>
+            <?php if (! empty($journalUrl ?? '')): ?>
+            <p>
+                <a class="journal-link" href="<?= esc($journalUrl) ?>" target="_blank" rel="noopener noreferrer"><?= esc($journalUrl) ?></a>
+            </p>
+            <?php endif; ?>
         </div>
     </div>
 

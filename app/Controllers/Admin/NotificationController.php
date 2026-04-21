@@ -80,7 +80,7 @@ class NotificationController extends BaseController
             // Get journal and publisher info
             $db = \Config\Database::connect();
             $journalData = $db->table('journals')
-                ->select('journals.name, publishers.name as publisher_name, publishers.email, publishers.phone, publishers.address, journals.default_signer_name, journals.default_signer_title')
+                ->select('journals.name, journals.website_url, publishers.name as publisher_name, publishers.email, publishers.phone, publishers.address, journals.default_signer_name, journals.default_signer_title')
                 ->join('publishers', 'publishers.id = journals.publisher_id', 'left')
                 ->where('journals.id', $letter['journal_id'])
                 ->get()
@@ -90,6 +90,7 @@ class NotificationController extends BaseController
             $emailService = new EmailService();
             $publisherData = [
                 'journal_name' => $journalData['name'] ?? 'Jurnal',
+                'journal_url' => $journalData['website_url'] ?? '',
                 'name' => $journalData['publisher_name'] ?? 'Penerbit',
                 'email' => $journalData['email'] ?? '',
                 'phone' => $journalData['phone'] ?? '',

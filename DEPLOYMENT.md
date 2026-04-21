@@ -1,194 +1,111 @@
-# Panduan Deployment PLPI ke Hosting Production
+# Panduan Deployment PLPI ke Production
 
-## Informasi Hosting
-- **Domain**: loa.ejurnal-unisap.ac.id
-- **Hosting Type**: Shared Hosting dengan cPanel
-- **Email Service**: SMTP dari Hosting
+## Informasi Server
 
----
+- Domain: `loa.unisap.ac.id`
+- Project path: `/home/loaunisa/plpi`
+- Branch deploy: `main`
+- Environment: `production`
+- Hosting: shared hosting/cPanel dengan akses SSH
 
-## Persiapan Sebelum Deploy
+## Metode Deploy yang Dipakai
 
-### 1. Informasi yang Dibutuhkan
-Hubungi hosting provider untuk mendapatkan:
-- [ ] SSH Access (username, password/key)
-- [ ] Database credentials (hostname, username, password, database name)
-- [ ] Email SMTP credentials (hostname, port, username, password)
-- [ ] FTP credentials (jika tidak ada SSH)
-- [ ] PHP version (minimal 8.0)
-- [ ] Composer tersedia di server
+Metode yang terbukti berhasil adalah deploy manual berbasis Git langsung di server.
 
-### 2. Backup Data Lokal
 ```bash
-# Backup database
-# Database saat ini: plpi
-
-# Backup files
-tar -czf ~/plpi-backup-$(date +%Y%m%d).tar.gz ./
+cd /home/loaunisa/plpi
+git fetch origin main
+git checkout main
+git pull --ff-only origin main
+php composer.phar install --no-dev --prefer-dist --optimize-autoloader
+php spark migrate --all
+php spark cache:clear
 ```
 
----
+## Fungsi Tiap Command
 
-## Metode 1: Deploy via SSH (Recommended)
+- `git fetch origin main`: mengambil update terbaru dari remote
+- `git checkout main`: memastikan branch deploy aktif
+- `git pull --ff-only origin main`: menarik perubahan terbaru tanpa merge commit
+- `php composer.phar install --no-dev --prefer-dist --optimize-autoloader`: install dependency production
+- `php spark migrate --all`: menjalankan migration terbaru
+- `php spark cache:clear`: membersihkan cache aplikasi
 
-### Step 1: Upload Files via SFTP/SCP
+## Verifikasi Setelah Deploy
+
+Jalankan:
+
 ```bash
-# Dari local machine, upload ke server
-scp -r . username@loa.ejurnal-unisap.ac.id:~/public_html/plpi
-# atau gunakan FileZilla dengan SFTP
+cd /home/loaunisa/plpi
+php spark env
+php spark migrate:status
 ```
 
-### Step 2: SSH ke Server
-```bash
-ssh username@loa.ejurnal-unisap.ac.id
-cd public_html/plpi
-```
+Pastikan:
 
-### Step 3: Jalankan Script Setup
-```bash
-# Copy script deploy
-chmod +x deploy.sh
-./deploy.sh production
-```
+- environment adalah `production`
+- migration sudah terpasang semua
 
----
+## Konfigurasi Environment
 
-## Metode 2: Deploy via FTP (Jika SSH Tidak Tersedia)
+File template yang dipakai adalah `.env.production`.
 
-### Step 1: Upload via FTP
-- Gunakan FileZilla atau WinSCP
-- Upload semua file ke `public_html/plpi`
-- Set permission 755 untuk folder, 644 untuk file
-
-### Step 2: Setup Manual di cPanel
-1. Buka File Manager di cPanel
-2. Navigate ke `public_html/plpi`
-3. Run terminal / SSH dari cPanel jika tersedia
-4. Jalankan: `bash deploy.sh production`
-
----
-
-## Konfigurasi Environment Production
-
-File `.env.production` sudah disiapkan. Anda perlu update:
+Pastikan `.env` di server sudah sesuai kebutuhan production:
 
 ```env
-# APP Configuration
-app.baseURL = 'https://loa.ejurnal-unisap.ac.id/'
 CI_ENVIRONMENT = production
-
-# DATABASE
-database.default.hostname = [FROM HOSTING]
-database.default.database = [FROM HOSTING]
-database.default.username = [FROM HOSTING]
-database.default.password = [FROM HOSTING]
-
-# EMAIL CONFIGURATION
-email.protocol = 'smtp'
-email.host = [SMTP HOST FROM HOSTING]
-email.port = [SMTP PORT - usually 587 or 465]
-email.username = [EMAIL FROM HOSTING]
-email.password = [EMAIL PASSWORD]
-email.crypto = [tls atau ssl, biasanya tls]
-email.timeout = 30
+app.baseURL = 'https://loa.unisap.ac.id/'
+database.default.hostname = localhost
+database.default.database = ...
+database.default.username = ...
+database.default.password = ...
+email.host = ...
+email.port = 587
+email.username = ...
+email.password = ...
+CI_DEBUG = false
 ```
-
----
-
-## Database Migration Production
-
-### Option 1: Import via phpMyAdmin (cPanel)
-1. Buka phpMyAdmin di cPanel
-2. Buat database baru sesuai credentials
-3. Import file migration atau SQL dump
-4. Run migrations: `php spark migrate`
-
-### Option 2: Via Command Line
-```bash
-cd public_html/plpi
-php spark migrate
-```
-
----
-
-## Post-Deployment Checklist
-
-- [ ] Update `.env` dengan production credentials
-- [ ] Run database migrations: `php spark migrate`
-- [ ] Set folder permissions:
-  ```bash
-  chmod 755 writable/ public/uploads/
-  chmod 644 writable/*
-  chmod 644 public/uploads/*
-  ```
-- [ ] Clear cache:
-  ```bash
-  php spark cache:clear
-  ```
-- [ ] Test aplikasi: https://loa.ejurnal-unisap.ac.id
-- [ ] Setup SSL Certificate (cPanel -> AutoSSL)
-- [ ] Configure firewall/security
-
----
-
-## Email Configuration Production
-
-### SMTP Server Hosting
-Hosting provider biasanya menyediakan:
-- **Host**: mail.loa.ejurnal-unisap.ac.id atau smtp.hosting-provider.com
-- **Port**: 587 (TLS) atau 465 (SSL)
-- **Username**: noreply@loa.ejurnal-unisap.ac.id (atau sesuai akun email hosting)
-- **Password**: [Sesuai setting hosting]
-
-### Test Email Configuration
-```bash
-# Buat test script atau gunakan dashboard admin
-# Cek: Pengaturan > Notifikasi > Test Email
-```
-
----
 
 ## Troubleshooting
 
-### Jika Migration Gagal
+### 1. `bash: ./deploy.sh: Permission denied`
+
+Solusi:
+
 ```bash
-php spark migrate:refresh  # Untuk reset (WARNING: Hapus data!)
-php spark migrate          # Jalankan ulang
+chmod +x deploy.sh
 ```
 
-### Jika Email Tidak Terkirim
-1. Cek credentials di `.env`
-2. Cek log: `writable/logs/log-YYYY-MM-DD.log`
-3. Test connection SMTP:
-   ```bash
-   telnet mail.hosting.com 587
-   ```
+atau:
 
-### Jika Permission Error
 ```bash
-chmod -R 755 writable/
-chmod -R 644 public/uploads/
+bash deploy.sh production deploy
 ```
 
----
+### 2. `[ERROR] Composer not found: composer`
 
-## Rollback ke Lokal
+Penyebab:
 
-Jika deployment bermasalah:
+- server tidak menyediakan command `composer` global
+
+Solusi:
+
+Gunakan:
+
 ```bash
-# Restore dari backup lokal
-tar -xzf ~/plpi-backup-YYYYMMDD.tar.gz
-# Update .env kembali ke local configuration
+php composer.phar install --no-dev --prefer-dist --optimize-autoloader
 ```
 
----
+### 3. Working tree tidak bersih
 
-## Support & Maintenance
+Cek:
 
-- **Log files**: `writable/logs/`
-- **Cache**: `writable/cache/`
-- **Sessions**: `writable/session/`
-- **Uploads**: `public/uploads/`
+```bash
+git status --short
+```
 
-Untuk maintenance, pastikan folder ini dapat ditulis oleh web server.
+Jika ada output, bereskan dulu sebelum menjalankan deploy otomatis.
 
+## Rekomendasi
+
+Untuk update rutin production, pakai panduan di [GIT_DEPLOY.md](./GIT_DEPLOY.md) sebagai referensi utama.
