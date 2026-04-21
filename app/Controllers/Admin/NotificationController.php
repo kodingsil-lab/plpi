@@ -41,9 +41,8 @@ class NotificationController extends BaseController
         if (! $row) {
             return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Notifikasi tidak ditemukan.');
         }
-        if ((string) ($row['status'] ?? '') === 'notifikasi terkirim') {
-            return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Notifikasi untuk LoA ini sudah pernah dikirim.');
-        }
+
+        $isResend = strtolower(trim((string) ($row['status'] ?? ''))) === 'notifikasi terkirim';
 
         $letter = (new LoaLetterModel())->find((int) $row['loa_letter_id']);
         $email = $letter['corresponding_email'] ?? null;
@@ -116,7 +115,11 @@ class NotificationController extends BaseController
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
 
-                return redirect()->to(site_url('admin/notifikasi'))->with('success', 'Email notifikasi berhasil dikirim ke penulis/pengaju LoA.');
+                $successMessage = $isResend
+                    ? 'Email notifikasi berhasil dikirim ulang ke penulis/pengaju LoA.'
+                    : 'Email notifikasi berhasil dikirim ke penulis/pengaju LoA.';
+
+                return redirect()->to(site_url('admin/notifikasi'))->with('success', $successMessage);
             } else {
                 return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Gagal mengirim email notifikasi. Silakan periksa konfigurasi email dan coba lagi.');
             }

@@ -43,14 +43,14 @@
             <td>
               <div class="myletters-actions">
                 <form method="post" action="<?= site_url('admin/notifikasi/' . (string) $r['id'] . '/kirim-email') ?>" class="d-inline">
+                  <?php $isSent = strtolower(trim((string) ($r['status'] ?? ''))) === 'notifikasi terkirim'; ?>
                   <button
                     class="btn btn-sm activity-btn user-action-btn user-action-detail action-solid action-solid-mail myletters-icon-only"
                     type="submit"
-                    aria-label="Kirim Email"
+                    aria-label="<?= $isSent ? 'Kirim Ulang Email' : 'Kirim Email' ?>"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    data-bs-title="Kirim Email"
-                    <?= strtolower(trim((string) ($r['status'] ?? ''))) === 'notifikasi terkirim' ? 'disabled' : '' ?>
+                    data-bs-title="<?= $isSent ? 'Kirim Ulang Email' : 'Kirim Email' ?>"
                   >
                     <iconify-icon icon="heroicons-outline:mail" aria-hidden="true"></iconify-icon>
                   </button>
