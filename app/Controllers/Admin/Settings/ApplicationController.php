@@ -62,6 +62,15 @@ class ApplicationController extends BaseController
             foreach ($fieldNames as $fieldName) {
                 $payload[$fieldName] = $storedPath;
             }
+
+            if ($inputName === 'favicon') {
+                $sourcePath = $targetDir . DIRECTORY_SEPARATOR . $newName;
+                $publicFaviconPath = FCPATH . 'favicon.ico';
+                $adminFaviconPath = FCPATH . 'unisap_favicon.ico';
+
+                @copy($sourcePath, $publicFaviconPath);
+                @copy($sourcePath, $adminFaviconPath);
+            }
         }
 
         if ($rowId > 0) {
