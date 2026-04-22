@@ -1211,13 +1211,13 @@
                 <?php foreach ($journalProfiles as $journal): ?>
                     <?php
                         $journalCode = strtoupper((string) ($journal['code'] ?? 'JURNAL'));
-                        $logoDataUri = trim((string) ($journal['logo_data_uri'] ?? ''));
+                        $logoUrl = trim((string) ($journal['logo_url'] ?? ''));
                         $journalUrl = trim((string) ($journal['website_url'] ?? ''));
                     ?>
                     <article class="plpi-journal-card">
                         <div class="plpi-journal-cover">
-                            <?php if ($logoDataUri !== ''): ?>
-                                <img src="<?= esc($logoDataUri) ?>" alt="<?= esc((string) ($journal['name'] ?? 'Logo Jurnal')) ?>" class="plpi-journal-logo">
+                            <?php if ($logoUrl !== ''): ?>
+                                <img src="<?= esc($logoUrl) ?>" alt="<?= esc((string) ($journal['name'] ?? 'Logo Jurnal')) ?>" class="plpi-journal-logo" loading="lazy" decoding="async">
                             <?php endif; ?>
                             <span class="plpi-journal-badge"><?= esc($journalCode) ?></span>
                         </div>
