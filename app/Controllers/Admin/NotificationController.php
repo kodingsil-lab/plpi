@@ -136,7 +136,7 @@ class NotificationController extends BaseController
                 ));
 
                 $successMessage = $isResend
-                    ? 'Email notifikasi berhasil dikirim ulang ke penulis/pengaju LoA.'
+                    ? 'Email notifikasi berhasil dikirim ulang ke penulis.'
                     : 'Email notifikasi berhasil dikirim ke penulis/pengaju LoA.';
 
                 return redirect()->to(site_url('admin/notifikasi'))->with('success', $successMessage);
