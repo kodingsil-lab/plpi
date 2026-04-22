@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Libraries\EmailService;
+use App\Libraries\LoaPdfService;
 use App\Models\LoaLetterModel;
 use App\Models\LoaNotificationModel;
 
@@ -44,38 +45,51 @@ class NotificationController extends BaseController
 
         $isResend = strtolower(trim((string) ($row['status'] ?? ''))) === 'notifikasi terkirim';
 
-        $letter = (new LoaLetterModel())->find((int) $row['loa_letter_id']);
+        $letterModel = new LoaLetterModel();
+        $letter = $letterModel->find((int) $row['loa_letter_id']);
+        if (! $letter) {
+            return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Data LoA tidak ditemukan.');
+        }
         $email = $letter['corresponding_email'] ?? null;
 
         if (empty($email)) {
             return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Email penulis/pengaju LoA belum tersedia.');
         }
 
-        // Check if PDF exists
-        $pdfPath = $letter['pdf_path'] ?? null;
-        
-        // Try different path possibilities
-        $possiblePaths = [
-            FCPATH . 'uploads/' . $pdfPath,  // public/uploads/
-            ROOTPATH . 'writable/uploads/' . $pdfPath,  // writable/uploads/
-            dirname(FCPATH) . '/writable/uploads/' . $pdfPath,  // ../writable/uploads/
-        ];
-        
-        $pdfFullPath = null;
-        foreach ($possiblePaths as $path) {
-            if (file_exists($path)) {
-                $pdfFullPath = $path;
-                break;
-            }
-        }
-        
-        if (empty($pdfPath) || empty($pdfFullPath)) {
-            // Debug info
-            log_message('error', 'PDF not found. Checked paths: ' . json_encode($possiblePaths));
-            return redirect()->to(site_url('admin/notifikasi'))->with('error', 'File PDF LoA tidak ditemukan. Pastikan PDF telah di-generate.');
-        }
-
         try {
+            $letterId = (int) ($letter['id'] ?? 0);
+            $loaNumber = (string) ($letter['loa_number'] ?? '-');
+            $notificationId = (int) ($row['id'] ?? 0);
+
+            log_message('info', sprintf(
+                '[LoA Notification] Start send flow. notification_id=%d, loa_letter_id=%d, loa_number=%s, recipient=%s',
+                $notificationId,
+                $letterId,
+                $loaNumber,
+                (string) $email
+            ));
+
+            // Always regenerate PDF first to ensure latest document is sent.
+            $newPdfPath = (new LoaPdfService())->generate($letter);
+            $letterModel->update((int) $letter['id'], [
+                'pdf_path' => $newPdfPath,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+            $letter['pdf_path'] = $newPdfPath;
+            log_message('info', sprintf(
+                '[LoA Notification] PDF regenerated. notification_id=%d, loa_letter_id=%d, loa_number=%s, pdf_path=%s',
+                $notificationId,
+                $letterId,
+                $loaNumber,
+                (string) $newPdfPath
+            ));
+
+            $pdfFullPath = WRITEPATH . 'uploads/' . ltrim((string) ($letter['pdf_path'] ?? ''), '/\\');
+            if (! is_file($pdfFullPath)) {
+                log_message('error', 'Regenerated PDF not found at path: ' . $pdfFullPath);
+                return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Gagal menyiapkan file PDF terbaru untuk notifikasi.');
+            }
+
             // Get journal and publisher info
             $db = \Config\Database::connect();
             $journalData = $db->table('journals')
@@ -98,7 +112,6 @@ class NotificationController extends BaseController
                 'signer_name' => $journalData['default_signer_title'] ?? 'Pimpinan Redaksi',
             ];
 
-            // $pdfFullPath is already determined in the path check above
             $sent = $emailService->sendLoaApprovedNotification(
                 $email,
                 $letter,
@@ -114,6 +127,13 @@ class NotificationController extends BaseController
                     'sent_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
+                log_message('info', sprintf(
+                    '[LoA Notification] Email sent. notification_id=%d, loa_letter_id=%d, loa_number=%s, recipient=%s',
+                    $notificationId,
+                    $letterId,
+                    $loaNumber,
+                    (string) $email
+                ));
 
                 $successMessage = $isResend
                     ? 'Email notifikasi berhasil dikirim ulang ke penulis/pengaju LoA.'
@@ -121,6 +141,13 @@ class NotificationController extends BaseController
 
                 return redirect()->to(site_url('admin/notifikasi'))->with('success', $successMessage);
             } else {
+                log_message('error', sprintf(
+                    '[LoA Notification] Email send failed. notification_id=%d, loa_letter_id=%d, loa_number=%s, recipient=%s',
+                    $notificationId,
+                    $letterId,
+                    $loaNumber,
+                    (string) $email
+                ));
                 return redirect()->to(site_url('admin/notifikasi'))->with('error', 'Gagal mengirim email notifikasi. Silakan periksa konfigurasi email dan coba lagi.');
             }
         } catch (\Throwable $e) {
