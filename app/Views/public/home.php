@@ -6,6 +6,9 @@
     $journalProfiles = is_array($journalProfiles ?? null) ? $journalProfiles : [];
     $requestStats = is_array($requestStats ?? null) ? $requestStats : ['total' => 0, 'pending' => 0, 'letters' => 0];
     $publicLogoUrl = plpi_asset_url_versioned((string) plpi_app_setting('public_logo_path', ''), 'assets/img/plpi-geo-logo.svg');
+    $adminNavUrl = (string) ($adminNavUrl ?? site_url('login'));
+    $adminNavLabel = (string) ($adminNavLabel ?? 'Login Admin');
+    $adminNavIcon = (string) ($adminNavIcon ?? 'bi-box-arrow-in-right');
 
     $mapStatus = static function (string $statusRaw): array {
         $status = strtolower(trim($statusRaw));
@@ -77,9 +80,6 @@
         align-items: center;
         gap: 12px;
         color: var(--plpi-navy);
-        font-size: 1.56rem;
-        font-weight: 800;
-        letter-spacing: .35px;
         text-decoration: none;
         text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     }
@@ -89,6 +89,27 @@
         height: 48px;
         display: block;
         filter: drop-shadow(0 6px 12px rgba(43, 89, 181, 0.18));
+    }
+
+    .plpi-brand-text {
+        display: inline-flex;
+        flex-direction: column;
+        line-height: 1.1;
+    }
+
+    .plpi-brand-title {
+        font-size: 1.56rem;
+        font-weight: 800;
+        letter-spacing: .35px;
+        color: var(--plpi-navy);
+    }
+
+    .plpi-brand-subtitle {
+        font-size: .7rem;
+        font-weight: 700;
+        letter-spacing: .22px;
+        color: #6b7f9c;
+        margin-top: 2px;
     }
 
     .plpi-menu {
@@ -139,19 +160,21 @@
         line-height: 1;
     }
 
-    .plpi-login-btn {
-        text-decoration: none;
+    .plpi-menu a.plpi-menu-cta {
         border: 1px solid var(--plpi-navy-soft);
         background: var(--plpi-navy-soft);
         color: #fff;
         border-radius: 10px;
         padding: 8px 14px;
-        font-size: .9rem;
-        font-weight: 700;
         transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
     }
 
-    .plpi-login-btn:hover {
+    .plpi-menu a.plpi-menu-cta::after {
+        display: none;
+    }
+
+    .plpi-menu a.plpi-menu-cta:hover,
+    .plpi-menu a.plpi-menu-cta:focus-visible {
         background: var(--plpi-navy);
         border-color: var(--plpi-navy);
         color: #fff;
@@ -872,13 +895,22 @@
     .plpi-footer {
         margin-top: 28px;
         border-top: 1px solid #e6edf6;
-        padding: 16px 0 8px;
+        padding: 14px 0 6px;
         color: #667a98;
         font-size: .88rem;
     }
 
     .plpi-footer strong {
         color: var(--plpi-navy);
+    }
+
+    .plpi-footer p {
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .plpi-footer p + p {
+        margin-top: 2px;
     }
 
     @media (max-width: 991.98px) {
@@ -910,13 +942,20 @@
 
     @media (max-width: 767.98px) {
         .plpi-brand {
-            font-size: 1.38rem;
             gap: 10px;
         }
 
         .plpi-brand img {
             width: 42px;
             height: 42px;
+        }
+
+        .plpi-brand-title {
+            font-size: 1.38rem;
+        }
+
+        .plpi-brand-subtitle {
+            font-size: .64rem;
         }
 
         .plpi-nav {
@@ -951,14 +990,17 @@
         <nav class="plpi-nav">
             <a class="plpi-brand" href="<?= site_url('/') ?>">
                 <img src="<?= esc($publicLogoUrl) ?>" alt="PLPI">
-                <span>PLPI</span>
+                <span class="plpi-brand-text">
+                    <span class="plpi-brand-title">PLPI</span>
+                    <span class="plpi-brand-subtitle">Pusat Layanan Publikasi Ilmiah</span>
+                </span>
             </a>
             <div class="plpi-menu">
                 <a href="<?= site_url('/') ?>" class="active"><i class="bi bi-house-door"></i><span>Beranda</span></a>
                 <a href="<?= site_url('loa/request') ?>"><i class="bi bi-send"></i><span>Ajukan LoA</span></a>
                 <a href="<?= site_url('loa/verify') ?>"><i class="bi bi-shield-check"></i><span>Verifikasi LoA</span></a>
+                <a href="<?= esc($adminNavUrl) ?>" class="plpi-menu-cta"><i class="bi <?= esc($adminNavIcon) ?>"></i><span><?= esc($adminNavLabel) ?></span></a>
             </div>
-            <a class="plpi-login-btn" href="<?= site_url('login') ?>">Login Admin</a>
         </nav>
     </header>
 
@@ -1148,8 +1190,8 @@
     </main>
 
     <footer class="plpi-footer" id="tentang">
-        <p><strong>PLPI</strong> &copy; <?= date('Y') ?> - Pusat Layanan Publikasi Ilmiah.</p>
-        <p>Sistem layanan untuk pengajuan, verifikasi, dan penerbitan LoA secara terintegrasi.</p>
+        <p><strong>PLPI</strong> &copy; <?= date('Y') ?> - Pusat Layanan Publikasi Ilmiah</p>
+        <p>Developed By KSJ <span style="color:#dc3545;">&#10084;</span></p>
     </footer>
 </div>
 
