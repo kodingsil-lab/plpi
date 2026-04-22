@@ -11,6 +11,8 @@ class JournalController extends BaseController
 {
     private const LOGO_TARGET_WIDTH = 900;
     private const LOGO_TARGET_HEIGHT = 1200;
+    private const LOGO_THUMB_WIDTH = 300;
+    private const LOGO_THUMB_HEIGHT = 400;
     private const DEFAULT_PDF_SIG_LEFT = 20;
     private const DEFAULT_PDF_SIG_TOP = 10;
     private const DEFAULT_PDF_SIG_HEIGHT = 85;
@@ -125,6 +127,7 @@ class JournalController extends BaseController
             if (! is_string($normalizedPath) || $normalizedPath === '') {
                 return redirect()->back()->withInput()->with('error', 'Logo jurnal gagal diproses ke PNG transparan 900x1200.');
             }
+            $this->createLogoThumbnail($normalizedPath);
             $data['logo_path'] = 'journals/logos/' . basename($normalizedPath);
         }
 
@@ -246,6 +249,7 @@ class JournalController extends BaseController
             if (! is_string($normalizedPath) || $normalizedPath === '') {
                 return redirect()->back()->withInput()->with('error', 'Logo jurnal gagal diproses ke PNG transparan 900x1200.');
             }
+            $this->createLogoThumbnail($normalizedPath);
             $data['logo_path'] = 'journals/logos/' . basename($normalizedPath);
         }
 
@@ -368,6 +372,79 @@ class JournalController extends BaseController
         }
 
         return $pngPath;
+    }
+
+    private function createLogoThumbnail(string $sourcePath): ?string
+    {
+        if (! is_file($sourcePath) || ! is_readable($sourcePath)) {
+            return null;
+        }
+
+        $meta = @getimagesize($sourcePath);
+        if (! is_array($meta) || count($meta) < 3) {
+            return null;
+        }
+
+        $srcW = (int) ($meta[0] ?? 0);
+        $srcH = (int) ($meta[1] ?? 0);
+        if ($srcW <= 0 || $srcH <= 0) {
+            return null;
+        }
+
+        $source = $this->createImageResource($sourcePath, (int) ($meta[2] ?? 0));
+        if (! $source) {
+            return null;
+        }
+
+        $targetW = self::LOGO_THUMB_WIDTH;
+        $targetH = self::LOGO_THUMB_HEIGHT;
+        $canvas = imagecreatetruecolor($targetW, $targetH);
+        if (! $canvas) {
+            imagedestroy($source);
+            return null;
+        }
+
+        imagealphablending($canvas, false);
+        imagesavealpha($canvas, true);
+        $transparent = imagecolorallocatealpha($canvas, 0, 0, 0, 127);
+        imagefill($canvas, 0, 0, $transparent);
+
+        $scale = min($targetW / $srcW, $targetH / $srcH);
+        $drawW = max(1, (int) round($srcW * $scale));
+        $drawH = max(1, (int) round($srcH * $scale));
+        $offsetX = (int) floor(($targetW - $drawW) / 2);
+        $offsetY = (int) floor(($targetH - $drawH) / 2);
+        imagecopyresampled($canvas, $source, $offsetX, $offsetY, 0, 0, $drawW, $drawH, $srcW, $srcH);
+
+        $thumbDir = dirname($sourcePath) . DIRECTORY_SEPARATOR . 'thumbs';
+        if (! is_dir($thumbDir) && ! @mkdir($thumbDir, 0775, true) && ! is_dir($thumbDir)) {
+            imagedestroy($source);
+            imagedestroy($canvas);
+            return null;
+        }
+
+        $thumbPath = $thumbDir . DIRECTORY_SEPARATOR . pathinfo($sourcePath, PATHINFO_FILENAME) . '-thumb.png';
+        $saved = imagepng($canvas, $thumbPath, 8);
+
+        imagedestroy($source);
+        imagedestroy($canvas);
+
+        return $saved ? $thumbPath : null;
+    }
+
+    private function createImageResource(string $path, int $imageType)
+    {
+        if ($imageType === IMAGETYPE_JPEG) {
+            return @imagecreatefromjpeg($path);
+        }
+        if ($imageType === IMAGETYPE_PNG) {
+            return @imagecreatefrompng($path);
+        }
+        if ($imageType === IMAGETYPE_WEBP && function_exists('imagecreatefromwebp')) {
+            return @imagecreatefromwebp($path);
+        }
+
+        return null;
     }
 
     private function getPdfDefaults(): array
