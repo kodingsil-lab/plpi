@@ -145,9 +145,8 @@ class JournalController extends BaseController
         }
 
         $model->insert($data);
-        $newId = (int) $model->getInsertID();
 
-        return redirect()->to(site_url('admin/journals/' . $newId . '/edit'))->with('success', 'Data jurnal berhasil ditambahkan.');
+        return redirect()->to(site_url('admin/journals'))->with('success', 'Data jurnal berhasil ditambahkan.');
     }
 
     public function edit(int $id)
@@ -268,7 +267,7 @@ class JournalController extends BaseController
 
         $model->update($id, $data);
 
-        return redirect()->to(site_url('admin/journals/' . $id . '/edit'))->with('success', 'Data jurnal berhasil diperbarui.');
+        return redirect()->to(site_url('admin/journals'))->with('success', 'Data jurnal berhasil diperbarui.');
     }
 
     public function destroy(int $id)
