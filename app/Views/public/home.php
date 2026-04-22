@@ -118,6 +118,30 @@
         gap: 18px;
     }
 
+    .plpi-menu-toggle {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #cbd9ee;
+        border-radius: 10px;
+        background: #f8fbff;
+        color: var(--plpi-navy);
+        font-size: 1.18rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: border-color .2s ease, background .2s ease, color .2s ease;
+    }
+
+    .plpi-menu-toggle:hover,
+    .plpi-menu-toggle:focus-visible {
+        border-color: var(--plpi-navy-soft);
+        background: #eef4ff;
+        color: var(--plpi-navy-soft);
+        outline: none;
+    }
+
     .plpi-menu a {
         display: inline-flex;
         align-items: center;
@@ -962,13 +986,47 @@
             flex-wrap: wrap;
             min-height: auto;
             padding: 10px 0;
+            align-items: center;
+        }
+
+        .plpi-menu-toggle {
+            display: inline-flex;
         }
 
         .plpi-menu {
             width: 100%;
             order: 3;
             justify-content: flex-start;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 4px;
+            margin-top: 8px;
             padding-top: 6px;
+            border-top: 1px solid #e8eef8;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+            transform: translateY(-4px);
+            transition: max-height .24s ease, opacity .2s ease, transform .2s ease;
+        }
+
+        .plpi-nav.is-menu-open .plpi-menu {
+            max-height: 360px;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .plpi-menu a {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 10px 8px;
+        }
+
+        .plpi-menu a.plpi-menu-cta {
+            justify-content: center;
+            margin-top: 4px;
         }
 
         .plpi-feature-grid,
@@ -995,7 +1053,16 @@
                     <span class="plpi-brand-subtitle">Pusat Layanan Publikasi Ilmiah</span>
                 </span>
             </a>
-            <div class="plpi-menu">
+            <button
+                type="button"
+                class="plpi-menu-toggle"
+                aria-label="Buka menu navigasi"
+                aria-expanded="false"
+                aria-controls="plpiPublicMenu"
+            >
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="plpi-menu" id="plpiPublicMenu">
                 <a href="<?= site_url('/') ?>" class="active"><i class="bi bi-house-door"></i><span>Beranda</span></a>
                 <a href="<?= site_url('loa/request') ?>"><i class="bi bi-send"></i><span>Ajukan LoA</span></a>
                 <a href="<?= site_url('loa/verify') ?>"><i class="bi bi-shield-check"></i><span>Verifikasi LoA</span></a>
@@ -1194,5 +1261,54 @@
         <p>Developed By KSJ <span style="color:#dc3545;">&#10084;</span></p>
     </footer>
 </div>
+
+<script>
+    (() => {
+        const nav = document.querySelector('.plpi-nav');
+        const toggle = document.querySelector('.plpi-menu-toggle');
+        const menu = document.getElementById('plpiPublicMenu');
+        if (!nav || !toggle || !menu) {
+            return;
+        }
+
+        const mobileQuery = window.matchMedia('(max-width: 767.98px)');
+
+        const closeMenu = () => {
+            nav.classList.remove('is-menu-open');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.innerHTML = '<i class="bi bi-list"></i>';
+            toggle.setAttribute('aria-label', 'Buka menu navigasi');
+        };
+
+        const openMenu = () => {
+            nav.classList.add('is-menu-open');
+            toggle.setAttribute('aria-expanded', 'true');
+            toggle.innerHTML = '<i class="bi bi-x-lg"></i>';
+            toggle.setAttribute('aria-label', 'Tutup menu navigasi');
+        };
+
+        toggle.addEventListener('click', () => {
+            if (nav.classList.contains('is-menu-open')) {
+                closeMenu();
+                return;
+            }
+            openMenu();
+        });
+
+        menu.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => {
+                if (mobileQuery.matches) {
+                    closeMenu();
+                }
+            });
+        });
+
+        mobileQuery.addEventListener('change', (event) => {
+            if (!event.matches) {
+                closeMenu();
+            }
+        });
+    })();
+</script>
 
 <?= $this->endSection() ?>
