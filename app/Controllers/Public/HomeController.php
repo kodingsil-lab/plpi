@@ -41,7 +41,7 @@ class HomeController extends BaseController
                 }
 
                 $version = rawurlencode((string) ($journal['updated_at'] ?? $journal['id']));
-                $journal['logo_url'] = site_url('journal-logo/' . (int) $journal['id']) . '?v=' . $version;
+                $journal['logo_url'] = site_url('journal-logo/' . (int) $journal['id']) . '?size=thumb&v=' . $version;
             }
             unset($journal);
 
@@ -93,6 +93,17 @@ class HomeController extends BaseController
             return $this->response->setStatusCode(404);
         }
 
+        $size = strtolower(trim((string) $this->request->getGet('size')));
+        if ($size === 'thumb') {
+            $thumbAbsolutePath = $this->resolveLogoThumbPath($absolutePath);
+            if ($thumbAbsolutePath !== null && ! is_file($thumbAbsolutePath)) {
+                $this->generateThumbFromSource($absolutePath, $thumbAbsolutePath, 300, 400);
+            }
+            if ($thumbAbsolutePath !== null && is_file($thumbAbsolutePath) && is_readable($thumbAbsolutePath)) {
+                $absolutePath = $thumbAbsolutePath;
+            }
+        }
+
         $mtime = (int) @filemtime($absolutePath);
         $size = (int) @filesize($absolutePath);
         $etag = '"' . sha1((string) $mtime . '|' . (string) $size . '|' . $absolutePath) . '"';
@@ -123,5 +134,74 @@ class HomeController extends BaseController
             ->setHeader('ETag', $etag)
             ->setHeader('Last-Modified', $lastModified)
             ->setBody($binary);
+    }
+
+    private function resolveLogoThumbPath(string $fullAbsolutePath): ?string
+    {
+        $dir = dirname($fullAbsolutePath);
+        $file = pathinfo($fullAbsolutePath, PATHINFO_FILENAME);
+        if ($dir === '' || $file === '') {
+            return null;
+        }
+
+        return $dir . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $file . '-thumb.png';
+    }
+
+    private function generateThumbFromSource(string $sourcePath, string $targetPath, int $targetW, int $targetH): void
+    {
+        $meta = @getimagesize($sourcePath);
+        if (! is_array($meta) || count($meta) < 3) {
+            return;
+        }
+
+        $srcW = (int) ($meta[0] ?? 0);
+        $srcH = (int) ($meta[1] ?? 0);
+        $imageType = (int) ($meta[2] ?? 0);
+        if ($srcW <= 0 || $srcH <= 0) {
+            return;
+        }
+
+        $source = null;
+        if ($imageType === IMAGETYPE_JPEG) {
+            $source = @imagecreatefromjpeg($sourcePath);
+        } elseif ($imageType === IMAGETYPE_PNG) {
+            $source = @imagecreatefrompng($sourcePath);
+        } elseif ($imageType === IMAGETYPE_WEBP && function_exists('imagecreatefromwebp')) {
+            $source = @imagecreatefromwebp($sourcePath);
+        }
+
+        if (! $source) {
+            return;
+        }
+
+        $canvas = imagecreatetruecolor($targetW, $targetH);
+        if (! $canvas) {
+            imagedestroy($source);
+            return;
+        }
+
+        imagealphablending($canvas, false);
+        imagesavealpha($canvas, true);
+        $transparent = imagecolorallocatealpha($canvas, 0, 0, 0, 127);
+        imagefill($canvas, 0, 0, $transparent);
+
+        $scale = min($targetW / $srcW, $targetH / $srcH);
+        $drawW = max(1, (int) round($srcW * $scale));
+        $drawH = max(1, (int) round($srcH * $scale));
+        $offsetX = (int) floor(($targetW - $drawW) / 2);
+        $offsetY = (int) floor(($targetH - $drawH) / 2);
+        imagecopyresampled($canvas, $source, $offsetX, $offsetY, 0, 0, $drawW, $drawH, $srcW, $srcH);
+
+        $targetDir = dirname($targetPath);
+        if (! is_dir($targetDir) && ! @mkdir($targetDir, 0775, true) && ! is_dir($targetDir)) {
+            imagedestroy($source);
+            imagedestroy($canvas);
+            return;
+        }
+
+        @imagepng($canvas, $targetPath, 8);
+
+        imagedestroy($source);
+        imagedestroy($canvas);
     }
 }
