@@ -16,6 +16,7 @@ class JournalController extends BaseController
     private const DEFAULT_PDF_SIG_LEFT = 20;
     private const DEFAULT_PDF_SIG_TOP = 10;
     private const DEFAULT_PDF_SIG_HEIGHT = 85;
+    private const HOME_JOURNAL_CACHE_KEY = 'public_home_journal_profiles_v2';
 
     public function index()
     {
@@ -148,6 +149,7 @@ class JournalController extends BaseController
         }
 
         $model->insert($data);
+        $this->invalidateHomeJournalCache();
 
         return redirect()->to(site_url('admin/journals'))->with('success', 'Data jurnal berhasil ditambahkan.');
     }
@@ -270,6 +272,7 @@ class JournalController extends BaseController
         }
 
         $model->update($id, $data);
+        $this->invalidateHomeJournalCache();
 
         return redirect()->to(site_url('admin/journals'))->with('success', 'Data jurnal berhasil diperbarui.');
     }
@@ -283,6 +286,7 @@ class JournalController extends BaseController
         }
 
         $model->delete($id);
+        $this->invalidateHomeJournalCache();
         return redirect()->to(site_url('admin/journals'))->with('success', 'Jurnal berhasil dihapus.');
     }
 
@@ -307,6 +311,7 @@ class JournalController extends BaseController
         }
 
         (new JournalModel())->delete($journalIds);
+        $this->invalidateHomeJournalCache();
         return redirect()->to(site_url('admin/journals'))->with('success', 'Jurnal terpilih berhasil dihapus.');
     }
 
@@ -454,5 +459,10 @@ class JournalController extends BaseController
             'top' => self::DEFAULT_PDF_SIG_TOP,
             'height' => self::DEFAULT_PDF_SIG_HEIGHT,
         ];
+    }
+
+    private function invalidateHomeJournalCache(): void
+    {
+        service('cache')->delete(self::HOME_JOURNAL_CACHE_KEY);
     }
 }
