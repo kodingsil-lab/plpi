@@ -54,12 +54,18 @@ class HomeController extends BaseController
             'letters' => (int) $letterModel->countAllResults(),
         ];
 
+        $isAdminLoggedIn = (bool) session('isLoggedIn')
+            && in_array((string) session('role'), ['superadmin', 'admin_jurnal'], true);
+
         return view('public/home', [
             'title' => 'PLPI',
             'subtitle' => 'Pusat Layanan Publikasi Ilmiah',
             'latestRequests' => $latestRequests,
             'journalProfiles' => $journalProfiles,
             'requestStats' => $requestStats,
+            'adminNavUrl' => $isAdminLoggedIn ? site_url('dashboard') : site_url('login'),
+            'adminNavLabel' => $isAdminLoggedIn ? 'Kembali ke Dashboard' : 'Login Admin',
+            'adminNavIcon' => $isAdminLoggedIn ? 'bi-arrow-left-circle' : 'bi-box-arrow-in-right',
         ]);
     }
 }
