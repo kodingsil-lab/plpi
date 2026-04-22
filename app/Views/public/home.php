@@ -9,6 +9,40 @@
     $adminNavUrl = (string) ($adminNavUrl ?? site_url('login'));
     $adminNavLabel = (string) ($adminNavLabel ?? 'Login Admin');
     $adminNavIcon = (string) ($adminNavIcon ?? 'bi-box-arrow-in-right');
+    $journalSvgDataUri = static function (string $codeRaw, string $nameRaw): string {
+        $code = strtoupper(trim($codeRaw));
+        $name = trim($nameRaw);
+        if ($code === '') {
+            $code = 'JURNAL';
+        }
+        if ($name === '') {
+            $name = 'Profil Jurnal';
+        }
+
+        $code = substr(preg_replace('/[^A-Z0-9-]+/', '', $code) ?? 'JURNAL', 0, 14);
+        $name = substr(preg_replace('/[^A-Za-z0-9 .,-]+/', ' ', $name) ?? 'Profil Jurnal', 0, 48);
+        $codeSafe = htmlspecialchars($code, ENT_QUOTES, 'UTF-8');
+        $nameSafe = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="520" height="320" viewBox="0 0 520 320">'
+            . '<defs>'
+            . '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+            . '<stop offset="0%" stop-color="#f3f7ff"/><stop offset="100%" stop-color="#dfe9fb"/>'
+            . '</linearGradient>'
+            . '</defs>'
+            . '<rect width="520" height="320" rx="24" fill="url(#g)"/>'
+            . '<circle cx="62" cy="258" r="58" fill="#cfdcf4" opacity="0.55"/>'
+            . '<path d="M360 0h160v120c0 12-10 22-22 22H392c-18 0-32-14-32-32V0z" fill="#cad7ee" opacity="0.75"/>'
+            . '<rect x="70" y="102" width="150" height="104" rx="10" fill="#ffffff" opacity="0.95"/>'
+            . '<rect x="84" y="116" width="122" height="8" rx="4" fill="#c9d7ee"/>'
+            . '<rect x="84" y="132" width="90" height="8" rx="4" fill="#d9e4f7"/>'
+            . '<rect x="84" y="148" width="110" height="8" rx="4" fill="#d9e4f7"/>'
+            . '<text x="70" y="260" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#163b73">' . $codeSafe . '</text>'
+            . '<text x="70" y="286" font-family="Arial, sans-serif" font-size="15" fill="#5f7391">' . $nameSafe . '</text>'
+            . '</svg>';
+
+        return 'data:image/svg+xml;charset=UTF-8,' . rawurlencode($svg);
+    };
 
     $mapStatus = static function (string $statusRaw): array {
         $status = strtolower(trim($statusRaw));
@@ -1211,14 +1245,23 @@
                 <?php foreach ($journalProfiles as $journal): ?>
                     <?php
                         $journalCode = strtoupper((string) ($journal['code'] ?? 'JURNAL'));
+                        $journalName = (string) ($journal['name'] ?? 'Profil Jurnal');
                         $logoUrl = trim((string) ($journal['logo_url'] ?? ''));
+                        $logoSvgUri = $journalSvgDataUri($journalCode, $journalName);
+                        $logoSrc = $logoUrl !== '' ? $logoUrl : $logoSvgUri;
                         $journalUrl = trim((string) ($journal['website_url'] ?? ''));
                     ?>
                     <article class="plpi-journal-card">
                         <div class="plpi-journal-cover">
-                            <?php if ($logoUrl !== ''): ?>
-                                <img src="<?= esc($logoUrl) ?>" alt="<?= esc((string) ($journal['name'] ?? 'Logo Jurnal')) ?>" class="plpi-journal-logo" loading="lazy" decoding="async">
-                            <?php endif; ?>
+                            <img
+                                src="<?= esc($logoSrc) ?>"
+                                data-fallback-src="<?= esc($logoSvgUri) ?>"
+                                alt="<?= esc($journalName) ?>"
+                                class="plpi-journal-logo"
+                                loading="lazy"
+                                decoding="async"
+                                onerror="if(this.dataset.fallbackSrc&&this.src!==this.dataset.fallbackSrc){this.src=this.dataset.fallbackSrc;}"
+                            >
                             <span class="plpi-journal-badge"><?= esc($journalCode) ?></span>
                         </div>
                         <h3 class="plpi-journal-title"><?= esc((string) ($journal['name'] ?? '-')) ?></h3>
