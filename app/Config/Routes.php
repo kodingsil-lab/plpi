@@ -4,6 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'Public\\HomeController::index');
+$routes->get('journal-logo/(\\d+)', 'Public\\HomeController::journalLogo/$1');
 
 $routes->group('', ['filter' => 'guest'], static function ($routes): void {
     $routes->get('login', 'Auth\\AuthController::loginForm');
