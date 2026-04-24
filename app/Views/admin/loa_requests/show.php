@@ -152,6 +152,8 @@
     $volume = trim((string) ($row['volume'] ?? '')) ?: '-';
     $issueNumber = trim((string) ($row['issue_number'] ?? '')) ?: '-';
     $publishedYear = trim((string) ($row['published_year'] ?? '')) ?: '-';
+    $authorsText = $authors !== [] ? implode(', ', $authors) : '-';
+    $affiliationsText = $affiliations !== [] ? implode(', ', $affiliations) : '-';
 
     $whatsappRaw = trim((string) ($row['whatsapp_number'] ?? ''));
     $whatsappDisplay = $whatsappRaw !== '' ? $whatsappRaw : '-';
@@ -248,32 +250,12 @@
                 <div class="request-detail-row">
                     <div class="request-detail-key">Identitas Penulis</div>
                     <div class="request-detail-sep">:</div>
-                    <div class="request-detail-value">
-                        <?php if ($authors !== []): ?>
-                            <ol>
-                                <?php foreach ($authors as $author): ?>
-                                    <li><?= esc($author) ?></li>
-                                <?php endforeach; ?>
-                            </ol>
-                        <?php else: ?>
-                            -
-                        <?php endif; ?>
-                    </div>
+                    <div class="request-detail-value"><?= esc($authorsText) ?></div>
                 </div>
                 <div class="request-detail-row">
                     <div class="request-detail-key">Afiliasi Penulis</div>
                     <div class="request-detail-sep">:</div>
-                    <div class="request-detail-value">
-                        <?php if ($affiliations !== []): ?>
-                            <ul>
-                                <?php foreach ($affiliations as $affiliation): ?>
-                                    <li><?= esc($affiliation) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php else: ?>
-                            -
-                        <?php endif; ?>
-                    </div>
+                    <div class="request-detail-value"><?= esc($affiliationsText) ?></div>
                 </div>
             </div>
 
