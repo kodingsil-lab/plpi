@@ -48,6 +48,7 @@ class LoaRequestController extends BaseController
                 ->like('loa_requests.request_code', $q)
                 ->orLike('loa_requests.title', $q)
                 ->orLike('loa_requests.corresponding_email', $q)
+                ->orLike('loa_requests.whatsapp_number', $q)
                 ->groupEnd();
         }
 
@@ -205,12 +206,13 @@ class LoaRequestController extends BaseController
         $filename = 'loa-requests-' . date('Ymd-His') . '.csv';
 
         $out = fopen('php://temp', 'w+');
-        fputcsv($out, ['request_code', 'title', 'corresponding_email', 'status', 'created_at']);
+        fputcsv($out, ['request_code', 'title', 'corresponding_email', 'whatsapp_number', 'status', 'created_at']);
         foreach ($rows as $r) {
             fputcsv($out, [
                 $r['request_code'] ?? '',
                 $r['title'] ?? '',
                 $r['corresponding_email'] ?? '',
+                $r['whatsapp_number'] ?? '',
                 $r['status'] ?? '',
                 $r['created_at'] ?? '',
             ]);

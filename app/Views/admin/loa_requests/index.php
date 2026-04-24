@@ -24,7 +24,7 @@
             </div>
             <div class="myletters-filter-item">
                 <label class="form-label">Pencarian</label>
-                <input type="text" name="q" value="<?= esc((string) ($filters['q'] ?? '')) ?>" class="form-control" placeholder="Kode / judul / email">
+                <input type="text" name="q" value="<?= esc((string) ($filters['q'] ?? '')) ?>" class="form-control" placeholder="Kode / judul / email / WhatsApp">
             </div>
             <div class="myletters-filter-btn-item">
                 <label class="form-label form-label-ghost">Aksi</label>

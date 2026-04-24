@@ -183,6 +183,10 @@
                 <div class="status-value"><?= esc((string) ($loaRequest['corresponding_email'] ?? '-')) ?></div>
             </div>
             <div class="status-item">
+                <div class="status-label">WhatsApp</div>
+                <div class="status-value"><?= esc((string) ($loaRequest['whatsapp_number'] ?? '-')) ?></div>
+            </div>
+            <div class="status-item">
                 <div class="status-label">Tanggal Pengajuan</div>
                 <div class="status-value"><?= esc(plpi_format_date($loaRequest['created_at'] ?? null, true)) ?></div>
             </div>

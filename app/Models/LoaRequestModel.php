@@ -12,7 +12,7 @@ class LoaRequestModel extends Model
     protected $useTimestamps = true;
     protected $allowedFields = [
         'journal_id','request_code','article_url','article_id_external','title','authors_json',
-        'corresponding_email','affiliations_json','status','notes_admin','rejection_reason',
+        'corresponding_email','whatsapp_number','affiliations_json','status','notes_admin','rejection_reason',
         'approved_at','volume','issue_number','published_year'
     ];
 }

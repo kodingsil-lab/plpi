@@ -286,7 +286,7 @@
 
     <form method="post" action="<?= site_url('loa/request') ?>">
         <div class="loa-grid">
-            <div class="loa-field">
+            <div class="loa-field full">
                 <label class="loa-label">Jurnal</label>
                 <select name="journal_id" class="loa-input">
                     <option value="">Pilih Jurnal</option>
@@ -296,14 +296,19 @@
                 </select>
             </div>
 
+            <div class="loa-field full">
+                <label class="loa-label">Judul Artikel</label>
+                <input type="text" name="title" value="<?= esc((string) old('title')) ?>" class="loa-input" placeholder="Masukkan judul artikel" required>
+            </div>
+
             <div class="loa-field">
                 <label class="loa-label">Email Korespondensi</label>
                 <input type="email" name="corresponding_email" value="<?= esc((string) old('corresponding_email')) ?>" class="loa-input" placeholder="contoh@email.com" required>
             </div>
 
-            <div class="loa-field full">
-                <label class="loa-label">Judul Artikel</label>
-                <input type="text" name="title" value="<?= esc((string) old('title')) ?>" class="loa-input" placeholder="Masukkan judul artikel" required>
+            <div class="loa-field">
+                <label class="loa-label">Nomor WhatsApp</label>
+                <input type="text" name="whatsapp_number" value="<?= esc((string) old('whatsapp_number')) ?>" class="loa-input" placeholder="Contoh: 0812xxxxxx / +62812xxxxxx" required>
             </div>
 
             <div class="loa-field">

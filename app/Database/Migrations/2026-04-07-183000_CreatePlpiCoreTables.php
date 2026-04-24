@@ -58,6 +58,7 @@ class CreatePlpiCoreTables extends Migration
             'title'               => ['type' => 'TEXT'],
             'authors_json'        => ['type' => 'LONGTEXT'],
             'corresponding_email' => ['type' => 'VARCHAR', 'constraint' => 191],
+            'whatsapp_number'     => ['type' => 'VARCHAR', 'constraint' => 30, 'null' => true],
             'affiliations_json'   => ['type' => 'LONGTEXT', 'null' => true],
             'volume'              => ['type' => 'VARCHAR', 'constraint' => 20, 'null' => true],
             'issue_number'        => ['type' => 'VARCHAR', 'constraint' => 20, 'null' => true],
