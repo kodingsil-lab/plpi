@@ -18,8 +18,10 @@
         .wrap{max-width:1100px;margin:0 auto;padding:24px}
         .card{background:#fff;border:1px solid #dbe4ef;border-radius:14px;padding:18px}
         .input{width:100%;padding:9px 10px;border:1px solid #c8d6ea;border-radius:10px;background:#fff}
-        .btn{display:inline-block;background:#123c6b;color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;border:0;cursor:pointer}
-        .btn2{display:inline-block;background:#fff;color:#123c6b;padding:8px 12px;border-radius:10px;text-decoration:none;border:1px solid #bcd0e9;cursor:pointer}
+        .btn{display:inline-block;background:#356acc;color:#fff;padding:8px 12px;border-radius:0.375rem;text-decoration:none;border:1px solid #356acc;cursor:pointer;transition:all .18s ease}
+        .btn:hover{background:#2f5fb8;border-color:#2c59ad;color:#fff;transform:translateY(-1px);box-shadow:0 6px 14px rgba(16,47,96,.16)}
+        .btn2{display:inline-block;background:#6c757d;color:#fff;padding:8px 12px;border-radius:0.375rem;text-decoration:none;border:1px solid #6c757d;cursor:pointer;transition:all .18s ease}
+        .btn2:hover{background:#5c636a;border-color:#565e64;color:#fff;transform:translateY(-1px);box-shadow:0 6px 14px rgba(16,47,96,.16)}
     </style>
 </head>
 <body>

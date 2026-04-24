@@ -25,7 +25,7 @@
     .request-detail-row {
         display: grid;
         grid-template-columns: 220px 28px minmax(0, 1fr);
-        align-items: start;
+        align-items: stretch;
         min-height: 52px;
         border-bottom: 1px dashed #d7e2f1;
     }
@@ -41,15 +41,19 @@
     }
 
     .request-detail-key {
-        font-weight: 700;
+        font-weight: 400;
         color: #24466f;
         border-right: 1px dashed #d7e2f1;
         background: #f6f9ff;
     }
 
     .request-detail-sep {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
         text-align: center;
-        font-weight: 700;
+        font-weight: 400;
         color: #3d5f89;
         border-right: 1px dashed #d7e2f1;
         background: #f9fbff;
@@ -57,7 +61,7 @@
 
     .request-detail-value {
         color: #173a67;
-        font-weight: 600;
+        font-weight: 400;
         word-break: break-word;
         line-height: 1.55;
     }
@@ -75,6 +79,15 @@
     .request-detail-value ul {
         margin: 0;
         padding-left: 18px;
+    }
+
+    .request-detail-page .detail-actions .btn {
+        min-height: 34px !important;
+        height: 34px !important;
+        padding: 0 12px !important;
+        border-radius: 8px !important;
+        font-size: 0.95rem !important;
+        line-height: 1 !important;
     }
 
     @media (max-width: 768px) {
@@ -262,13 +275,13 @@
             <div class="detail-actions mt-3">
                 <?php if ($isActionable): ?>
                     <form method="post" action="<?= site_url('admin/loa-requests/' . (string) ($row['id'] ?? 0) . '/approve') ?>">
-                        <button class="btn btn-primary-main" type="submit">Setujui</button>
+                        <button class="btn btn-primary" type="submit">Setujui</button>
                     </form>
                     <form method="post" action="<?= site_url('admin/loa-requests/' . (string) ($row['id'] ?? 0) . '/reject') ?>" onsubmit="return confirm('Tolak permohonan ini?')">
-                        <button class="btn btn-outline-danger" type="submit">Tolak</button>
+                        <button class="btn btn-danger" type="submit">Tolak</button>
                     </form>
                 <?php endif; ?>
-                <a class="btn btn-light-soft" href="<?= site_url('admin/loa-requests') ?>">Kembali</a>
+                <a class="btn btn-secondary" href="<?= site_url('admin/loa-requests') ?>">Kembali</a>
             </div>
         </div>
     </div>

@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\AppSettingModel;
-
 if (! function_exists('plpi_app_settings')) {
     function plpi_app_settings(): array
     {
@@ -15,13 +13,13 @@ if (! function_exists('plpi_app_settings')) {
 
         try {
             $db = db_connect();
-            if (! $db->tableExists('app_settings')) {
+            if (! $db || ! $db->tableExists('app_settings')) {
                 return $cached;
             }
 
-            $row = (new AppSettingModel())->first();
+            $row = $db->table('app_settings')->limit(1)->get()->getRowArray();
             $cached = is_array($row) ? $row : [];
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $cached = [];
         }
 

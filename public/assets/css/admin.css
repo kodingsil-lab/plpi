@@ -1612,6 +1612,110 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
     text-decoration: none;
 }
 
+/* Global button system aligned with Bootstrap examples */
+:root {
+    --bs-primary: #356acc;
+    --bs-primary-rgb: 53, 106, 204;
+}
+
+.btn {
+    border-radius: 0.375rem;
+    font-weight: 400;
+}
+
+.btn-primary,
+.btn-primary-main,
+.admin-action-btn-primary,
+.dashboard-action-btn-primary {
+    color: #fff !important;
+    background-color: #356acc !important;
+    border-color: #356acc !important;
+}
+
+.btn-primary:hover,
+.btn-primary-main:hover,
+.admin-action-btn-primary:hover,
+.dashboard-action-btn-primary:hover {
+    color: #fff !important;
+    background-color: #2f5fb8 !important;
+    border-color: #2c59ad !important;
+}
+
+.btn-secondary {
+    color: #fff !important;
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+.btn-success {
+    color: #fff !important;
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+}
+
+.btn-danger {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.btn-warning {
+    color: #212529 !important;
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+}
+
+.btn-info {
+    color: #fff !important;
+    background-color: #0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+}
+
+.btn-light,
+.btn-light-soft {
+    color: #212529 !important;
+    background-color: #f8f9fa !important;
+    border-color: #f8f9fa !important;
+}
+
+.btn-dark {
+    color: #fff !important;
+    background-color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+.btn-link {
+    color: #356acc !important;
+}
+
+.loa-btn-main,
+.verify-btn-main {
+    color: #fff !important;
+    background: #356acc !important;
+    border-color: #356acc !important;
+}
+
+.loa-btn-main:hover,
+.verify-btn-main:hover {
+    color: #fff !important;
+    background: #2f5fb8 !important;
+    border-color: #2c59ad !important;
+}
+
+.loa-btn-soft,
+.verify-btn-soft {
+    color: #212529 !important;
+    background: #f8f9fa !important;
+    border-color: #f8f9fa !important;
+}
+
+.loa-btn-soft:hover,
+.verify-btn-soft:hover {
+    color: #212529 !important;
+    background: #e9ecef !important;
+    border-color: #dee2e6 !important;
+}
+
 .table-page-btn:first-child {
     border-top-left-radius: var(--pagination-radius);
     border-bottom-left-radius: var(--pagination-radius);

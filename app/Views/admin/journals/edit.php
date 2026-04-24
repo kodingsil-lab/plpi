@@ -1,5 +1,26 @@
 <?= $this->extend('layouts/admin') ?>
 <?= $this->section('content') ?>
+<style>
+  .journal-form-actions {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px dashed #d9e4f2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .journal-form-actions .btn {
+    min-width: 92px;
+    min-height: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+  }
+</style>
 <?php
 $isEdit = ! empty($row['id']);
 $formAction = $isEdit
@@ -146,9 +167,9 @@ if (! empty($row['default_signature_path'])) {
         </div>
       </div>
 
-      <div class="d-flex gap-2 mt-4 myletters-actions user-form-actions justify-content-end">
+      <div class="journal-form-actions">
         <button class="btn btn-primary-main user-form-btn-flat" type="submit">Simpan</button>
-        <a class="btn btn-light-soft user-form-btn-flat" href="<?= site_url('admin/journals') ?>">Kembali</a>
+        <a class="btn btn-secondary user-form-btn-flat" href="<?= site_url('admin/journals') ?>">Kembali</a>
       </div>
     </form>
   </div>

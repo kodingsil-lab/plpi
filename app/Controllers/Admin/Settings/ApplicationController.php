@@ -9,18 +9,36 @@ class ApplicationController extends BaseController
 {
     public function index()
     {
-        $row = (new AppSettingModel())->first();
+        $row = [];
+        try {
+            $db = db_connect();
+            if ($db && $db->tableExists('app_settings')) {
+                $fetched = (new AppSettingModel())->first();
+                $row = is_array($fetched) ? $fetched : [];
+            }
+        } catch (\Throwable $e) {
+            $row = [];
+        }
 
         return view('admin/settings/application/index', [
             'title' => 'Aplikasi',
             'subtitle' => 'Pengaturan logo, favicon, dan zona waktu aplikasi.',
-            'row' => is_array($row) ? $row : [],
+            'row' => $row,
             'timezoneOptions' => plpi_timezone_options(),
         ]);
     }
 
     public function update()
     {
+        try {
+            $db = db_connect();
+            if (! $db || ! $db->tableExists('app_settings')) {
+                return redirect()->back()->withInput()->with('error', 'Tabel app_settings belum tersedia. Jalankan migrasi terlebih dahulu.');
+            }
+        } catch (\Throwable $e) {
+            return redirect()->back()->withInput()->with('error', 'Koneksi database bermasalah. Cek konfigurasi dan migrasi.');
+        }
+
         $model = new AppSettingModel();
         $row = $model->first();
         $rowId = (int) ($row['id'] ?? 0);

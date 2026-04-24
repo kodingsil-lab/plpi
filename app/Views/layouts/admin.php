@@ -19,6 +19,54 @@
         .brand-plpi-sub{font-size:12px!important;line-height:1.3}
         .plpi-page-title{font-size:30px;font-weight:700;color:#103f72}
         .plpi-kicker{font-size:13px;color:#5f758e}
+
+        /* Final global button override (loaded last) to avoid legacy CSS collisions */
+        .main-content .btn{
+            border-radius:.375rem!important;
+            font-weight:700!important;
+            transition: all .18s ease!important;
+        }
+        .main-content .btn:hover{
+            transform: translateY(-1px);
+            filter: brightness(1.03);
+            box-shadow: 0 6px 14px rgba(16, 47, 96, 0.16)!important;
+        }
+        .main-content .btn:active{
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(16, 47, 96, 0.14)!important;
+        }
+        .main-content .btn:focus-visible{
+            outline: 0;
+            box-shadow: 0 0 0 .2rem rgba(53, 106, 204, .22)!important;
+        }
+        .main-content .btn-primary,
+        .main-content .btn-primary-main{
+            color:#fff!important;
+            background:#356acc!important;
+            border-color:#356acc!important;
+        }
+        .main-content .btn-primary:hover,
+        .main-content .btn-primary-main:hover{
+            color:#fff!important;
+            background:#2f5fb8!important;
+            border-color:#2c59ad!important;
+        }
+        .main-content .btn-secondary{
+            color:#fff!important;
+            background:#6c757d!important;
+            border-color:#6c757d!important;
+        }
+        .main-content .btn-danger{
+            color:#fff!important;
+            background:#dc3545!important;
+            border-color:#dc3545!important;
+        }
+        .main-content .btn-light,
+        .main-content .btn-light-soft{
+            color:#212529!important;
+            background:#f8f9fa!important;
+            border-color:#f8f9fa!important;
+        }
     </style>
 </head>
 <body class="myletters-page">
