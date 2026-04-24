@@ -7,16 +7,6 @@
         background: #fff;
     }
 
-    .request-detail-card .section-title,
-    .request-detail-card .status-pill,
-    .request-detail-card .request-detail-key,
-    .request-detail-card .request-detail-sep,
-    .request-detail-card .request-detail-value,
-    .request-detail-card .request-detail-value a,
-    .request-detail-card .detail-actions .btn {
-        font-weight: 400 !important;
-    }
-
     .request-detail-header {
         display: flex;
         align-items: center;
@@ -51,6 +41,7 @@
     }
 
     .request-detail-key {
+        font-weight: 700;
         color: #24466f;
         border-right: 1px dashed #d7e2f1;
         background: #f6f9ff;
@@ -58,6 +49,7 @@
 
     .request-detail-sep {
         text-align: center;
+        font-weight: 700;
         color: #3d5f89;
         border-right: 1px dashed #d7e2f1;
         background: #f9fbff;
@@ -65,6 +57,7 @@
 
     .request-detail-value {
         color: #173a67;
+        font-weight: 600;
         word-break: break-word;
         line-height: 1.55;
     }
